@@ -14,26 +14,26 @@ import java.awt.image.BufferedImage;
  * @author Thomas
  */
 public class DrawingArea extends javax.swing.JPanel {
-    
+
     /**
-     * Constructor with no arguments.
-     * This is needed in order for NetBeans to be able to add DrawingArea
-     * as a component. Removal of this makes the Design tab break.
+     * Constructor with no arguments. This is needed in order for NetBeans to be
+     * able to add DrawingArea as a component. Removal of this makes the Design
+     * tab break.
      */
     public DrawingArea() {
         initComponents();
-        
+
 //        imageCraft = null;
     }
 
     /**
      * Creates new form DrawingArea.
-     * 
+     *
      * @param iC ImageCraft object that this DrawingArea belongs to
      */
     public DrawingArea(ImageCraft iC) {
         initComponents();
-        
+
         imageCraft = iC;
     }
 
@@ -94,12 +94,11 @@ public class DrawingArea extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseReleased
 
     /**
-     * 
+     *
      * @param x
      * @param y
      */
-    @Override
-    public void setSize(int x, int y) {
+    public void increaseSize(int x, int y) {
         for (Layer layer : imageCraft.layerList) {
             for (SimpleHistory simpleHistoryObj : layer.historyArray) {
                 simpleHistoryObj.finalImage = imageCraft.resize(simpleHistoryObj.finalImage,
@@ -117,11 +116,11 @@ public class DrawingArea extends javax.swing.JPanel {
         this.revalidate();
         this.repaint();
     }
-    
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
         // Must have this so that the NetBeans Design tab works.
         if (imageCraft == null) {
             return;

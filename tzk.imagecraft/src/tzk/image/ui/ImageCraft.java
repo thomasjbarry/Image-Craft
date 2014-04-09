@@ -640,17 +640,17 @@ public class ImageCraft extends javax.swing.JFrame {
 
     private void BottomResizeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BottomResizeMouseReleased
         //Only modifies the Y-direction
-        drawingArea1.setSize(0, evt.getY());
+        drawingArea1.increaseSize(0, evt.getY());
     }//GEN-LAST:event_BottomResizeMouseReleased
 
     private void CornerResizeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CornerResizeMouseReleased
         //Modifies both the X-direction and Y-direction
-        drawingArea1.setSize(evt.getX(), evt.getY());
+        drawingArea1.increaseSize(evt.getX(), evt.getY());
     }//GEN-LAST:event_CornerResizeMouseReleased
 
     private void RightResizeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RightResizeMouseReleased
         //Only modifies the X-direction
-        drawingArea1.setSize(evt.getX(), 0);
+        drawingArea1.increaseSize(evt.getX(), 0);
     }//GEN-LAST:event_RightResizeMouseReleased
 
     private void jNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewActionPerformed

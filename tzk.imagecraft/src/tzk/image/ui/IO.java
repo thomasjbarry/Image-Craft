@@ -87,7 +87,7 @@ public class IO {
                     //If the bufferedFile is too big resize it
                     if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
                             || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-                    imageCraft.drawingArea1.setSize(
+                    imageCraft.drawingArea1.increaseSize(
                             bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
                             bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
                     }
@@ -117,7 +117,7 @@ public class IO {
                             if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
                                     || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
 
-                                imageCraft.drawingArea1.setSize(
+                                imageCraft.drawingArea1.increaseSize(
                                         bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
                                         bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
                                 System.out.println(bufferedFile.getWidth() + " " + bufferedFile.getHeight());
@@ -193,7 +193,7 @@ public class IO {
                     //If the bufferedFile is too big resize it
 //                    if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
 //                            || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-                imageCraft.drawingArea1.setSize(
+                imageCraft.drawingArea1.increaseSize(
                         bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
                         bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
 //                    }
