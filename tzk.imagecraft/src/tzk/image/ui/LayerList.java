@@ -1,0 +1,308 @@
+/* The MIT License (MIT)
+
+ Copyright (c) 2014 Thomas James Barry, Zachary Y. Gateley, Kenneth Drew Gonzales
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
+package tzk.image.ui;
+
+/**
+ *
+ * @author Thomas
+ */
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Point;
+import java.util.Vector;
+import javax.swing.*;
+
+public class LayerList extends JList {
+
+    //Constructors
+    public LayerList() {
+        initComponents();
+    }
+
+    @SuppressWarnings("unchecked")
+    public LayerList(ImageCraft iC) {
+        Vector<String> layers = new Vector<>();
+        imageCraft = iC;
+        for (Layer layer : imageCraft.layerList) {
+            layers.add(layer.layerName);
+        }
+        setListData(layers);
+        setSelectedIndex(imageCraft.layerList.size() - 1);
+        initComponents();
+        setCellRenderer(new currentLayerCellRenderer());
+    }
+
+    //Classes
+    private class currentLayerCellRenderer extends DefaultListCellRenderer {
+
+        //Makes a Custom CellRenderer that sets the Font Color to Red for the
+        //Current Layer and to Black otherwise.
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (imageCraft.layerList.indexOf(imageCraft.currentLayer) == index) {
+                setForeground(Color.RED);
+            } else {
+                setForeground(Color.BLACK);
+            }
+            return this;
+        }
+    }
+
+    //Methods
+    private void initComponents() {
+        jPopupMenu = new javax.swing.JPopupMenu();
+        jMenuItemSetCL = new javax.swing.JMenuItem();
+        jMenuItemRename = new javax.swing.JMenuItem();
+        jMenuItemMoveUp = new javax.swing.JMenuItem();
+        jMenuItemMoveDown = new javax.swing.JMenuItem();
+        jMenuItemClearLayer = new javax.swing.JMenuItem();
+        jMenuItemDeleteLayer = new javax.swing.JMenuItem();
+        
+
+        jPopupMenu.add(jMenuItemSetCL);
+        jMenuItemSetCL.setText("Set as Current Layer");
+        jMenuItemSetCL.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSetCLActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemRename);
+        jMenuItemRename.setText("Rename");
+        jMenuItemRename.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRenameActionPerformed(evt);
+            }
+        });        
+        jPopupMenu.add(jMenuItemMoveUp);
+        jMenuItemMoveUp.setText("Move up");
+        jMenuItemMoveUp.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMoveUpActionPerformed(evt);
+            }
+        });
+        jPopupMenu.add(jMenuItemMoveDown);
+        jMenuItemMoveDown.setText("Move down");
+        jMenuItemMoveDown.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMoveDownActionPerformed(evt);
+            }
+        });
+        
+        jPopupMenu.add(jMenuItemClearLayer);
+        jMenuItemClearLayer.setText("Clear");
+        jMenuItemClearLayer.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+               jMenuItemClearLayerActionPerformed(evt);
+            }
+        });
+         
+        jPopupMenu.add(jMenuItemDeleteLayer);
+        jMenuItemDeleteLayer.setText("Delete");
+
+        jMenuItemDeleteLayer.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemDeleteLayerActionPerformed(evt);
+            }
+        });
+
+        setSelectedIndex(0);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLayerListMouseClicked(evt);
+            }
+        });
+        addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            @Override
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jLayerListValueChanged(evt);
+            }
+        });
+    }
+
+    private void jLayerListMouseClicked(java.awt.event.MouseEvent evt) {
+        //If you right clicked the LayerList then show the PopupMenu from
+        //where you clicked and set the clickedLayer to the layer you clicked on
+        if (SwingUtilities.isRightMouseButton(evt)) {
+            clickedLayer = imageCraft.layerList.get(
+                    this.locationToIndex(new Point(evt.getX(), evt.getY())));
+            enableAllMenuOptions(jPopupMenu);
+
+            if (clickedLayer == imageCraft.layerList.get(0)) {
+                jMenuItemRename.setEnabled(false);
+                jMenuItemMoveUp.setEnabled(false);
+                jMenuItemMoveDown.setEnabled(false);
+                jMenuItemDeleteLayer.setEnabled(false);
+            } else {
+                if (clickedLayer == imageCraft.layerList.get(1)) {
+                    jMenuItemMoveUp.setEnabled(false);
+                }
+                if (clickedLayer == imageCraft.layerList.get(imageCraft.layerList.size() - 1)) {
+                    jMenuItemMoveDown.setEnabled(false);
+                }
+            }
+
+            jPopupMenu.show(this, evt.getX(), evt.getY());
+
+            System.out.println("You right clicked " + clickedLayer.layerName);
+        }
+    }
+
+    private void jLayerListValueChanged(javax.swing.event.ListSelectionEvent evt) {
+        //If there isn't a selected index don't do anything
+        if (getSelectedIndex() != -1) {
+            if (imageCraft.selectedAll) {
+                imageCraft.selectedAll = false;
+            } else if (imageCraft.jSelectAllLayers.isSelected()) {
+                int index = getSelectedIndex();
+                imageCraft.jSelectAllLayers.setSelected(false);
+                setSelectedIndex(index);
+            } else if (getSelectedIndices().length == imageCraft.layerList.size()) {
+                imageCraft.selectedAll = true;
+                imageCraft.jSelectAllLayers.setSelected(true);
+            }
+
+            imageCraft.currentLayer = imageCraft.layerList.get(
+                    getSelectedIndex());
+            this.repaint();
+            imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
+        }
+    }
+
+    private void jMenuItemSetCLActionPerformed(java.awt.event.ActionEvent evt) {
+        //If you select the "Set as Current Layer" menu item set the Current
+        //Layer to the layer we right clicked on.
+        imageCraft.currentLayer = clickedLayer;
+        this.repaint();
+        System.out.println("The Current Layer is now " +
+                imageCraft.currentLayer.layerName);
+    }
+    
+    private void jMenuItemRenameActionPerformed(java.awt.event.ActionEvent evt) {
+        int[] selected = this.getSelectedIndices();
+        String renameText = JOptionPane.showInputDialog("Rename layer", clickedLayer.layerName);
+        if (renameText != null) {
+        clickedLayer.layerName = renameText;
+        this.updateLayerList();
+        this.setSelectedIndices(selected);
+        this.repaint();
+        }
+    }    
+
+    private void jMenuItemMoveUpActionPerformed(java.awt.event.ActionEvent evt) {
+        int[] selected = this.getSelectedIndices();
+        int index = imageCraft.layerList.indexOf(clickedLayer);
+        Layer friend = imageCraft.layerList.get(index - 1);
+        imageCraft.layerList.set(index - 1, clickedLayer);
+        imageCraft.layerList.set(index, friend);
+
+        this.updateLayerList();
+        this.repaint();
+
+        for (int i = 0; i < selected.length; i++) {
+            if (selected[i] == index || selected[i] == index - 1) {
+                selected[i] = selected[i] == index ? index - 1 : index;
+            }
+        }
+        this.setSelectedIndices(selected);
+        System.out.println("You just moved " + clickedLayer.layerName + " up.");
+    }
+
+    private void jMenuItemMoveDownActionPerformed(java.awt.event.ActionEvent evt) {
+        int[] selected = this.getSelectedIndices();
+        int index = imageCraft.layerList.indexOf(clickedLayer);
+
+        Layer friend = imageCraft.layerList.get(index + 1);
+        imageCraft.layerList.set(index + 1, clickedLayer);
+        imageCraft.layerList.set(index, friend);
+
+        this.updateLayerList();
+        this.repaint();
+
+        for (int i = 0; i < selected.length; i++) {
+            if (selected[i] == index || selected[i] == index + 1) {
+                selected[i] = selected[i] == index ? index + 1 : index;
+            }
+        }
+        this.setSelectedIndices(selected);
+        System.out.println("You just moved " + clickedLayer.layerName + " down.");
+    }
+
+    private void jMenuItemClearLayerActionPerformed(java.awt.event.ActionEvent evt) {
+        int[] selected = this.getSelectedIndices();
+        clickedLayer.historyArray.clear();
+        clickedLayer.undoIndex = -1;
+        this.updateLayerList();
+        this.setSelectedIndices(selected);
+        this.repaint();
+        System.out.println("You just cleared " + clickedLayer.layerName);
+    }
+    
+    private void jMenuItemDeleteLayerActionPerformed(java.awt.event.ActionEvent evt) {
+        imageCraft.layerList.remove(clickedLayer);
+        this.updateLayerList();
+        this.repaint();
+        System.out.println("You just deleted " + clickedLayer.layerName);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void updateLayerList() {
+        // Get layers from Layer class
+        Vector<String> layers = new Vector<>();
+        for (Layer layer : imageCraft.layerList) {
+            layers.add(layer.layerName);
+        }
+
+        // Update list component, set selected layer
+        setListData(layers);
+        setSelectedIndex(imageCraft.layerList.size() - 1);
+    }
+
+    private void enableAllMenuOptions(JPopupMenu menu) {
+        for (Component item : menu.getComponents()) {
+            item.setEnabled(true);
+        }
+    }
+    
+    protected int[] getSelected() {
+        return getSelectedIndices();
+    }
+
+    public static void main() {
+        //Do Nothing
+    }
+
+    //Initialize Variables
+    private ImageCraft imageCraft;
+    private Layer clickedLayer;
+    private JPopupMenu jPopupMenu;
+    private JMenuItem jMenuItemSetCL, jMenuItemRename, jMenuItemMoveUp,
+            jMenuItemMoveDown, jMenuItemClearLayer, jMenuItemDeleteLayer;
+}

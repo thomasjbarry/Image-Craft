@@ -1,0 +1,14 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# NetBeans Specific #
+# 3/22/14: Do not ignore properties. Breaks Netbeans project.
+# *.properties
+/AnagramGame/nbproject/private/
+/tzk.imagecraft/build/
+/tzk.imagecraft/dist/
+/tzk.imagecraft/nbproject/private/
