@@ -37,7 +37,7 @@ public class ColorPicker extends javax.swing.JFrame {
      */
     public ColorPicker() {
         //No specified ImageCraft object for this ColorPicker
-        icObj = null;
+        imageCraft = null;
         
         //Create the GUI components
         initComponents();
@@ -53,7 +53,7 @@ public class ColorPicker extends javax.swing.JFrame {
     public ColorPicker(final ImageCraft opener)
     {
         //Initialize variables
-        icObj = opener;
+        imageCraft = opener;
         
         //Create the GUI components
         initComponents();
@@ -118,24 +118,24 @@ public class ColorPicker extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jSelectButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jSelectButtonMouseClicked
-        if (icObj != null) 
+        if (imageCraft != null) 
         {
             //If user selected to pick the primaryColor then set it to the 
             //selected color
             if (primary)
             {
-                icObj.primaryColor = jColorChooser.getColor();
+                imageCraft.primaryColor = jColorChooser.getColor();
             }
             
             //Otherwise if user selected to pick the secondaryColor then set it
             //to the selected color
             else 
             {
-                icObj.secondaryColor = jColorChooser.getColor();
+                imageCraft.secondaryColor = jColorChooser.getColor();
             }
             
             //Paint jColorSwatch component to the newly selected color
-            icObj.jColorSwatch.paintComponent(icObj.jColorSwatch.getGraphics());
+            imageCraft.jColorSwatch.paintComponent(imageCraft.jColorSwatch.getGraphics());
         }
         //Close the ColorPicker
         this.dispatchEvent(windowClosing);
@@ -177,7 +177,7 @@ public class ColorPicker extends javax.swing.JFrame {
     }
     
     // Variable declaration
-    private final ImageCraft icObj;
+    protected ImageCraft imageCraft;
     private final WindowEvent windowClosing
             = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
     protected boolean primary;

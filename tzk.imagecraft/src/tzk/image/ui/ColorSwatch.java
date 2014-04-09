@@ -45,7 +45,7 @@ public class ColorSwatch extends javax.swing.JPanel {
     {
         imageCraft = iC;        
         initComponents();
-        colorPicker = new ColorPicker(iC);
+//        colorPicker = new ColorPicker(iC);
     }
 
     /**
@@ -110,9 +110,10 @@ public class ColorSwatch extends javax.swing.JPanel {
         
         if (doPicker) 
         {
-            colorPicker.jColorChooser.setColor((primary ? imageCraft.primaryColor : imageCraft.secondaryColor));
-            colorPicker.primary = primary;
-            colorPicker.setVisible(true);
+            ImageCraft.colorPicker.imageCraft = imageCraft;            
+            ImageCraft.colorPicker.jColorChooser.setColor((primary ? imageCraft.primaryColor : imageCraft.secondaryColor));
+            ImageCraft.colorPicker.primary = primary;
+            ImageCraft.colorPicker.setVisible(true);
         }
     }//GEN-LAST:event_formMouseClicked
 
@@ -172,7 +173,7 @@ public class ColorSwatch extends javax.swing.JPanel {
     
     // Variables declaration
     private ImageCraft imageCraft;
-    private ColorPicker colorPicker;
+//    private ColorPicker colorPicker;
     // End of variables declaration
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,7 +4,7 @@ TODO:
 
 ZACH: Shapes Bug (layered JPanels), Open Bug
 
-THOMAS: Shared ColorPicker, LayerList (SH object lists, embedded window?)
+THOMAS: LayerList (SH object lists, embedded window?)
 
 DREW: Modify Size of Drawing Area (Custom components for size adjust boxes/ set location based on size of drawing area)
 

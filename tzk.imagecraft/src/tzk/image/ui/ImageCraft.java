@@ -789,6 +789,8 @@ public class ImageCraft extends javax.swing.JFrame {
     
     //Number of current open ImageCraft frames
     private static int openFrames = 0;
+    
+    public static ColorPicker colorPicker = new ColorPicker();
 
     // End variables declaration
 
