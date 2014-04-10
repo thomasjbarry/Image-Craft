@@ -23,9 +23,13 @@
  */
 package tzk.image.ui;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -87,9 +91,9 @@ public class IO {
                     //If the bufferedFile is too big resize it
                     if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
                             || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-                    imageCraft.drawingArea1.increaseSize(
-                            bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
-                            bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
+                        imageCraft.drawingArea1.increaseSize(
+                                bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
+                                bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
                     }
                     openedLayer.addHistory(bufferedFile);
 
@@ -190,7 +194,7 @@ public class IO {
                 BufferedImage bufferedFile = ImageIO.read(file);
                 System.out.println("File turned into buffered");
 
-                    //If the bufferedFile is too big resize it
+                //If the bufferedFile is too big resize it
 //                    if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
 //                            || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
                 imageCraft.drawingArea1.increaseSize(
@@ -206,17 +210,35 @@ public class IO {
             System.out.println("Import " + file.toString());
         }
     }
-        /**
-         * Export a file as a JPG.
-         *
-         * @param unique false: Overwrite last export file true: Write to a new
-         * export file
-         */
+
+    /**
+     * Export a file as a JPG.
+     *
+     * @param unique false: Overwrite last export file true: Write to a new
+     * export file
+     */
     protected void export(boolean unique) {
         if (unique || latestExport == null) {
             // Set available image file formats
             fileChooser.resetChoosableFileFilters();
             fileChooser.setFileFilter(imageFormats);
+            BufferedImage image = imageCraft.newBlankImage();
+            Graphics g = image.getGraphics();
+            for (Layer layer : imageCraft.layerList) {
+                if (layer.undoIndex != -1) {
+                    g.drawImage(layer.historyArray.get(layer.undoIndex).finalImage, 0, 0, null);
+                }
+            }
+            BufferedImage filteredImage = new BufferedImage(
+                    (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
+                    (int) imageCraft.drawingArea1.getPreferredSize().getHeight(),
+                    BufferedImage.TYPE_INT_RGB);
+            Graphics g2 = filteredImage.getGraphics();
+            g2.setColor(Color.white);
+            g2.fillRect(0, 0,
+                    (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
+                    (int) imageCraft.drawingArea1.getPreferredSize().getHeight());
+            g2.drawImage(image, 0, 0, null);
 
             // Attempt JFileChooser save dialogue
             int saveOption = fileChooser.showSaveDialog(imageCraft);
@@ -228,6 +250,26 @@ public class IO {
 
             // New file chosen, export
             latestExport = fileChooser.getSelectedFile();
+
+            String[] fileNameParts = latestExport.toString().split("\\.");
+            String format;
+            if (fileNameParts.length > 1) {
+                format = fileNameParts[fileNameParts.length - 1];
+            } else {
+                Path source = latestExport.toPath();
+                String formattedName = latestExport.toString() + ".png";
+                try {
+                    Files.move(source, source.resolveSibling(formattedName));
+                } catch (IOException err) {
+                    System.out.println("err");
+                }
+                format = ".png";
+            }
+
+            try {
+                ImageIO.write(filteredImage, format, latestExport);
+            } catch (IOException err) {
+            }
         }
 
         System.out.println("Export " + (unique ? "new " : "") + "to " + latestExport.toString());
