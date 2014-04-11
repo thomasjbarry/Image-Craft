@@ -83,24 +83,27 @@ public class IO {
             //a new layer, otherwise open it in a new ImageCraft instance.
             if (imageCraft.numLayer == 1 && imageCraft.layerList.get(0).historyArray.isEmpty()) {
                 try {
+                    // Create a new layer in this ImageCraft
                     Layer openedLayer = new Layer(imageCraft);
 
+                    // Buffer the image file
                     BufferedImage bufferedFile = ImageIO.read(file);
-                    System.out.println("File turned into buffered1");
 
-                    //If the bufferedFile is too big resize it
+                    // If the bufferedFile is too big, resize it
                     if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
                             || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
                         imageCraft.drawingArea1.increaseSize(
                                 bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
                                 bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
                     }
-                    openedLayer.addHistory(bufferedFile);
 
+                    // Add BufferedImage to layer history
+                    openedLayer.addHistory(bufferedFile);
                 } catch (IOException err) {
                     System.out.println("Not a real image..."); // You shmuck
                 }
-            } else {
+            } // Otherwise, open a new ImageCraft window
+            else {
                 java.awt.EventQueue.invokeLater(new Runnable() {
 
                     @Override
@@ -111,6 +114,7 @@ public class IO {
                         // Show ImageCraft object
                         program.setVisible(true);
 
+                        // Open BufferedImage in new layer
                         try {
                             Layer openedLayer = new Layer(program);
 
@@ -129,7 +133,6 @@ public class IO {
 
                             }
                             openedLayer.addHistory(bufferedFile);
-
                         } catch (IOException err) {
                             System.out.println("Not a real image..."); // You shmuck
                         }
@@ -163,6 +166,9 @@ public class IO {
 
             // New file chosen, save
             latestSave = fileChooser.getSelectedFile();
+
+            // Update ImageCraft title
+            imageCraft.setTitle(latestSave.toString());
         }
 
         System.out.println("Save " + (unique ? "new " : "") + "to " + latestSave.toString());

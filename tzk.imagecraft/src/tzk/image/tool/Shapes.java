@@ -182,10 +182,6 @@ public class Shapes extends SimpleTool {
     }
 
     // Variables declaration
-    // These fields  hide SimpleTool fields. This is OK.
-//    public JToggleButton toolButton;
-//    protected String toolImage = "";
-//    protected String toolName = "Brush";
     private final ImageCraft imageCraft;
     private boolean dragging, rightButton;
     private int startX, startY;

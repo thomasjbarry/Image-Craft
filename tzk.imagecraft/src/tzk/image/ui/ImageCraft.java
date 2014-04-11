@@ -54,15 +54,19 @@ public class ImageCraft extends javax.swing.JFrame {
                 + layer.layerName + " ; " + layer);
 
         selectedAll = false;
-        // Temporary - Give this window a title
-        // When we're working with files, set the title with the file name
-        this.setTitle("Image Craft " + (++numImageCraft));
+        
+        // Update the total number of ImageCraft objects 
+        numImageCraft++;
+        
+        // Update the title
+        setTitle();
 
         // Initiate ImageCraft tools
         drawTool = new Draw(this);
         fillTool = new Fill(this);
         shapesTool = new Shapes(this, "rectangle");
         pickAColor = new PickAColor(this);
+        
         // Select default tool
         drawTool.select();
 
@@ -90,7 +94,6 @@ public class ImageCraft extends javax.swing.JFrame {
         jToolBar = new javax.swing.JPanel();
         jDraw = new javax.swing.JToggleButton();
         jFill = new javax.swing.JToggleButton();
-        jFilter = new javax.swing.JToggleButton();
         jPick = new javax.swing.JToggleButton();
         jShape = new javax.swing.JToggleButton();
         jColorSwatch = new ColorSwatch(this);
@@ -112,6 +115,7 @@ public class ImageCraft extends javax.swing.JFrame {
         jImport = new javax.swing.JMenuItem();
         jUndo = new javax.swing.JMenuItem();
         jRedo = new javax.swing.JMenuItem();
+        jFilter = new javax.swing.JMenu();
         jHelp = new javax.swing.JMenu();
         jAbout = new javax.swing.JMenuItem();
 
@@ -201,8 +205,6 @@ public class ImageCraft extends javax.swing.JFrame {
             }
         });
 
-        jFilter.setText("Filter");
-
         jPick.setText("Picker");
         jPick.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,22 +229,17 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jFill, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFilter)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPick, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jShape)
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(182, Short.MAX_VALUE))
         );
         jToolBarLayout.setVerticalGroup(
             jToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jToolBarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jFilter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jToolBarLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jFill, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jFill, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jDraw, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPick, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jShape, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -493,6 +490,9 @@ public class ImageCraft extends javax.swing.JFrame {
 
         jMenuBar1.add(jEdit);
 
+        jFilter.setText("Filter");
+        jMenuBar1.add(jFilter);
+
         jHelp.setText("Help");
 
         jAbout.setText("About");
@@ -721,6 +721,37 @@ public class ImageCraft extends javax.swing.JFrame {
         resizedImage.getGraphics().drawImage(bufferedImage, 0, 0, null);
         return resizedImage;
     }
+    
+    /**
+     * Set the title of ImageCraft with new passed title.
+     * 
+     * @param title This is the new title of this file. If it has a path, the path will be removed.
+     */
+    @Override
+    public void setTitle(String title) {
+        // Clean up title by stripping the path, and update object field
+        // Check for forward or backward slash in name, store which is found to delim
+        int lastSlash = -1;
+        // Using a single "=" on one side of a comparison operator is a way
+        // to tell the next line what condition passed, if the condition amounts to true
+        if ((lastSlash=title.lastIndexOf('/'))>-1 || (lastSlash=title.lastIndexOf('\''))>-1) {
+            title=title.substring(lastSlash + 1);
+        }
+        currentTitle = title;
+        
+        // Add ImageCraft tag before setting jFrame title
+        title = title.concat(" (ImageCraft)");
+        
+        super.setTitle(title);
+    }
+    
+    /**
+     * Set the title of this ImageCraft.
+     * Does not set a new currentTitle.
+     */
+    public void setTitle() {
+        setTitle(currentTitle);
+    }
 
     /**
      * @param args the command line arguments
@@ -784,6 +815,9 @@ public class ImageCraft extends javax.swing.JFrame {
     // All available tools
     public SimpleTool drawTool, fillTool, shapesTool, pickAColor;
     
+    // Name of the current file
+    public String currentTitle = "Untitled";
+    
     //Number of total ImageCraft objects created to be used for the title
     private static int numImageCraft = 0;
     
@@ -808,7 +842,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JMenuItem jExportAs;
     private javax.swing.JMenu jFile;
     public javax.swing.JToggleButton jFill;
-    public javax.swing.JToggleButton jFilter;
+    private javax.swing.JMenu jFilter;
     private javax.swing.JMenu jHelp;
     private javax.swing.JMenuItem jImport;
     private javax.swing.JLabel jLabel1;

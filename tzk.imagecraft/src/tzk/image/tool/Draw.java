@@ -159,12 +159,6 @@ public class Draw extends SimpleTool {
     }
 
     // Variables declaration
-    
-    // These fields  hide SimpleTool fields. This is OK.
-//    public JToggleButton toolButton;
-//    protected String toolImage = "";
-//    protected String toolName = "Brush";
-    
     private final ImageCraft imageCraft;
     
     private Graphics drawingGraphics, imageGraphics;

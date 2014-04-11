@@ -100,12 +100,9 @@ public class SimpleTool {
     // Variables declaration
     
     private final ImageCraft imageCraft;
+    
     // What button the tool is using
     public JToggleButton toolButton = null;
-    // What image should be used for the tool
-    protected final String toolImage = "";
-    // The name of the tool
-    protected final String toolName = "Default";
     
     // End of variables declaration
 }
