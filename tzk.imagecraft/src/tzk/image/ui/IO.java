@@ -122,16 +122,12 @@ public class IO {
                             BufferedImage bufferedFile = ImageIO.read(file);
                             System.out.println("File turned into buffered2");
 
-                            //If the bufferedFile is too big resize it                            
+                            // If the bufferedFile is too big, resize it
                             if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
                                     || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-
-                                imageCraft.drawingArea1.increaseSize(
+                                program.drawingArea1.increaseSize(
                                         bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
                                         bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
-                                System.out.println(bufferedFile.getWidth() + " " + bufferedFile.getHeight());
-                                System.out.println(imageCraft.drawingArea1.getWidth() + " " + imageCraft.drawingArea1.getHeight());
-
                             }
                             openedLayer.addHistory(bufferedFile);
                         } catch (IOException err) {
