@@ -427,6 +427,7 @@ public class ImageCraft extends javax.swing.JFrame {
         });
         jFile.add(jSaveAs);
 
+        jExport.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         jExport.setText("Export");
         jExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

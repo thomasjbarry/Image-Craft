@@ -24,6 +24,7 @@
 package tzk.image.ui;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -227,6 +228,9 @@ public class IO {
             // Set available image file formats
             fileChooser.resetChoosableFileFilters();
             fileChooser.setFileFilter(imageFormats);
+            
+            //Create a new BufferedImage and use its graphics to draw every layer
+            //in imageCraft to the BufferedImage
             BufferedImage image = imageCraft.newBlankImage();
             Graphics g = image.getGraphics();
             for (Layer layer : imageCraft.layerList) {
@@ -234,15 +238,22 @@ public class IO {
                     g.drawImage(layer.historyArray.get(layer.undoIndex).finalImage, 0, 0, null);
                 }
             }
+            
+            //Create a filteredImage that has a white background to draw the
+            //transparent BufferedImage with all the layers
             BufferedImage filteredImage = new BufferedImage(
                     (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
                     (int) imageCraft.drawingArea1.getPreferredSize().getHeight(),
                     BufferedImage.TYPE_INT_RGB);
             Graphics g2 = filteredImage.getGraphics();
+            
+            //Set the background to white
             g2.setColor(Color.white);
             g2.fillRect(0, 0,
                     (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
                     (int) imageCraft.drawingArea1.getPreferredSize().getHeight());
+            
+            //Draw image holding all the layers
             g2.drawImage(image, 0, 0, null);
 
             // Attempt JFileChooser save dialogue
@@ -256,8 +267,13 @@ public class IO {
             // New file chosen, export
             latestExport = fileChooser.getSelectedFile();
 
+            //Splits up the filename wherever a period is to get the extension
             String[] fileNameParts = latestExport.toString().split("\\.");
             String format;
+            
+            //If the latestExport string was able to be split then set the last
+            //element to be the format.
+            //Otherwise force the filename into default type PNG
             if (fileNameParts.length > 1) {
                 format = fileNameParts[fileNameParts.length - 1];
             } else {
@@ -271,8 +287,14 @@ public class IO {
                 format = ".png";
             }
 
+            //Attempts to write the file and open it in the Desktop
             try {
                 ImageIO.write(filteredImage, format, latestExport);
+                try {
+                    Desktop.getDesktop().open(new File(latestExport.toString()));
+                } catch (IllegalArgumentException iae) {
+                    System.out.println("File Not Found");
+                }
             } catch (IOException err) {
             }
         }
