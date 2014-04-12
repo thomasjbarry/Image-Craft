@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -83,28 +84,8 @@ public class IO {
             //in the background layer then open the file in this ImageCraft in
             //a new layer, otherwise open it in a new ImageCraft instance.
             if (imageCraft.numLayer == 1 && imageCraft.layerList.get(0).historyArray.isEmpty()) {
-                try {
-                    // Create a new layer in this ImageCraft
-                    Layer openedLayer = new Layer(imageCraft);
-
-                    // Buffer the image file
-                    BufferedImage bufferedFile = ImageIO.read(file);
-
-                    // If the bufferedFile is too big, resize it
-                    if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
-                            || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-                        imageCraft.drawingArea1.increaseSize(
-                                bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
-                                bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
-                    }
-
-                    // Add BufferedImage to layer history
-                    openedLayer.addHistory(bufferedFile);
-                } catch (IOException err) {
-                    System.out.println("Not a real image..."); // You shmuck
-                }
-            } // Otherwise, open a new ImageCraft window
-            else {
+                readFile(file, imageCraft, true);
+            } else {
                 java.awt.EventQueue.invokeLater(new Runnable() {
 
                     @Override
@@ -116,23 +97,7 @@ public class IO {
                         program.setVisible(true);
 
                         // Open BufferedImage in new layer
-                        try {
-                            Layer openedLayer = new Layer(program);
-
-                            BufferedImage bufferedFile = ImageIO.read(file);
-                            System.out.println("File turned into buffered2");
-
-                            // If the bufferedFile is too big, resize it
-                            if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
-                                    || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-                                program.drawingArea1.increaseSize(
-                                        bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
-                                        bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
-                            }
-                            openedLayer.addHistory(bufferedFile);
-                        } catch (IOException err) {
-                            System.out.println("Not a real image..."); // You shmuck
-                        }
+                        readFile(file, program, true);
                     }
                 });
             }
@@ -193,22 +158,8 @@ public class IO {
         // File chosen, open
         final File file = fileChooser.getSelectedFile();
         if (file.exists()) {
-            try {
-                BufferedImage bufferedFile = ImageIO.read(file);
+            readFile(file, imageCraft, false);
 
-                //If the bufferedFile is too big resize it
-//                    if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
-//                            || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-                imageCraft.drawingArea1.increaseSize(
-                        bufferedFile.getWidth() - imageCraft.drawingArea1.getWidth(),
-                        bufferedFile.getHeight() - imageCraft.drawingArea1.getHeight());
-//                    }
-                imageCraft.currentLayer.addHistory(bufferedFile);
-                imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
-
-            } catch (IOException err) {
-                System.out.println("Not a real image..."); // You shmuck
-            }
             System.out.println("Import " + file.toString());
         }
     }
@@ -224,33 +175,11 @@ public class IO {
             // Set available image file formats
             fileChooser.resetChoosableFileFilters();
             fileChooser.setFileFilter(imageFormats);
-            
-            //Create a new BufferedImage and use its graphics to draw every layer
-            //in imageCraft to the BufferedImage
-            BufferedImage image = imageCraft.newBlankImage();
-            Graphics g = image.getGraphics();
-            for (Layer layer : imageCraft.layerList) {
-                if (layer.undoIndex != -1) {
-                    g.drawImage(layer.historyArray.get(layer.undoIndex).finalImage, 0, 0, null);
-                }
-            }
-            
-            //Create a filteredImage that has a white background to draw the
-            //transparent BufferedImage with all the layers
-            BufferedImage filteredImage = new BufferedImage(
-                    (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
-                    (int) imageCraft.drawingArea1.getPreferredSize().getHeight(),
-                    BufferedImage.TYPE_INT_RGB);
-            Graphics g2 = filteredImage.getGraphics();
-            
-            //Set the background to white
-            g2.setColor(Color.white);
-            g2.fillRect(0, 0,
-                    (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
-                    (int) imageCraft.drawingArea1.getPreferredSize().getHeight());
-            
-            //Draw image holding all the layers
-            g2.drawImage(image, 0, 0, null);
+
+            //Take a screenshot of all layers in the layerList
+            //TODO: screenshot selection of layers (create ArrayList<Layer> 
+            //for layers to be screenshot
+            BufferedImage filteredImage = screenshot(imageCraft.layerList);
 
             // Attempt JFileChooser save dialogue
             int exportOption = fileChooser.showDialog(imageCraft, "Export");
@@ -266,7 +195,7 @@ public class IO {
             //Splits up the filename wherever a period is to get the extension
             String[] fileNameParts = latestExport.toString().split("\\.");
             String format;
-            
+
             //If the latestExport string was able to be split then set the last
             //element to be the format.
             //Otherwise force the filename into default type PNG
@@ -296,6 +225,56 @@ public class IO {
         }
 
         System.out.println("Export " + (unique ? "new " : "") + "to " + latestExport.toString());
+    }
+
+    private void readFile(File file, ImageCraft iC, boolean newIC) {
+        try {
+            Layer layer = newIC ? new Layer(iC) : iC.currentLayer;
+            BufferedImage bufferedFile = ImageIO.read(file);
+
+            //If the bufferedFile is too big resize it
+            if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
+                    || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
+                iC.drawingArea1.increaseSize(
+                        bufferedFile.getWidth() - iC.drawingArea1.getWidth(),
+                        bufferedFile.getHeight() - iC.drawingArea1.getHeight());
+            }
+            layer.addHistory(bufferedFile);
+            iC.drawingArea1.paintComponent(iC.drawingArea1.getGraphics());
+        } catch (IOException err) {
+            System.out.println("Not a real image..."); // You shmuck
+        }
+    }
+
+    private BufferedImage screenshot(ArrayList<Layer> layers) {
+        //Create a new BufferedImage and use its graphics to draw every layer
+        //in imageCraft to the BufferedImage
+        BufferedImage image = imageCraft.newBlankImage();
+        Graphics g = image.getGraphics();
+        for (Layer layer : layers) {
+            if (layer.undoIndex != -1) {
+                g.drawImage(layer.historyArray.get(layer.undoIndex).finalImage, 0, 0, null);
+            }
+        }
+
+        //Create a filteredImage that has a white background to draw the
+        //transparent BufferedImage with all the layers
+        BufferedImage filteredImage = new BufferedImage(
+                (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
+                (int) imageCraft.drawingArea1.getPreferredSize().getHeight(),
+                BufferedImage.TYPE_INT_RGB);
+        Graphics g2 = filteredImage.getGraphics();
+
+        //Set the background to white
+        g2.setColor(Color.white);
+        g2.fillRect(0, 0,
+                (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
+                (int) imageCraft.drawingArea1.getPreferredSize().getHeight());
+
+        //Draw image holding all the layers
+        g2.drawImage(image, 0, 0, null);
+        
+        return filteredImage;
     }
 
     // Variables declaration
