@@ -186,10 +186,10 @@ public class IO {
         fileChooser.setFileFilter(imageCraftFormat);
 
         // Attempt open
-        int openOption = fileChooser.showOpenDialog(imageCraft);
-        // Returns JFileChooser.APPROVE_OPTION if the "Open" button was clicked
-        if (openOption != JFileChooser.APPROVE_OPTION) {
-            System.out.println("Open cancelled by user...");
+        int importOption = fileChooser.showDialog(imageCraft, "Import");
+        // Returns JFileChooser.APPROVE_OPTION if the "Import" button was clicked
+        if (importOption != JFileChooser.APPROVE_OPTION) {
+            System.out.println("Import cancelled by user...");
             return;
         }
 
@@ -198,7 +198,6 @@ public class IO {
         if (file.exists()) {
             try {
                 BufferedImage bufferedFile = ImageIO.read(file);
-                System.out.println("File turned into buffered");
 
                 //If the bufferedFile is too big resize it
 //                    if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
@@ -247,9 +246,9 @@ public class IO {
             g2.drawImage(image, 0, 0, null);
 
             // Attempt JFileChooser save dialogue
-            int saveOption = fileChooser.showSaveDialog(imageCraft);
-            // Returns JFileChooser.APPROVE_OPTION if the user clicked "Save"
-            if (saveOption != JFileChooser.APPROVE_OPTION) {
+            int exportOption = fileChooser.showDialog(imageCraft, "Export");
+            // Returns JFileChooser.APPROVE_OPTION if the user clicked "Export"
+            if (exportOption != JFileChooser.APPROVE_OPTION) {
                 System.out.println("Export cancelled by user...");
                 return;
             }

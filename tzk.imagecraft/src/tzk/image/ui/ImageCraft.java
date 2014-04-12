@@ -23,6 +23,7 @@
 package tzk.image.ui;
 
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import tzk.image.tool.Draw;
@@ -34,6 +35,7 @@ import tzk.image.tool.SimpleTool;
 /**
  *
  * DrewTest
+ *
  * @author Zach
  */
 public class ImageCraft extends javax.swing.JFrame {
@@ -45,6 +47,7 @@ public class ImageCraft extends javax.swing.JFrame {
     public ImageCraft() {
         numLayer = 0;
         layerList = new ArrayList<>();
+    
         //Create the GUI components
         initComponents();
 
@@ -54,10 +57,7 @@ public class ImageCraft extends javax.swing.JFrame {
                 + layer.layerName + " ; " + layer);
 
         selectedAll = false;
-        
-        // Update the total number of ImageCraft objects 
-        numImageCraft++;
-        
+
         // Update the title
         setTitle();
 
@@ -66,7 +66,7 @@ public class ImageCraft extends javax.swing.JFrame {
         fillTool = new Fill(this);
         shapesTool = new Shapes(this, "rectangle");
         pickAColor = new PickAColor(this);
-        
+
         // Select default tool
         drawTool.select();
 
@@ -96,6 +96,7 @@ public class ImageCraft extends javax.swing.JFrame {
         jFill = new javax.swing.JToggleButton();
         jPick = new javax.swing.JToggleButton();
         jShape = new javax.swing.JToggleButton();
+        jSize = new javax.swing.JComboBox();
         jColorSwatch = new ColorSwatch(this);
         drawingArea1 = new DrawingArea(this);
         RightResize = new javax.swing.JPanel();
@@ -219,6 +220,24 @@ public class ImageCraft extends javax.swing.JFrame {
             }
         });
 
+        jSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pen Width: 1", "Pen Width: 2", "Pen Width: 5" }));
+        jSize.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jSizeItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jColorSwatchLayout = new javax.swing.GroupLayout(jColorSwatch);
+        jColorSwatch.setLayout(jColorSwatchLayout);
+        jColorSwatchLayout.setHorizontalGroup(
+            jColorSwatchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 56, Short.MAX_VALUE)
+        );
+        jColorSwatchLayout.setVerticalGroup(
+            jColorSwatchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 56, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jToolBarLayout = new javax.swing.GroupLayout(jToolBar);
         jToolBar.setLayout(jToolBarLayout);
         jToolBarLayout.setHorizontalGroup(
@@ -232,41 +251,31 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addComponent(jPick, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jShape)
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addComponent(jColorSwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jToolBarLayout.setVerticalGroup(
             jToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jToolBarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jFill, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jDraw, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPick, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jShape, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jShape, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jToolBarLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(jToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jToolBarLayout.createSequentialGroup()
+                                .addComponent(jColorSwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jSize))))
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout jColorSwatchLayout = new javax.swing.GroupLayout(jColorSwatch);
-        jColorSwatch.setLayout(jColorSwatchLayout);
-        jColorSwatchLayout.setHorizontalGroup(
-            jColorSwatchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 56, Short.MAX_VALUE)
-        );
-        jColorSwatchLayout.setVerticalGroup(
-            jColorSwatchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 56, Short.MAX_VALUE)
-        );
-
-        drawingArea1.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                drawingArea1ComponentResized(evt);
-            }
-        });
-        drawingArea1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                drawingArea1PropertyChange(evt);
-            }
-        });
         drawingArea1.setLayout(new javax.swing.BoxLayout(drawingArea1, javax.swing.BoxLayout.LINE_AXIS));
 
         RightResize.setBackground(new java.awt.Color(255, 255, 255));
@@ -345,8 +354,6 @@ public class ImageCraft extends javax.swing.JFrame {
             .addGroup(jRightPaneLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(jToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(jColorSwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jRightPaneLayout.createSequentialGroup()
                 .addGap(8, 8, 8)
@@ -365,11 +372,7 @@ public class ImageCraft extends javax.swing.JFrame {
             jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jRightPaneLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jRightPaneLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jColorSwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jRightPaneLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
@@ -382,7 +385,7 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addGroup(jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(CornerResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BottomResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jSplitPane1.setRightComponent(jRightPane);
@@ -683,11 +686,11 @@ public class ImageCraft extends javax.swing.JFrame {
     private void jCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCloseActionPerformed
         //Dispose of this ImageCraft, if unsaved should check if you want to save
         dispose();
-        
+
         //If we are closing the only openFrame then exit the application
         if (openFrames == 1) {
             System.exit(0);
-        }        
+        }
         ImageCraft.openFrames--;
     }//GEN-LAST:event_jCloseActionPerformed
 
@@ -703,13 +706,22 @@ public class ImageCraft extends javax.swing.JFrame {
         inputOutput.fileImport();
     }//GEN-LAST:event_jImportActionPerformed
 
-    private void drawingArea1ComponentResized(java.awt.event.ComponentEvent evt) {                                            
-    }
-    
-    private void drawingArea1PropertyChange(java.beans.PropertyChangeEvent evt) {                                            
-    }    
-    
-    public BufferedImage newBlankImage() {
+    private void jSizeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jSizeItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            if (jSize.getSelectedIndex() == 0) {
+                currentTool.setPenStroke("src/tzk/image/img/standardPen_1.png");
+                currentTool.setPenWidth(1);
+            } else if (jSize.getSelectedIndex() == 1) {
+                currentTool.setPenStroke("src/tzk/image/img/standardPen_2.png");
+                currentTool.setPenWidth(2);                
+            }else {
+                currentTool.setPenStroke("src/tzk/image/img/standardPen_5.png");
+                currentTool.setPenWidth(5);               
+            }           
+        }
+    }//GEN-LAST:event_jSizeItemStateChanged
+
+     public BufferedImage newBlankImage() {
         return new BufferedImage(
                 (int) drawingArea1.getPreferredSize().getWidth(),
                 (int) drawingArea1.getPreferredSize().getHeight(),
@@ -721,11 +733,12 @@ public class ImageCraft extends javax.swing.JFrame {
         resizedImage.getGraphics().drawImage(bufferedImage, 0, 0, null);
         return resizedImage;
     }
-    
+
     /**
      * Set the title of ImageCraft with new passed title.
-     * 
-     * @param title This is the new title of this file. If it has a path, the path will be removed.
+     *
+     * @param title This is the new title of this file. If it has a path, the
+     * path will be removed.
      */
     @Override
     public void setTitle(String title) {
@@ -734,20 +747,19 @@ public class ImageCraft extends javax.swing.JFrame {
         int lastSlash = -1;
         // Using a single "=" on one side of a comparison operator is a way
         // to tell the next line what condition passed, if the condition amounts to true
-        if ((lastSlash=title.lastIndexOf('/'))>-1 || (lastSlash=title.lastIndexOf('\''))>-1) {
-            title=title.substring(lastSlash + 1);
+        if ((lastSlash = title.lastIndexOf('/')) > -1 || (lastSlash = title.lastIndexOf('\'')) > -1) {
+            title = title.substring(lastSlash + 1);
         }
         currentTitle = title;
-        
+
         // Add ImageCraft tag before setting jFrame title
         title = title.concat(" (ImageCraft)");
-        
+
         super.setTitle(title);
     }
-    
+
     /**
-     * Set the title of this ImageCraft.
-     * Does not set a new currentTitle.
+     * Set the title of this ImageCraft. Does not set a new currentTitle.
      */
     public void setTitle() {
         setTitle(currentTitle);
@@ -804,26 +816,23 @@ public class ImageCraft extends javax.swing.JFrame {
 
     // FileChooser is inside of this input-output object
     private final IO inputOutput;
-    
+
     //Number of New Layers, List of all layers, currently selected layer
     protected int numLayer;
     protected ArrayList<Layer> layerList;
     public Layer currentLayer;
-    
+
     // Current tool selected
     public SimpleTool currentTool = null;
     // All available tools
     public SimpleTool drawTool, fillTool, shapesTool, pickAColor;
-    
+
     // Name of the current file
     public String currentTitle = "Untitled";
-    
-    //Number of total ImageCraft objects created to be used for the title
-    private static int numImageCraft = 0;
-    
+
     //Number of current open ImageCraft frames
     private static int openFrames = 0;
-    
+
     public static ColorPicker colorPicker = new ColorPicker();
 
     // End variables declaration
@@ -859,6 +868,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     protected javax.swing.JCheckBox jSelectAllLayers;
     public javax.swing.JToggleButton jShape;
+    public javax.swing.JComboBox jSize;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel jToolBar;
     private javax.swing.JMenuItem jUndo;

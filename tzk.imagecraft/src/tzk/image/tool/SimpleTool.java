@@ -4,105 +4,105 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package tzk.image.tool;
 
 import java.awt.event.*;
 import javax.swing.JToggleButton;
 import tzk.image.ui.ImageCraft;
 
-
 /**
- * Basic tool class.
- * Extend this class with your tool.
- * 
+ * Basic tool class. Extend this class with your tool.
+ *
  * @author zach
  */
 public class SimpleTool {
-    
+
     public SimpleTool(ImageCraft iC) {
         imageCraft = iC;
     }
-    
+
     /**
-     * What happens when the mouse is pressed.
-     * When this tool is selected, this event fires when the mouse is
-     * pressed in the DrawingArea
-     * 
-     * @param evt 
+     * What happens when the mouse is pressed. When this tool is selected, this
+     * event fires when the mouse is pressed in the DrawingArea
+     *
+     * @param evt
      */
     public void mousePressed(MouseEvent evt) {
     }
-    
+
     /**
-     * What happens when the mouse is dragged.
-     * When this tool is selected, this method is called when the mouse
-     * has been pressed within the DrawingArea and the mouse is dragged
-     * in the drawing area.
-     * 
-     * @param evt 
+     * What happens when the mouse is dragged. When this tool is selected, this
+     * method is called when the mouse has been pressed within the DrawingArea
+     * and the mouse is dragged in the drawing area.
+     *
+     * @param evt
      */
     public void mouseDragged(MouseEvent evt) {
     }
-    
-    /** 
-     * What happens when the mouse is released.
-     * When this tool is selected, this method is called when the mouse
-     * has been pressed within the DrawingArea and the mouse is 
-     * released
-     * 
-     * @param evt 
+
+    /**
+     * What happens when the mouse is released. When this tool is selected, this
+     * method is called when the mouse has been pressed within the DrawingArea
+     * and the mouse is released
+     *
+     * @param evt
      */
     public void mouseReleased(MouseEvent evt) {
     }
-    
+
     /**
      * Deselects any current tool and selects the new tool.
-     * 
-     * 
+     *
+     *
      */
-    public void select()
-    {
+    public void select() {
         if (imageCraft.currentTool != null) {
             deselect();
         }
-        
+
         // Select currentTool
         // Set the toggle button of the current tool to selected
         imageCraft.currentTool = this;
         if (imageCraft.currentTool != null && imageCraft.currentTool.toolButton != null) {
             imageCraft.currentTool.toolButton.setSelected(true);
         }
+        //By default you cannot select a size for a tool (this is overrided if
+        //this is a draw or shape tool.
+        imageCraft.jSize.setEnabled(false);
     }
- 
+
     /**
      * Deselects this SimpleTool
-     * 
-     * 
-     */    
+     *
+     *
+     */
     public void deselect() {
         // In case this was called when there is no current tool, end execution
         if (imageCraft.currentTool == null) {
             return;
         }
-        
+
         // Toggle its button
         if (imageCraft.currentTool.toolButton != null) {
             imageCraft.currentTool.toolButton.setSelected(false);
         }
     }
-    
+
     public void setButton(JToggleButton button) {
         toolButton = button;
     }
     
+    public void setPenStroke(String filePath){        
+    }
     
+    public void setPenWidth(int width){
+    }        
+
     // Variables declaration
-    
     private final ImageCraft imageCraft;
-    
+
     // What button the tool is using
     public JToggleButton toolButton = null;
-    
+
     // End of variables declaration
 }

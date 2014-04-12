@@ -7,8 +7,15 @@ package tzk.image.tool;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.LookupOp;
+import java.awt.image.ShortLookupTable;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
 import tzk.image.ui.ImageCraft;
 
@@ -20,9 +27,11 @@ public class Draw extends SimpleTool {
 
     public Draw(ImageCraft iC) {
         super(iC);
-        
+
         imageCraft = iC;
-        
+        penStroke = "src/tzk/image/img/standardPen_1.png";
+        penIndex = 0;        
+
         super.setButton(imageCraft.jDraw);
     }
 
@@ -39,14 +48,19 @@ public class Draw extends SimpleTool {
         if (dragging) {
             return;
         }
-        
+
         // Create a new BufferedImage object
         // This will be sent to SimpleHistory constructor
         currentDrawing = imageCraft.newBlankImage();
-        
+
         //Get the coordinates clicked
         short x = (short) evt.getX();
         short y = (short) evt.getY();
+
+        //Adjust this point if outside the borders of the drawing area
+        Point point = adjustBorderPoints(x, y);
+        x = (short) point.getX();
+        y = (short) point.getY();
 
         // You are about to drag the mouse
         dragging = true;
@@ -67,17 +81,21 @@ public class Draw extends SimpleTool {
         // Right button clicked: use secondary color
         Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);
 
-        //Set the BufferedImage color and add the current coordinates &&
-        //color to simpleHistoryObject
-        imageGraphics.setColor(toColor);
+        //Try to open the penStroke file and set the penColor to the toColor
+        try {
+            BufferedImage initialPen = ImageIO.read(
+                    new File(penStroke));
+            pen = setPenColor(initialPen, toColor);
+        } catch (IOException err) {
+            System.out.println("Not a real image..."); // You shmuck
+            pen = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB, null);
+        }
+        
+        imageGraphics.drawImage(pen, x, y, null);        
 
         //Store these mouse coordinates as the previous point
         prevX = x;
         prevY = y;
-
-        //draw the point pressed to the BufferedImage and then to the JPanel
-        imageGraphics.drawLine(x, y, x, y);
-        drawingGraphics.drawImage(currentDrawing, 0, 0, null);
     }
 
     /**
@@ -96,24 +114,14 @@ public class Draw extends SimpleTool {
         short x = (short) evt.getX();
         short y = (short) evt.getY();
 
-        //If we dragged the mouse outside of the JPanel
-        //Set the x/y value to the border value
-        if (x < 0) {
-            x = 0;
-        } else {
-            // Set x to the lesser of x or the right edge of the drawingArea
-            x = (short) Math.min(x, imageCraft.drawingArea1.getWidth() - 1);
-        }
-        if (y < 0) {
-            y = 0;
-        } else {
-            // Set y to the lesser of y or the bottom edge of the drawingArea
-            y = (short) Math.min(y, imageCraft.drawingArea1.getHeight() - 1);
-        }
+        //Adjust this point if outside the borders of the drawing area
+        Point point = adjustBorderPoints(x, y);
+        x = (short) point.getX();
+        y = (short) point.getY();
 
-        //Draw a line from the previous point to the current point
-        //on the BufferedImage
-        imageGraphics.drawLine(prevX, prevY, x, y);
+        //Use the Bresenham Line Algorithm to find any point in between this and
+        //the previous point to also draw
+        bresenhamAlgorithm(prevX, prevY, x, y);
 
         //Draw the BufferedImage onto the JPanel
         drawingGraphics.drawImage(currentDrawing, 0, 0, null);
@@ -136,13 +144,9 @@ public class Draw extends SimpleTool {
             return;
         }
 
-        // The below code ensures that if we begin
-        //dragging with one button and press the other mouse button and then
+        //If we begin dragging with one button and press the other mouse button and then
         //release the other mouse button that it ignores it and continues dragging
-        //with the first button that we pressed. You can test this by drawing
-        //with the left/right button and then try clicking with the other button
-        //while you continue dragging. Without this code it breaks the drawing.
-        //With this code we continue drawing
+        //with the first button that we pressed.
         if (rightButton != SwingUtilities.isRightMouseButton(evt)) {
             return;
         }
@@ -157,13 +161,122 @@ public class Draw extends SimpleTool {
         drawingGraphics.dispose();
         imageGraphics.dispose();
     }
+    
+    private Point adjustBorderPoints(short x, short y) {
+        //If we dragged the mouse outside of the JPanel
+        //Set the x/y value to the border value
+        if (x < 0) {
+            x = 0;
+        } else {
+            // Set x to the lesser of x or the right edge of the drawingArea
+            x = (short) Math.min(x, imageCraft.drawingArea1.getWidth() - (pen != null ? pen.getWidth() : 1));
+        }
+        if (y < 0) {
+            y = 0;
+        } else {
+            // Set y to the lesser of y or the bottom edge of the drawingArea
+            y = (short) Math.min(y, imageCraft.drawingArea1.getHeight() - (pen != null ? pen.getHeight() : 1));
+        }
+
+        return new Point(x, y);
+    }
+
+    private BufferedImage setPenColor(BufferedImage image, Color color) {
+        //Creates short arrays to represent all possible values of Color components
+        short[] red = new short[256];
+        short[] green = new short[256];
+        short[] blue = new short[256];
+        short[] alpha = new short[256];
+        
+        //Set the values of each possible value with the value corresponding the the color
+        for (int i = 0; i < 256; i++) {
+            red[i] = (short) color.getRed();
+            green[i] = (short) color.getGreen();
+            blue[i] = (short) color.getBlue();
+            alpha[i] = (short) color.getAlpha();
+        }
+
+        //2D short array to be used as a LookupTable to determine the color
+        short[][] penColor = new short[][]{red, green, blue, alpha};
+        //new BufferedImageOp (filter) to change the color of a BufferedImage
+        BufferedImageOp penColorOp = new LookupOp(new ShortLookupTable(0, penColor), null);
+        //return the passed BufferedImage after being filtered by the penColorOp
+        return penColorOp.filter(image, image);
+    }
+
+    @Override
+    public void select() {
+        super.select();
+        //select the tool and then enable the ability to select a size
+        imageCraft.jSize.setEnabled(true);
+        imageCraft.jSize.setSelectedIndex(penIndex);
+    }
+
+    @Override
+    public void setPenStroke(String filePath) {
+        penStroke = filePath;
+        if (penStroke.equals("src/tzk/image/img/standardPen_1.png")) {
+            penIndex = 0;
+        } else if (penStroke.equals("src/tzk/image/img/standardPen_2.png")) {
+            penIndex = 1;
+        } else {
+            penIndex = 2;
+        }        
+    }
+
+    public void bresenhamAlgorithm(int x1, int y1, int x2, int y2) {
+        //The range of X and Y
+        int deltaX = x2 - x1;
+        int deltaY = y2 - y1;
+        
+        //Assign the numerator and denomerator of the slope of the line
+        //so that it is in the range [-1,1]
+        int slopeDenom = Math.max(Math.abs(deltaX), Math.abs(deltaY));
+        int slopeNumer = Math.min(Math.abs(deltaX), Math.abs(deltaY)); 
+        
+        //The signs of the slopes depending on the octet that the line is in
+        int dX1, dY1, dX2, dY2;        
+
+        //Assigns the signs of the slopes according to the octet the line is in
+        dX1 = (int) Math.signum(deltaX);
+        dX2 = Math.abs(deltaX) > Math.abs(deltaY) ? (int) Math.signum(deltaX) : 0;
+        dY1 = (int) Math.signum(deltaY);
+        dY2 = Math.abs(deltaX) > Math.abs(deltaY) ? 0 : (int) Math.signum(deltaY);
+
+        //Our error variable that is used to increment the slope's numerator
+        //until the slope leaves the range [-1,1]
+        int error = (int) .5 * slopeDenom;
+
+        for (int i = 0; i <= slopeDenom; i++) {
+            //Draw current pixel with current pen image
+            imageGraphics.drawImage(pen, x1, y1, null);
+            
+            //update the error value with the slope numerator            
+            error += slopeNumer;
+            
+            //If the slope is not in the range [-1,1] then subtract 1 from the
+            // absolute value of the slope and then add appropriate dX&dY values
+            //Else the slope is in range [-1,1] then add appropiate dX&dY values
+            if (!(error < slopeDenom)) {
+                error -= slopeDenom;
+                x1 += dX1;
+                y1 += dY1;
+            } else {
+                x1 += dX2;
+                y1 += dY2;
+            }
+        }
+    }    
 
     // Variables declaration
     private final ImageCraft imageCraft;
-    
+
     private Graphics drawingGraphics, imageGraphics;
     private boolean dragging, rightButton;
     private BufferedImage currentDrawing;
     private short prevX, prevY;
+    private BufferedImage pen;
+    private String penStroke;    
+    private int penIndex;
     // End of variables declaration
 }

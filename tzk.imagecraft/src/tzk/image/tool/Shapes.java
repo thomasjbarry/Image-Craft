@@ -23,8 +23,11 @@
  */
 package tzk.image.tool;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.SwingUtilities;
@@ -41,7 +44,8 @@ public class Shapes extends SimpleTool {
 
         imageCraft = iC;
         shapeType = shape;
-
+        penWidth = 1;
+        penIndex = 0;
         super.setButton(imageCraft.jShape);
     }
 
@@ -69,8 +73,8 @@ public class Shapes extends SimpleTool {
         rightButton = SwingUtilities.isRightMouseButton(evt);
         
         //Store initial point that was clicked
-        startX = evt.getX();
-        startY = evt.getY();
+        startX = (short) evt.getX();
+        startY = (short) evt.getY();
         
         //Get the graphics for the drawing area
         drawingGraphics = imageCraft.drawingArea1.getGraphics();
@@ -87,40 +91,30 @@ public class Shapes extends SimpleTool {
         imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
         
         //Get the current coordinates endX, endY and make a local copy of startX and startY
-        int endX = evt.getX();
-        int endY = evt.getY();
-        int x = startX;
-        int y = startY;
+        short endX = (short) evt.getX();
+        short endY = (short) evt.getY();
+        short x = startX;
+        short y = startY;
         
         //Set the currentDrawing to the drawingArea's currentDrawing
         currentDrawing = imageCraft.drawingArea1.currentDrawing; 
         
         //Get the graphics for this currentDrawing
-        imageGraphics = currentDrawing.getGraphics(); 
+        imageGraphics = (Graphics2D) currentDrawing.getGraphics(); 
         
         //Determine which color to paint with and set the imageGraphics to that color
         Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);        
-        imageGraphics.setColor(toColor);        
-        
-        //If we dragged the mouse outside of the JPanel
-        //Set the x/y value to the border value
-        if (endX < 0) {
-            endX = 0;
-        } else {
-            // Set x to the lesser of x or the right edge of the drawingArea
-            endX = Math.min(endX, imageCraft.drawingArea1.getWidth() - 1);
-        }
-        if (endY < 0) {
-            endY = 0;
-        } else {
-            // Set y to the lesser of y or the bottom edge of the drawingArea
-            endY = Math.min(endY, imageCraft.drawingArea1.getHeight() - 1);
-        }
+        imageGraphics.setColor(toColor);
+        imageGraphics.setStroke(new BasicStroke(penWidth));
+
+        Point point = adjustBorderPoints(endX, endY);
+        endX = (short) point.getX();
+        endY = (short) point.getY();
         
         //If we went to the left of our initial point then swap the values
         //of our endX and the local copy of the startX
         if (endX < x) {
-            int friend = endX;
+            short friend = endX;
             endX = x;
             x = friend;
         }
@@ -128,7 +122,7 @@ public class Shapes extends SimpleTool {
         //If we went above our initial point then swap the values
         //of our endY and the local copy of the startY        
         if (endY < y) {
-            int friend = endY;
+            short friend = endY;
             endY = y;
             y = friend;
         }
@@ -180,13 +174,59 @@ public class Shapes extends SimpleTool {
         drawingGraphics.dispose();
         imageGraphics.dispose();
     }
+    
+    private Point adjustBorderPoints(short x, short y) {
+        //If we dragged the mouse outside of the JPanel
+        //Set the x/y value to the border value
+        if (x < 0) {
+            x = 0;
+        } else {
+            // Set x to the lesser of x or the right edge of the drawingArea
+            x = (short) Math.min(x, imageCraft.drawingArea1.getWidth() - penWidth);
+        }
+        if (y < 0) {
+            y = 0;
+        } else {
+            // Set y to the lesser of y or the bottom edge of the drawingArea
+            y = (short) Math.min(y, imageCraft.drawingArea1.getHeight() - penWidth);
+        }
+
+        return new Point(x, y);
+    }    
+    
+    @Override
+    public void select()
+    {
+        super.select();
+        //select the tool and then enable the ability to select a size
+        imageCraft.jSize.setEnabled(true);
+        imageCraft.jSize.setSelectedIndex(penIndex);
+    } 
+    
+    /**
+     *
+     * @param width
+     */
+    @Override
+    public void setPenWidth(int width) {
+        penWidth = width;
+        if (penWidth == 1) {
+            penIndex = 0;
+        } else if (penWidth == 2) {
+            penIndex = 1;
+        } else {
+            penIndex = 2;
+        }
+    }    
 
     // Variables declaration
     private final ImageCraft imageCraft;
     private boolean dragging, rightButton;
-    private int startX, startY;
+    private short startX, startY;
     private final String shapeType;
     private BufferedImage currentDrawing;
-    private Graphics imageGraphics, drawingGraphics;
+    private Graphics2D imageGraphics;
+    private Graphics drawingGraphics;
+    private int penWidth, penIndex;
     // End of variables declaration
 }
