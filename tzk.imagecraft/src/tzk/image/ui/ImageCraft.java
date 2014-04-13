@@ -360,7 +360,7 @@ public class ImageCraft extends javax.swing.JFrame {
 		
 		jRightPane.add(jColorSwatch);
 		size = jColorSwatch.getPreferredSize();	
-		jColorSwatch.setBounds( 530 + insets.left, 5 + insets.top, size.width, size.height);
+		jColorSwatch.setBounds( 550 + insets.left, 5 + insets.top, size.width, size.height);
 		
 		jRightPane.add(drawingArea1);
 		size = drawingArea1.getPreferredSize();
