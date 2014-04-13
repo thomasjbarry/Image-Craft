@@ -347,46 +347,38 @@ public class ImageCraft extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jRightPaneLayout = new javax.swing.GroupLayout(jRightPane);
-        jRightPane.setLayout(jRightPaneLayout);
-        jRightPaneLayout.setHorizontalGroup(
-            jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jRightPaneLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(jToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jRightPaneLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(RightResize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jRightPaneLayout.createSequentialGroup()
-                .addGap(278, 278, 278)
-                .addComponent(BottomResize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(CornerResize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(119, 119, 119))
-        );
-        jRightPaneLayout.setVerticalGroup(
-            jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jRightPaneLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(jToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jRightPaneLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jRightPaneLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(RightResize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(178, 178, 178)))
-                .addGroup(jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(CornerResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BottomResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
+       		
+        jRightPane.setLayout(null);
+		jRightPane.setBounds( 0, 0, 300, 120);
+		
+		Insets insets = jRightPane.getInsets();
+		Dimension size;
+		
+		jRightPane.add(jToolBar);		
+		size = jToolBar.getPreferredSize();
+		jToolBar.setBounds( 5 + insets.left, 5 + insets.top, size.width, size.height);
+		
+		jRightPane.add(jColorSwatch);
+		size = jColorSwatch.getPreferredSize();	
+		jColorSwatch.setBounds( 530 + insets.left, 5 + insets.top, size.width, size.height);
+		
+		jRightPane.add(drawingArea1);
+		size = drawingArea1.getPreferredSize();
+		System.out.println(size);
+		drawingArea1.setBounds( 15 + insets.left, 75 + insets.top, size.width, size.height);
+		
+		/*jRightPane.add(corner);
+		size = corner.getPreferredSize();
+		corner.setBounds( insets.left, insets.top, size.width, size.height);
+		
+		jRightPane.add(horizontal);
+		size = horizontal.getPreferredSize();
+		horizontal.setBounds( insets.left, insets.top, size.width, size.height);
+		
+		jRightPane.add(vertical);
+		size = vertical.getPreferredSize();
+		vertical.setBounds( insets.left, insets.top, size.width, size.height);
+		jRightPane.repaint();*/
 
         jSplitPane1.setRightComponent(jRightPane);
 
