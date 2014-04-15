@@ -98,10 +98,8 @@ public class ImageCraft extends javax.swing.JFrame {
         jShape = new javax.swing.JToggleButton();
         jSize = new javax.swing.JComboBox();
         jColorSwatch = new ColorSwatch(this);
+        easel1 = new tzk.image.ui.Easel(this);
         drawingArea1 = new DrawingArea(this);
-        RightResize = new javax.swing.JPanel();
-        CornerResize = new javax.swing.JPanel();
-        BottomResize = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jFile = new javax.swing.JMenu();
         jNew = new javax.swing.JMenuItem();
@@ -181,7 +179,7 @@ public class ImageCraft extends javax.swing.JFrame {
                     .addComponent(jSelectAllLayers)
                     .addComponent(newLayer))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
         );
 
         jSplitPane1.setLeftComponent(jLayersPane);
@@ -238,6 +236,25 @@ public class ImageCraft extends javax.swing.JFrame {
             .addGap(0, 56, Short.MAX_VALUE)
         );
 
+        easel1.setPreferredSize(new java.awt.Dimension(585, 345));
+
+        drawingArea1.setLayout(new javax.swing.BoxLayout(drawingArea1, javax.swing.BoxLayout.LINE_AXIS));
+
+        javax.swing.GroupLayout easel1Layout = new javax.swing.GroupLayout(easel1);
+        easel1.setLayout(easel1Layout);
+        easel1Layout.setHorizontalGroup(
+            easel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(easel1Layout.createSequentialGroup()
+                .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+        easel1Layout.setVerticalGroup(
+            easel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(easel1Layout.createSequentialGroup()
+                .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jToolBarLayout = new javax.swing.GroupLayout(jToolBar);
         jToolBar.setLayout(jToolBarLayout);
         jToolBarLayout.setHorizontalGroup(
@@ -253,9 +270,12 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addComponent(jShape)
                 .addGap(18, 18, 18)
                 .addComponent(jSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jColorSwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jToolBarLayout.createSequentialGroup()
+                .addComponent(easel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jToolBarLayout.setVerticalGroup(
             jToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,78 +293,8 @@ public class ImageCraft extends javax.swing.JFrame {
                                 .addComponent(jColorSwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jSize))))
-                .addContainerGap())
-        );
-
-        drawingArea1.setLayout(new javax.swing.BoxLayout(drawingArea1, javax.swing.BoxLayout.LINE_AXIS));
-
-        RightResize.setBackground(new java.awt.Color(255, 255, 255));
-        RightResize.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                RightResizeMouseReleased(evt);
-            }
-        });
-        RightResize.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                RightResizeMouseDragged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout RightResizeLayout = new javax.swing.GroupLayout(RightResize);
-        RightResize.setLayout(RightResizeLayout);
-        RightResizeLayout.setHorizontalGroup(
-            RightResizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 9, Short.MAX_VALUE)
-        );
-        RightResizeLayout.setVerticalGroup(
-            RightResizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 9, Short.MAX_VALUE)
-        );
-
-        CornerResize.setBackground(new java.awt.Color(255, 255, 255));
-        CornerResize.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                CornerResizeMouseReleased(evt);
-            }
-        });
-        CornerResize.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                CornerResizeMouseDragged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout CornerResizeLayout = new javax.swing.GroupLayout(CornerResize);
-        CornerResize.setLayout(CornerResizeLayout);
-        CornerResizeLayout.setHorizontalGroup(
-            CornerResizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 9, Short.MAX_VALUE)
-        );
-        CornerResizeLayout.setVerticalGroup(
-            CornerResizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 9, Short.MAX_VALUE)
-        );
-
-        BottomResize.setBackground(new java.awt.Color(255, 255, 255));
-        BottomResize.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                BottomResizeMouseReleased(evt);
-            }
-        });
-        BottomResize.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                BottomResizeMouseDragged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout BottomResizeLayout = new javax.swing.GroupLayout(BottomResize);
-        BottomResize.setLayout(BottomResizeLayout);
-        BottomResizeLayout.setHorizontalGroup(
-            BottomResizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 9, Short.MAX_VALUE)
-        );
-        BottomResizeLayout.setVerticalGroup(
-            BottomResizeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(17, 17, 17)
+                .addComponent(easel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout jRightPaneLayout = new javax.swing.GroupLayout(jRightPane);
@@ -354,38 +304,14 @@ public class ImageCraft extends javax.swing.JFrame {
             .addGroup(jRightPaneLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(jToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jRightPaneLayout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(RightResize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jRightPaneLayout.createSequentialGroup()
-                .addGap(278, 278, 278)
-                .addComponent(BottomResize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(CornerResize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(119, 119, 119))
+                .addGap(0, 16, Short.MAX_VALUE))
         );
         jRightPaneLayout.setVerticalGroup(
             jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jRightPaneLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(jToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jRightPaneLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jRightPaneLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(RightResize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(178, 178, 178)))
-                .addGroup(jRightPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(CornerResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BottomResize, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jSplitPane1.setRightComponent(jRightPane);
@@ -515,11 +441,11 @@ public class ImageCraft extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 781, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 793, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -630,33 +556,6 @@ public class ImageCraft extends javax.swing.JFrame {
         // Close program. If unsaved, it should check to see if we want to save.
         System.exit(0);
     }//GEN-LAST:event_jQuitActionPerformed
-
-    private void BottomResizeMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BottomResizeMouseDragged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BottomResizeMouseDragged
-
-    private void CornerResizeMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CornerResizeMouseDragged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CornerResizeMouseDragged
-
-    private void RightResizeMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RightResizeMouseDragged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_RightResizeMouseDragged
-
-    private void BottomResizeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BottomResizeMouseReleased
-        //Only modifies the Y-direction
-        drawingArea1.increaseSize(0, evt.getY());
-    }//GEN-LAST:event_BottomResizeMouseReleased
-
-    private void CornerResizeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CornerResizeMouseReleased
-        //Modifies both the X-direction and Y-direction
-        drawingArea1.increaseSize(evt.getX(), evt.getY());
-    }//GEN-LAST:event_CornerResizeMouseReleased
-
-    private void RightResizeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_RightResizeMouseReleased
-        //Only modifies the X-direction
-        drawingArea1.increaseSize(evt.getX(), 0);
-    }//GEN-LAST:event_RightResizeMouseReleased
 
     private void jNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNewActionPerformed
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -839,10 +738,8 @@ public class ImageCraft extends javax.swing.JFrame {
     // End variables declaration
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel BottomResize;
-    private javax.swing.JPanel CornerResize;
-    private javax.swing.JPanel RightResize;
     public tzk.image.ui.DrawingArea drawingArea1;
+    private tzk.image.ui.Easel easel1;
     private javax.swing.JMenuItem jAbout;
     private javax.swing.JMenuItem jClose;
     public tzk.image.ui.ColorSwatch jColorSwatch;
