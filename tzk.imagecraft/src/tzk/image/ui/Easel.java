@@ -24,6 +24,7 @@
 package tzk.image.ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 /**
@@ -42,8 +43,6 @@ public class Easel extends javax.swing.JPanel {
     public Easel(ImageCraft iC) {
         imageCraft = iC;
         initComponents();
-        
-        
 
     }
 
@@ -65,6 +64,14 @@ public class Easel extends javax.swing.JPanel {
                 formMouseDragged(evt);
             }
         });
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                formMouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -79,50 +86,94 @@ public class Easel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
-        // TODO add your handling code here:
-        //Horizontal
-        
-        System.out.println(evt.getX() + " " + evt.getY());
+//someone get rid of this for me
+
+    }//GEN-LAST:event_formMouseDragged
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+        // finds out if the user clicked the right box, then sets
+        // the vertical, horizontal, or coner bools to true.
         if (evt.getX() > width - 10
-                && evt.getY() < (height - 10) / 2
-                && evt.getY() > (height - 10) / 2 + 10) {
+                && evt.getY() > (height - 10) / 2
+                && evt.getY() < (height - 10) / 2 + 10) {
             //right/horizontal
+            horizontal = true;
             System.out.println("horizon");
         } else if (evt.getY() > height - 10
                 && evt.getX() > (width - 10) / 2
                 && evt.getX() < (width - 10) / 2 + 10) {
             //bottom/vertical
+            vertical = true;
             System.out.println("vertica");
 
-//        } else if (evt.getY() > height - 10
-//                && evt.getX() > width - 10) {
-//            //corner
-//            System.out.println("corner");
-
+        } else if (evt.getY() > height - 10
+                && evt.getX() > width - 10) {
+            //corner
+            corner = true;
+            System.out.println("corner");
         }
+    }//GEN-LAST:event_formMousePressed
 
-
-    }//GEN-LAST:event_formMouseDragged
+    private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+      /*
+        In each, I resize the drawingarea1 and the easel
+        repaint, then revalidate, then set the dragging booleans
+        to false
+        */
+        
+        if (horizontal) {
+            imageCraft.drawingArea1.increaseSize(evt.getX() - width , 0);
+            this.increaseSize(evt.getX()  - width , 0);
+            revalidate();
+            repaint();
+            System.out.println(horizontal);
+        } else if (vertical) {
+            imageCraft.drawingArea1.increaseSize(0, evt.getY() - height );
+            this.increaseSize(0 , evt.getY()  - height);
+            revalidate();
+            repaint();
+            System.out.println(vertical);
+        } else if (corner) {
+            imageCraft.drawingArea1.increaseSize(evt.getX() - width, evt.getY() - height);
+            this.increaseSize( evt.getX() -width, evt.getY() - height);
+            revalidate();
+            repaint();
+            System.out.println(corner);
+        }
+        horizontal = false;
+        vertical = false;
+        corner = false;
+    }//GEN-LAST:event_formMouseReleased
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-       
-     
+
         width = this.getWidth();
         height = this.getHeight();
-        
+
         g.setColor(Color.BLUE);
         g.fillRect(width - 10, (height - 10) / 2, 10, 10);//horizontal resizer
         g.fillRect(width - 10, height - 10, 10, 10);//corner rezier
-        g.fillRect((width - 10) / 2, height - 10, 10, 10);
- 
+        g.fillRect((width - 10) / 2, height - 10, 10, 10); //vertical resizer
+
         revalidate();
         repaint();
     }
 
+    //Used to increase Easel size
+    public void increaseSize(int x, int y) {
+
+        this.setPreferredSize(new Dimension(
+                (int) this.getPreferredSize().getWidth() + x,
+                (int) this.getPreferredSize().getHeight() + y));
+        this.revalidate();
+        this.repaint();
+    }
+
     public ImageCraft imageCraft;
     public int height, width;
+    private boolean corner, vertical, horizontal;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
