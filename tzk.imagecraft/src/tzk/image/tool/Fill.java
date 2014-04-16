@@ -226,7 +226,7 @@ public class Fill extends SimpleTool {
         imageCraft.drawingArea1.getGraphics().drawImage(fillImage, 0, 0, null);
         
         // Create new history object in layer
-        imageCraft.currentLayer.addHistory(fillImage);
+        imageCraft.currentLayer.addHistory(fillImage, "Fill");
     }
 
     /**

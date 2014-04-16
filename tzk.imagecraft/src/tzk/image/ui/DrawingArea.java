@@ -22,8 +22,6 @@ public class DrawingArea extends javax.swing.JPanel {
      */
     public DrawingArea() {
         initComponents();
-
-//        imageCraft = null;
     }
 
     /**
@@ -129,11 +127,15 @@ public class DrawingArea extends javax.swing.JPanel {
         // Get selected layers from ImageCraft object
         // Paint those layers to a new bufferedImage
         // And draw the buffered image onto the panel
-        int[] selectedIndices = imageCraft.layerList1.getSelectedIndices();
+        int[] selectedIndices = imageCraft.layerTree1.getSelectionRows();
         currentDrawing = new BufferedImage(this.getWidth(),
                 this.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        for (int index : selectedIndices) {
-            imageCraft.layerList.get(index).drawLayer();
+        for (int i : selectedIndices) {
+            if (imageCraft.layerTree1.getClickedLayer(i) != null) {
+                imageCraft.layerTree1.getClickedLayer(i).drawLayer();
+            } else {
+                imageCraft.layerTree1.getClickedHistory(i).draw(currentDrawing);
+            }
         }
         g.drawImage(currentDrawing, 0, 0, this);
     }

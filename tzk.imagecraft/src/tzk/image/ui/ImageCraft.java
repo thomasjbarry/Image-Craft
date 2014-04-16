@@ -26,6 +26,8 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import tzk.image.tool.Draw;
 import tzk.image.tool.Fill;
 import tzk.image.tool.PickAColor;
@@ -64,7 +66,7 @@ public class ImageCraft extends javax.swing.JFrame {
         // Initiate ImageCraft tools
         drawTool = new Draw(this);
         fillTool = new Fill(this);
-        shapesTool = new Shapes(this, "rectangle");
+        shapesTool = new Shapes(this, "Rectangle");
         pickAColor = new PickAColor(this);
 
         // Select default tool
@@ -87,9 +89,9 @@ public class ImageCraft extends javax.swing.JFrame {
         jLayersPane = new javax.swing.JPanel();
         newLayer = new javax.swing.JButton();
         jSelectAllLayers = new javax.swing.JCheckBox();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        layerList1 = new tzk.image.ui.LayerList(this);
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        layerTree1 = new tzk.image.ui.LayerTree(this);
         jRightPane = new javax.swing.JPanel();
         jToolBar = new javax.swing.JPanel();
         jDraw = new javax.swing.JToggleButton();
@@ -145,16 +147,11 @@ public class ImageCraft extends javax.swing.JFrame {
             }
         });
 
-        layerList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(layerList1);
-
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Layers");
+
+        jScrollPane1.setViewportView(layerTree1);
 
         javax.swing.GroupLayout jLayersPaneLayout = new javax.swing.GroupLayout(jLayersPane);
         jLayersPane.setLayout(jLayersPaneLayout);
@@ -165,10 +162,11 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(newLayer)
                 .addGap(49, 49, 49))
-            .addGroup(jLayersPaneLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayersPaneLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jLayersPaneLayout.setVerticalGroup(
             jLayersPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,8 +176,9 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addGroup(jLayersPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSelectAllLayers)
                     .addComponent(newLayer))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jSplitPane1.setLeftComponent(jLayersPane);
@@ -273,8 +272,6 @@ public class ImageCraft extends javax.swing.JFrame {
                             .addComponent(jSize))))
                 .addContainerGap())
         );
-
-        easel1.setPreferredSize(new java.awt.Dimension(585, 345));
 
         drawingArea1.setLayout(new javax.swing.BoxLayout(drawingArea1, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -465,7 +462,6 @@ public class ImageCraft extends javax.swing.JFrame {
         //Add the layer name to the layerNameList
         //and the layer object to the layerObjectList
         Layer layer = new Layer(this);
-        layerList1.updateLayerList();
 
         drawingArea1.paintComponent(drawingArea1.getGraphics());
 
@@ -474,24 +470,25 @@ public class ImageCraft extends javax.swing.JFrame {
     }//GEN-LAST:event_newLayerMouseClicked
 
     private void jSelectAllLayersItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jSelectAllLayersItemStateChanged
-
         //If the checkbox is deselected then select the first layer. 
         //Otherwise if all layers were selected manually do nothing.
         //Otherwise if the checkbox is selected and there is more than one layer
         //in the layerNameList then select all of the layers.
         if (evt.getStateChange() == java.awt.event.ItemEvent.DESELECTED) {
-            layerList1.setSelectedIndex(0);
-        } else if (layerList1.getSelectedIndices().length == this.layerList.size()) {
+            layerTree1.setSelectionRow(0);
+        } else if (layerTree1.getSelected().get(0).length == this.layerList.size()) {
         } else if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED
                 && this.layerList.size() > 1) {
-            int[] indexes = new int[this.layerList.size()];
+            int[] indices = new int[this.layerList.size()];
 
-            for (int i = 0; (i < (this.layerList.size())); i++) {
-                indexes[i] = i;
+            for (int i = 0; i < layerTree1.root.getChildCount(); i++) {
+                indices[i] = layerTree1.getRowForPath(new TreePath(((DefaultMutableTreeNode) layerTree1.root.getChildAt(i)).getPath()));
             }
-            layerList1.setSelectedIndices(indexes);
+//            layerList1.setSelectedIndices(indexes);
+            layerTree1.setSelectionRows(indices);
             selectedAll = true;
             jSelectAllLayers.setSelected(true);
+
         } else {
             System.out.println(
                     "Error: jSelectAllLayers didn't select or deselect");
@@ -763,14 +760,14 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JPanel jRightPane;
     private javax.swing.JMenuItem jSave;
     private javax.swing.JMenuItem jSaveAs;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     protected javax.swing.JCheckBox jSelectAllLayers;
     public javax.swing.JToggleButton jShape;
     public javax.swing.JComboBox jSize;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel jToolBar;
     private javax.swing.JMenuItem jUndo;
-    protected tzk.image.ui.LayerList layerList1;
+    protected tzk.image.ui.LayerTree layerTree1;
     private javax.swing.JButton newLayer;
     // End of variables declaration//GEN-END:variables
 }

@@ -52,9 +52,6 @@ public class Layer {
 
         //UndoIndex starts at 0
         undoIndex = -1;
-        
-        // Update layer list with current layer
-        imageCraft.layerList1.updateLayerList();
     }
 
     // draws all objects in a layer to a BufferedImage object passed as a param
@@ -82,9 +79,12 @@ public class Layer {
     }
 
     public void initLayer() {
-        // Add layer to list
-        System.out.println(this);
-        imageCraft.layerList.add(this);
+        // Add layer to top of the list
+        imageCraft.layerList.add(0, this);
+
+        //Add this new layer to the layerTree and select it
+        imageCraft.layerTree1.addLayer(this);
+        imageCraft.layerTree1.setSelected(this);
 
         // Make this new layer the current layer
         imageCraft.currentLayer = this;
@@ -94,29 +94,34 @@ public class Layer {
      * Create new SimpleHistory object and add to historyArray.
      *
      * @param image
+     * @param historyType
      */
-    public void addHistory(BufferedImage image) {
+    public void addHistory(BufferedImage image, String historyType) {
         //For all indices after the undoIndex delete the SimpleHistory object
         for (int i = historyArray.size() - 1; i > undoIndex; i--) {
+            imageCraft.layerTree1.removeHistory(historyArray.get(historyArray.size() - i - 1), this);
             historyArray.remove(i);
         }
-
-        historyArray.add(new SimpleHistory(this, image));
+        SimpleHistory history = new SimpleHistory(imageCraft, this, image, historyType);
+        undoIndex++;
+        imageCraft.layerTree1.addHistory(history, this);
+        historyArray.add(history);
         imageCraft.drawingArea1.currentDrawing.getGraphics().drawImage(
                 image, 0, 0, null);
-        undoIndex++;
+
         imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
 
     }
-    
+
     public void removeHistory(int i) {
         historyArray.remove(i);
-        undoIndex = (short)(historyArray.size() - 1);        
+        undoIndex = (short) (historyArray.size() - 1);
     }
 
     protected void undo() {
         if (undoIndex > -1) {
             undoIndex--;
+            imageCraft.layerTree1.repaint();
             imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
             System.out.println(undoIndex);
         }
@@ -125,6 +130,7 @@ public class Layer {
     protected void redo() {
         if (undoIndex < historyArray.size() - 1) {
             undoIndex++;
+            imageCraft.layerTree1.repaint();
             imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
             System.out.println(undoIndex);
         }
@@ -139,5 +145,10 @@ public class Layer {
     protected String layerName;
     public final ArrayList<SimpleHistory> historyArray;
     private final ImageCraft imageCraft;
+
+    protected short drawNum = 0;
+    protected short rectangleNum = 0;
+    protected short fillNum = 0;
+    protected short imageNum = 0;
     //End of Variable Declaration
 }

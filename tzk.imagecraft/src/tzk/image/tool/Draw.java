@@ -172,7 +172,7 @@ public class Draw extends SimpleTool {
         dragging = false;
 
         // Create new history object in layer
-        imageCraft.currentLayer.addHistory(currentDrawing);
+        imageCraft.currentLayer.addHistory(currentDrawing, "Draw");
 
         // Clean up resources
         drawingGraphics.dispose();
@@ -232,13 +232,17 @@ public class Draw extends SimpleTool {
     @Override
     public void setPenStroke(String filePath) {
         penStroke = filePath;
-        if (penStroke.equals("src/tzk/image/img/standardPen_1.png")) {
-            penIndex = 0;
-        } else if (penStroke.equals("src/tzk/image/img/standardPen_2.png")) {
-            penIndex = 1;
-        } else {
-            penIndex = 2;
-        }        
+        switch (penStroke) {
+            case "src/tzk/image/img/standardPen_1.png":
+                penIndex = 0;
+                break;
+            case "src/tzk/image/img/standardPen_2.png":
+                penIndex = 1;
+                break;        
+            default:
+                penIndex = 2;
+                break;
+        }
     }
 
     public void bresenhamAlgorithm(int x1, int y1, int x2, int y2) {

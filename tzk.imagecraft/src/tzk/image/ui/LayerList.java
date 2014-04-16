@@ -32,6 +32,7 @@ import java.awt.Point;
 import java.util.Vector;
 import javax.swing.*;
 
+@Deprecated
 public class LayerList extends JList {
 
     //Constructors

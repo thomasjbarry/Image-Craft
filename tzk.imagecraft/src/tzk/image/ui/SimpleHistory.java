@@ -33,16 +33,38 @@ public class SimpleHistory {
     /**
      * Create new SimpleHistory image object.
      * 
-     * @param layer the layer to which this SimpleHistory object belongs
+     * @param iC the ImageCraft to which the Layer object belongs
+     * @param layer the Layer to which this SimpleHistory object belongs
      * @param image a BufferedImage object with ONLY the latest action's changes
+     * @param historyType
      */
-    public SimpleHistory(Layer layer, BufferedImage image)
+    public SimpleHistory(ImageCraft iC, Layer layer, BufferedImage image, String historyType)
     {
+        imageCraft = iC;
         // Save parameters to object
         layerObject = layer;
         actionImage = image;
         actionFilter = null;
-        
+        short historyNum;
+        switch (historyType) {
+            case "Draw":
+                historyNum = ++layerObject.drawNum;
+                break;
+            case "Rectangle":
+                historyNum = ++layerObject.rectangleNum;
+                break;
+            case "Fill":
+                historyNum = ++layerObject.fillNum;
+                break;
+            case "Imported Image":
+                historyNum = ++layerObject.imageNum;
+                break;
+            default:
+                historyNum = 0;
+                break;
+        }
+        historyName = historyType + " Object #" + historyNum;
+        System.out.println("New SimpleHistory in " + this.layerObject.layerName + ": " + historyName);
         createFinalImage();
     }
     
@@ -91,6 +113,7 @@ public class SimpleHistory {
     }
     
     // Variable Declaration
+    private ImageCraft imageCraft;
     // Snapshot of the action
     protected BufferedImage actionImage;
     // This is the exact filter command
@@ -99,5 +122,6 @@ public class SimpleHistory {
     // Snapshot of the layer up to this point, including this action
     protected BufferedImage finalImage;
     protected final Layer layerObject;
+    protected String historyName;
     //End of variable declaration
 }

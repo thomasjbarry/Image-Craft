@@ -128,7 +128,7 @@ public class Shapes extends SimpleTool {
         
         //Check the shapeType and draw the correct shape to this currentDrawing
         //using the adjusted local copy of startX, startY and endX, endY
-        if (shapeType.equals("rectangle")) {
+        if (shapeType.equals("Rectangle")) {
             imageGraphics.drawRect(x, y, endX - x, endY - y);
         } else {
             System.out.println("No Shape of type" + shapeType);
@@ -167,7 +167,7 @@ public class Shapes extends SimpleTool {
         dragging = false;
         
         // Create new history object in layer
-        imageCraft.currentLayer.addHistory(currentDrawing);
+        imageCraft.currentLayer.addHistory(currentDrawing, shapeType);
 
         // Clean up resources
         drawingGraphics.dispose();

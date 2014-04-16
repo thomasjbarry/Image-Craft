@@ -238,7 +238,7 @@ public class IO {
                         bufferedFile.getWidth() - iC.drawingArea1.getWidth(),
                         bufferedFile.getHeight() - iC.drawingArea1.getHeight());
             }
-            layer.addHistory(bufferedFile);
+            layer.addHistory(bufferedFile, "Imported Image");
             iC.drawingArea1.paintComponent(iC.drawingArea1.getGraphics());
         } catch (IOException err) {
             System.out.println("Not a real image..."); // You shmuck
