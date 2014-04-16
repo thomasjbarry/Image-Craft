@@ -25,6 +25,7 @@ package tzk.image.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -68,8 +69,17 @@ public class LayerTree extends JTree {
         //creates right click menu and listeners
         initComponents();
 
-        //Sets the CellRenderer to the private class layerTreeCellRenderer
-        setCellRenderer((TreeCellRenderer) new LayerTree.layerTreeCellRenderer());
+        //Sets the CellRenderer to an object of the private class layerTreeCellRenderer
+        DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) new LayerTree.layerTreeCellRenderer();
+        setCellRenderer(renderer);
+        
+        //Creates ImageIcon for Layers and SimpleHistory objects from file name
+        ImageIcon historyIcon = new ImageIcon("src/tzk/image/img/historyIcon.png");
+        ImageIcon layerIcon = new ImageIcon("src/tzk/image/img/layerIcon.png");
+        renderer.setLeafIcon(historyIcon);
+        renderer.setOpenIcon(layerIcon);
+        renderer.setClosedIcon(layerIcon);
+        
     }
 
     //Classes
@@ -890,6 +900,7 @@ public class LayerTree extends JTree {
             item.setEnabled(true);
         }
     }
+    
 
     //Initialize Variables
     private ImageCraft imageCraft;

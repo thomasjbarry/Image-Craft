@@ -11,7 +11,7 @@ TODO:
 
 	ZACH: Shapes Bug (layered JPanels), More efficient Fill Tool
 
-	THOMAS: LayerTree bugs, LayerTree icons (make it look better)
+	THOMAS: LayerTree bugs
 
 	DREW: Easel: make components clickable outside of where it is colored
 
@@ -20,7 +20,7 @@ TODO:
 		IO.java:
 			ImageCraft format - See IO.imageCraftFormat
 			
-		Tools: Draw (Penstrokes), Eraser, Select, Zoom, Resize
+		Tools: Draw (Penstrokes), Eraser, Select, Zoom, Resize, Text
 
 		System Clipboard: Copy/Paste
 
