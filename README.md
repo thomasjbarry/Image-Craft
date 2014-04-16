@@ -1,26 +1,37 @@
 Image-Craft
 ===========
+
+Bugs:
+
+	LayerTree- doesn't repaint drawing area upon deleting a SimpleHistory object
+	Export- If no file extension is written in the filename the file will not save
+	Shapes- redraws the entire drawing area making it choppy
+
 TODO:
 
-ZACH: Shapes Bug (layered JPanels), More efficient Fill Tool
+	ZACH: Shapes Bug (layered JPanels), More efficient Fill Tool
 
-THOMAS: LayerList (SH object lists > JTree)
+	THOMAS: LayerTree bugs, LayerTree icons (make it look better)
 
-DREW: Modify Size of Drawing Area (Custom components for size adjust boxes/ set location based on size of drawing area)
+	DREW: Easel: make components clickable outside of where it is colored
 
-IO.java:
-	ImageCraft format - See IO.imageCraftFormat
+	For anyone:
 	
-Tools: Draw (Penstrokes), Eraser, Select
+		IO.java:
+			ImageCraft format - See IO.imageCraftFormat
+			
+		Tools: Draw (Penstrokes), Eraser, Select, Zoom, Resize
 
-System Clipboard: Copy/Paste
+		System Clipboard: Copy/Paste
 
-Drag and Drop: How to modify the size/location of an object after creating it (shapes, pasting pictures, etc.)
+		Drag and Drop: How to modify the size/location of an object after creating it (shapes, pasting pictures, etc.)
 
-Complex History class (filters-- BufferedImageOp)
+		Complex History class (filters-- BufferedImageOp)
 
-Clean up ColorPicker to be more user friendly
+		Clean up ColorPicker to be more user friendly
 
-Zoom ability
+		Scroll Panes
 
-Scroll Panes
+		Anti-Aliasing
+		
+		Custom PopupDialog to allow for saving, exporting selections, specific layers, or all layers

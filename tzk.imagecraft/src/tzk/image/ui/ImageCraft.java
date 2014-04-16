@@ -129,6 +129,11 @@ public class ImageCraft extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
 
         jLayersPane.setMinimumSize(new java.awt.Dimension(180, 100));
         jLayersPane.setPreferredSize(new java.awt.Dimension(180, 418));
@@ -159,14 +164,11 @@ public class ImageCraft extends javax.swing.JFrame {
             jLayersPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayersPaneLayout.createSequentialGroup()
                 .addComponent(jSelectAllLayers)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(newLayer)
                 .addGap(49, 49, 49))
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayersPaneLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(jScrollPane1)
         );
         jLayersPaneLayout.setVerticalGroup(
             jLayersPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,9 +178,9 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addGroup(jLayersPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSelectAllLayers)
                     .addComponent(newLayer))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                .addGap(1, 1, 1))
         );
 
         jSplitPane1.setLeftComponent(jLayersPane);
@@ -617,6 +619,10 @@ public class ImageCraft extends javax.swing.JFrame {
             }           
         }
     }//GEN-LAST:event_jSizeItemStateChanged
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        this.repaint();
+    }//GEN-LAST:event_formComponentResized
 
      public BufferedImage newBlankImage() {
         return new BufferedImage(
