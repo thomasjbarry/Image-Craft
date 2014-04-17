@@ -234,7 +234,7 @@ public class IO {
             //If the bufferedFile is too big resize it
             if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
                     || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-                iC.drawingArea1.increaseSize(
+                iC.drawingArea1.resizeDrawing(
                         bufferedFile.getWidth() - iC.drawingArea1.getWidth(),
                         bufferedFile.getHeight() - iC.drawingArea1.getHeight());
             }

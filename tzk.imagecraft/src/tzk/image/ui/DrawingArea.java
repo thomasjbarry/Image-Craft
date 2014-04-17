@@ -92,27 +92,47 @@ public class DrawingArea extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseReleased
 
     /**
+     * Resizes this entire drawing.
+     * Updates all layers, history items, and javax.swing with new size
      *
-     * @param x
-     * @param y
+     * @param x the additional width of the document
+     * @param y the additional height of the document
      */
-    public void increaseSize(int x, int y) {
+    public void resizeDrawing(int x, int y) {
+        // Update BufferedImage objects in layers
         for (Layer layer : imageCraft.layerList) {
             for (SimpleHistory simpleHistoryObj : layer.historyArray) {
+                // finalImage is what this layer looks like after this action is performed
                 simpleHistoryObj.finalImage = imageCraft.resize(simpleHistoryObj.finalImage,
                         simpleHistoryObj.finalImage.getWidth() + x,
                         simpleHistoryObj.finalImage.getHeight() + y);
 
+                // actionImage contains a snapshot of the action performed only
+                // One could potentially add this actionImage to the finalImage 
+                // of the last simpleHistory element to get this simpleHistory
+                // object's finalImage
                 simpleHistoryObj.actionImage = imageCraft.resize(simpleHistoryObj.actionImage,
                         simpleHistoryObj.actionImage.getWidth() + x,
                         simpleHistoryObj.actionImage.getHeight() + y);
             }
         }
+        // Update swing
         this.setPreferredSize(new Dimension(
                 (int) this.getPreferredSize().getWidth() + x,
                 (int) this.getPreferredSize().getHeight() + y));
         this.revalidate();
         this.repaint();
+    }
+    
+    /**
+     * Create a new temporary workSpace.
+     * To remove the workspace, just set it to null
+     */
+    public void instantiateWorkSpace() {
+        workSpace = new BufferedImage(
+                this.getWidth(),
+                this.getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
     }
 
     @Override
@@ -138,10 +158,21 @@ public class DrawingArea extends javax.swing.JPanel {
             }
         }
         g.drawImage(currentDrawing, 0, 0, this);
+        
+        // Paint the temporary workspace if it exists
+        // Paint this over the currentDrawing so that it is visible
+        if (workSpace != null) {
+            g.drawImage(workSpace, 0, 0, this);
+        }
     }
 
+    // Variables declaration
+    // The current drawing, set by what is selected in LayerList
     public BufferedImage currentDrawing;
+    // A temporary workspace, used with tools such as Shape
+    public BufferedImage workSpace;
     private ImageCraft imageCraft;
+    // End of variables declaration
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

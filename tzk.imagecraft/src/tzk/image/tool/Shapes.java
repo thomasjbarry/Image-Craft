@@ -22,12 +22,15 @@
  */
 package tzk.image.tool;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.SwingUtilities;
 import tzk.image.ui.ImageCraft;
@@ -75,7 +78,19 @@ public class Shapes extends SimpleTool {
         startX = (short) evt.getX();
         startY = (short) evt.getY();
         
-        //Get the graphics for the drawing area
+        // Create a new temporary workspace and save it to this object
+        imageCraft.drawingArea1.instantiateWorkSpace();
+        workSpace = imageCraft.drawingArea1.workSpace;
+        workSpaceGraphics = (Graphics2D) imageCraft.drawingArea1.workSpace.getGraphics();
+        
+        //Determine which color to paint with and set the imageGraphics to that color
+        Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);        
+        workSpaceGraphics.setColor(toColor);
+        workSpaceGraphics.setStroke(new BasicStroke(penWidth));
+        
+        // Set the backgroundColor so that we can use clearRect
+        workSpaceGraphics.setBackground(new Color(0, 0, 0, 0));
+        
         drawingGraphics = imageCraft.drawingArea1.getGraphics();
     }
 
@@ -89,54 +104,34 @@ public class Shapes extends SimpleTool {
         //Repaint the drawing area before we draw to forget any previous dragged shapes
         imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
         
-        //Get the current coordinates endX, endY and make a local copy of startX and startY
-        short endX = (short) evt.getX();
-        short endY = (short) evt.getY();
-        short x = startX;
-        short y = startY;
+        // Clear the workSpace image
+        // This may be deprecated. Can we update?
+        workSpaceGraphics.clearRect(0, 0, workSpace.getWidth(), workSpace.getHeight());
+       
+        // Get the top left and bottom right coordinates
+        short[] coordinates = points((short) evt.getX(), (short) evt.getY());
+        short x1, y1, x2, y2;
+        // Left
+        x1 = coordinates[0];
+        // Top
+        y1 = coordinates[1];
+        // Right
+        x2 = coordinates[2];
+        // Bottom
+        y2 = coordinates[3];
         
-        //Set the currentDrawing to the drawingArea's currentDrawing
-        currentDrawing = imageCraft.drawingArea1.currentDrawing; 
-        
-        //Get the graphics for this currentDrawing
-        imageGraphics = (Graphics2D) currentDrawing.getGraphics(); 
-        
-        //Determine which color to paint with and set the imageGraphics to that color
-        Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);        
-        imageGraphics.setColor(toColor);
-        imageGraphics.setStroke(new BasicStroke(penWidth));
-
-        Point point = adjustBorderPoints(endX, endY);
-        endX = (short) point.getX();
-        endY = (short) point.getY();
-        
-        //If we went to the left of our initial point then swap the values
-        //of our endX and the local copy of the startX
-        if (endX < x) {
-            short friend = endX;
-            endX = x;
-            x = friend;
-        }
-        
-        //If we went above our initial point then swap the values
-        //of our endY and the local copy of the startY        
-        if (endY < y) {
-            short friend = endY;
-            endY = y;
-            y = friend;
-        }
-        
-        //Check the shapeType and draw the correct shape to this currentDrawing
-        //using the adjusted local copy of startX, startY and endX, endY
+        // Draw the shape
         if (shapeType.equals("Rectangle")) {
-            imageGraphics.drawRect(x, y, endX - x, endY - y);
+            // drawRect param: x, y, width, height
+            workSpaceGraphics.drawRect(
+                    x1, y1, x2 - x1, y2 - y1);
         } else {
             System.out.println("No Shape of type" + shapeType);
             return;
         }
         
         //Draw this currentDrawing to the drawingArea
-        drawingGraphics.drawImage(currentDrawing, 0, 0, null);
+        drawingGraphics.drawImage(workSpace, 0, 0, null);
     }
 
     /**
@@ -167,31 +162,53 @@ public class Shapes extends SimpleTool {
         dragging = false;
         
         // Create new history object in layer
-        imageCraft.currentLayer.addHistory(currentDrawing, shapeType);
+        imageCraft.currentLayer.addHistory(workSpace, shapeType);
 
         // Clean up resources
         drawingGraphics.dispose();
-        imageGraphics.dispose();
+        workSpaceGraphics.dispose();
+        imageCraft.drawingArea1.workSpace = null;
     }
     
-    private Point adjustBorderPoints(short x, short y) {
+    private short[] points(short x2, short y2) {
+        short x1 = startX;
+        short y1 = startY;
+        
         //If we dragged the mouse outside of the JPanel
         //Set the x/y value to the border value
-        if (x < 0) {
-            x = 0;
+        if (x2 < 0) {
+            x2 = 0;
         } else {
             // Set x to the lesser of x or the right edge of the drawingArea
-            x = (short) Math.min(x, imageCraft.drawingArea1.getWidth() - penWidth);
+            x2 = (short) Math.min(x2, imageCraft.drawingArea1.getWidth() - penWidth);
         }
-        if (y < 0) {
-            y = 0;
+        if (y2 < 0) {
+            y2 = 0;
         } else {
             // Set y to the lesser of y or the bottom edge of the drawingArea
-            y = (short) Math.min(y, imageCraft.drawingArea1.getHeight() - penWidth);
+            y2 = (short) Math.min(y2, imageCraft.drawingArea1.getHeight() - penWidth);
         }
-
-        return new Point(x, y);
-    }    
+        
+        // Swap left and right
+        // if new point is left of original point
+        if (x2 < x1) {
+            short friend = x2;
+            x2 = x1;
+            x1 = friend;
+        }
+        
+        // Swap top and bottom
+        // if new point is above original point
+        if (y2 < y1) {
+            short friend = y2;
+            y2 = y1;
+            y1 = friend;
+        }
+        
+        // Return array of coordinates
+        short[] r = {x1, y1, x2, y2};
+        return r;
+    }
     
     @Override
     public void select()
@@ -223,8 +240,8 @@ public class Shapes extends SimpleTool {
     private boolean dragging, rightButton;
     private short startX, startY;
     private final String shapeType;
-    private BufferedImage currentDrawing;
-    private Graphics2D imageGraphics;
+    private BufferedImage workSpace;
+    private Graphics2D workSpaceGraphics;
     private Graphics drawingGraphics;
     private int penWidth, penIndex;
     // End of variables declaration

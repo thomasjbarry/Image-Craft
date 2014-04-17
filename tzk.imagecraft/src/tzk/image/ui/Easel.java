@@ -82,7 +82,7 @@ public class Easel extends javax.swing.JPanel {
 
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         // finds out if the user clicked the right box, then sets
-        // the vertical, horizontal, or coner bools to true.
+        // the vertical, horizontal, or corner bools to true.
         if (evt.getX() > width - 10
                 && evt.getY() > (height - 10) / 2
                 && evt.getY() < (height - 10) / 2 + 10) {
@@ -108,15 +108,17 @@ public class Easel extends javax.swing.JPanel {
          */
 
         if (horizontal) {       
-            this.increaseSize(evt.getX() - width, 0);            
-            imageCraft.drawingArea1.increaseSize(evt.getX() - width, 0);
+            this.resizeEasel(evt.getX() - width, 0);            
+            imageCraft.drawingArea1.resizeDrawing(evt.getX() - width, 0);
         } else if (vertical) {
-            this.increaseSize(0, evt.getY() - height);
-            imageCraft.drawingArea1.increaseSize(0, evt.getY() - height);
+            this.resizeEasel(0, evt.getY() - height);
+            imageCraft.drawingArea1.resizeDrawing(0, evt.getY() - height);
         } else if (corner) {
-            this.increaseSize(evt.getX() - width, evt.getY() - height);
-            imageCraft.drawingArea1.increaseSize(evt.getX() - width, evt.getY() - height);
+            this.resizeEasel(evt.getX() - width, evt.getY() - height);
+            imageCraft.drawingArea1.resizeDrawing(evt.getX() - width, evt.getY() - height);
         }
+        
+        // Unset all flags
         horizontal = false;
         vertical = false;
         corner = false;
@@ -137,9 +139,14 @@ public class Easel extends javax.swing.JPanel {
         g.fillRect((width - 10) / 2, height - 10, 10, 10); //vertical resizer
     }
 
-    //Used to increase Easel size
-    public void increaseSize(int x, int y) {
-
+    /**
+     * Resize the easel.
+     * Updates javax.swing
+     * 
+     * @param x additional width to add (negative: remove)
+     * @param y additional height to add (negative: remove)
+     */
+    public void resizeEasel(int x, int y) {
         this.setPreferredSize(new Dimension(
                 (int) this.getPreferredSize().getWidth() + x,
                 (int) this.getPreferredSize().getHeight() + y));
