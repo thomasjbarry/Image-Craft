@@ -127,11 +127,7 @@ public class Shapes extends SimpleTool {
                     x1, y1, x2 - x1, y2 - y1);
         } else {
             System.out.println("No Shape of type" + shapeType);
-            return;
         }
-        
-        //Draw this currentDrawing to the drawingArea
-        drawingGraphics.drawImage(workSpace, 0, 0, null);
     }
 
     /**
