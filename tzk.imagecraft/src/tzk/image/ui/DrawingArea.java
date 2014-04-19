@@ -151,7 +151,7 @@ public class DrawingArea extends javax.swing.JPanel {
         currentDrawing = new BufferedImage(this.getWidth(),
                 this.getHeight(), BufferedImage.TYPE_INT_ARGB);
         // With LayerTree, layers are in reversed order.
-        for (int i = selectedIndices.length - 1; i > -1; i--) {
+        for (int i = selectedIndices[selectedIndices.length - 1]; i > -1; i--) {
             if (imageCraft.layerTree1.getClickedLayer(i) != null) {
                 imageCraft.layerTree1.getClickedLayer(i).drawLayer();
             } else {
