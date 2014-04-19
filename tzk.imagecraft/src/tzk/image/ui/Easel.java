@@ -130,8 +130,13 @@ public class Easel extends javax.swing.JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        width = this.getWidth();
-        height = this.getHeight();
+        // For NetBeans design tab
+        if (imageCraft == null) {
+            return;
+        }
+        
+        width = imageCraft.drawingArea1.getWidth() + 10;
+        height = imageCraft.drawingArea1.getHeight() + 10;
 
         g.setColor(Color.BLUE);
         g.fillRect(width - 10, (height - 10) / 2, 10, 10);//horizontal resizer

@@ -63,7 +63,7 @@ public class Fill extends SimpleTool {
         int x = evt.getX();
         int y = evt.getY();
         
-        // The BufferedImage we'll work with
+        // The current, visible BufferedImage canvas area
         BufferedImage image = imageCraft.drawingArea1.currentDrawing;
         
         // This is the color that we will paint over.
@@ -160,8 +160,8 @@ public class Fill extends SimpleTool {
                     color = new Color(image.getRGB(x - 1, y), true);
                     // If color.equals(toColor), then we have already painted
                     // this pixel
-                    if (colorDistance(color, fromColor) <= threshold && 
-                            !color.equals(toColor)) {
+                    if (!color.equals(toColor) &&
+                            colorDistance(color, fromColor) <= threshold) {
                         // If we haven't seen a pixel on the left side that we
                         // want to fill yet, be vigilant
                         if (checkLeft) {
@@ -188,8 +188,8 @@ public class Fill extends SimpleTool {
                     color = new Color(image.getRGB(x + 1, y), true);
                     // If color.equals(toColor), then we have already painted
                     // this pixel
-                    if (colorDistance(color, fromColor) <= threshold &&
-                            !color.equals(toColor)) {
+                    if (!color.equals(toColor) &&
+                            colorDistance(color, fromColor) <= threshold) {
                         // If we haven't seen a pixel on the right side that we
                         // want to fill yet, be vigilant
                         if (checkRight) {

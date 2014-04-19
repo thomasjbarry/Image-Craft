@@ -137,7 +137,7 @@ public class IO {
     }
 
     /**
-     * Import a file to the current layer
+     * Import a file to the current layer.
      */
     protected void fileImport() {
         // Set available file formats, all
@@ -164,7 +164,7 @@ public class IO {
     }
 
     /**
-     * Export a file as a JPG.
+     * Export a file as a GIF, JPG, or PNG.
      *
      * @param unique false: Overwrite last export file true: Write to a new
      * export file
@@ -245,35 +245,31 @@ public class IO {
         }
     }
 
+    /**
+     * Build a screenshot of the current drawing.
+     * 
+     * @param layers which layers to show in screenshot
+     * @return screenshot
+     */
     private BufferedImage screenshot(ArrayList<Layer> layers) {
-        //Create a new BufferedImage and use its graphics to draw every layer
-        //in imageCraft to the BufferedImage
+        // Create a new BufferedImage
         BufferedImage image = imageCraft.newBlankImage();
         Graphics g = image.getGraphics();
-        for (Layer layer : layers) {
+        
+        // Draw a white background on the image
+        g.setColor(Color.white);
+        g.fillRect(0, 0, image.getWidth(), image.getHeight());
+        
+        // Draw each layer on top of the background
+        for (int i = layers.size() - 1; i > -1; i--) {
+            Layer layer = layers.get(i);
             if (layer.undoIndex != -1) {
                 g.drawImage(layer.historyArray.get(layer.undoIndex).finalImage, 0, 0, null);
             }
         }
-
-        //Create a filteredImage that has a white background to draw the
-        //transparent BufferedImage with all the layers
-        BufferedImage filteredImage = new BufferedImage(
-                (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
-                (int) imageCraft.drawingArea1.getPreferredSize().getHeight(),
-                BufferedImage.TYPE_INT_RGB);
-        Graphics g2 = filteredImage.getGraphics();
-
-        //Set the background to white
-        g2.setColor(Color.white);
-        g2.fillRect(0, 0,
-                (int) imageCraft.drawingArea1.getPreferredSize().getWidth(),
-                (int) imageCraft.drawingArea1.getPreferredSize().getHeight());
-
-        //Draw image holding all the layers
-        g2.drawImage(image, 0, 0, null);
         
-        return filteredImage;
+        // Return the screenshot
+        return image;
     }
 
     // Variables declaration
