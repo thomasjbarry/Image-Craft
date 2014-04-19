@@ -101,6 +101,7 @@ public class ImageCraft extends javax.swing.JFrame {
         jSize = new javax.swing.JComboBox();
         jColorSwatch = new ColorSwatch(this);
         jScrollPane2 = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
         easel1 = new tzk.image.ui.Easel(this);
         drawingArea1 = new DrawingArea(this);
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -180,7 +181,7 @@ public class ImageCraft extends javax.swing.JFrame {
                     .addComponent(jSelectAllLayers)
                     .addComponent(newLayer))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
                 .addGap(1, 1, 1))
         );
 
@@ -253,7 +254,7 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addComponent(jShape)
                 .addGap(18, 18, 18)
                 .addComponent(jSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jColorSwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -286,14 +287,33 @@ public class ImageCraft extends javax.swing.JFrame {
         easel1.setLayout(easel1Layout);
         easel1Layout.setHorizontalGroup(
             easel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(easel1Layout.createSequentialGroup()
+                .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(215, Short.MAX_VALUE))
         );
         easel1Layout.setVerticalGroup(
             easel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(easel1Layout.createSequentialGroup()
+                .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
-        jScrollPane2.setViewportView(easel1);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 715, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(easel1, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 405, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(easel1, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE))
+        );
+
+        jScrollPane2.setViewportView(jPanel1);
 
         javax.swing.GroupLayout jRightPaneLayout = new javax.swing.GroupLayout(jRightPane);
         jRightPane.setLayout(jRightPaneLayout);
@@ -764,6 +784,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jNew;
     private javax.swing.JMenuItem jOpen;
+    private javax.swing.JPanel jPanel1;
     public javax.swing.JToggleButton jPick;
     private javax.swing.JMenuItem jQuit;
     private javax.swing.JMenuItem jRedo;
