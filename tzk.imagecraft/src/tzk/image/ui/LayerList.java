@@ -45,7 +45,7 @@ public class LayerList extends JList {
         Vector<String> layers = new Vector<>();
         imageCraft = iC;
         for (Layer layer : imageCraft.layerList) {
-            layers.add(layer.layerName);
+            layers.add(layer.getLayerName());
         }
         setListData(layers);
         setSelectedIndex(imageCraft.layerList.size() - 1);
@@ -172,7 +172,7 @@ public class LayerList extends JList {
 
             jPopupMenu.show(this, evt.getX(), evt.getY());
 
-            System.out.println("You right clicked " + clickedLayer.layerName);
+            System.out.println("You right clicked " + clickedLayer.getLayerName());
         }
     }
 
@@ -203,14 +203,14 @@ public class LayerList extends JList {
         imageCraft.currentLayer = clickedLayer;
         this.repaint();
         System.out.println("The Current Layer is now " +
-                imageCraft.currentLayer.layerName);
+                imageCraft.currentLayer.getLayerName());
     }
     
     private void jMenuItemRenameActionPerformed(java.awt.event.ActionEvent evt) {
         int[] selected = this.getSelectedIndices();
-        String renameText = JOptionPane.showInputDialog("Rename layer", clickedLayer.layerName);
+        String renameText = JOptionPane.showInputDialog("Rename layer", clickedLayer.getLayerName());
         if (renameText != null) {
-        clickedLayer.layerName = renameText;
+        clickedLayer.setLayerName(renameText);
         this.updateLayerList();
         this.setSelectedIndices(selected);
         this.repaint();
@@ -233,7 +233,7 @@ public class LayerList extends JList {
             }
         }
         this.setSelectedIndices(selected);
-        System.out.println("You just moved " + clickedLayer.layerName + " up.");
+        System.out.println("You just moved " + clickedLayer.getLayerName() + " up.");
     }
 
     private void jMenuItemMoveDownActionPerformed(java.awt.event.ActionEvent evt) {
@@ -253,24 +253,24 @@ public class LayerList extends JList {
             }
         }
         this.setSelectedIndices(selected);
-        System.out.println("You just moved " + clickedLayer.layerName + " down.");
+        System.out.println("You just moved " + clickedLayer.getLayerName() + " down.");
     }
 
     private void jMenuItemClearLayerActionPerformed(java.awt.event.ActionEvent evt) {
         int[] selected = this.getSelectedIndices();
-        clickedLayer.historyArray.clear();
-        clickedLayer.undoIndex = -1;
+        clickedLayer.getHistoryArray().clear();
+        clickedLayer.setUndoIndex((short) -1);
         this.updateLayerList();
         this.setSelectedIndices(selected);
         this.repaint();
-        System.out.println("You just cleared " + clickedLayer.layerName);
+        System.out.println("You just cleared " + clickedLayer.getLayerName());
     }
     
     private void jMenuItemDeleteLayerActionPerformed(java.awt.event.ActionEvent evt) {
         imageCraft.layerList.remove(clickedLayer);
         this.updateLayerList();
         this.repaint();
-        System.out.println("You just deleted " + clickedLayer.layerName);
+        System.out.println("You just deleted " + clickedLayer.getLayerName());
     }
 
     @SuppressWarnings("unchecked")
@@ -278,7 +278,7 @@ public class LayerList extends JList {
         // Get layers from Layer class
         Vector<String> layers = new Vector<>();
         for (Layer layer : imageCraft.layerList) {
-            layers.add(layer.layerName);
+            layers.add(layer.getLayerName());
         }
 
         // Update list component, set selected layer

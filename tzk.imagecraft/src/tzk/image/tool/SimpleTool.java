@@ -118,7 +118,7 @@ public class SimpleTool {
     private final ImageCraft imageCraft;
 
     // What button the tool is using
-    public JToggleButton toolButton = null;
+    private JToggleButton toolButton = null;
 
     // End of variables declaration
 }

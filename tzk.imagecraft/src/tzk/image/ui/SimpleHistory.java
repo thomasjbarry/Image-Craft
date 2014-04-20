@@ -48,23 +48,27 @@ public class SimpleHistory {
         short historyNum;
         switch (historyType) {
             case "Draw":
-                historyNum = ++layerObject.drawNum;
+                layerObject.setDrawNum((short) (layerObject.getDrawNum() + 1));
+                historyNum = layerObject.getDrawNum();
                 break;
             case "Rectangle":
-                historyNum = ++layerObject.rectangleNum;
+                layerObject.setRectangleNum((short) (layerObject.getRectangleNum() + 1));
+                historyNum = layerObject.getDrawNum();
                 break;
             case "Fill":
-                historyNum = ++layerObject.fillNum;
+                layerObject.setFillNum((short) (layerObject.getFillNum() + 1));
+                historyNum = layerObject.getDrawNum();
                 break;
             case "Imported Image":
-                historyNum = ++layerObject.imageNum;
+                layerObject.setImageNum((short) (layerObject.getImageNum() + 1));
+                historyNum = layerObject.getDrawNum();
                 break;
             default:
                 historyNum = 0;
                 break;
         }
         historyName = historyType + " Object #" + historyNum;
-        System.out.println("New SimpleHistory in " + this.layerObject.layerName + ": " + historyName);
+        System.out.println("New SimpleHistory in " + this.layerObject.getLayerName() + ": " + historyName);
         createFinalImage();
     }
     
@@ -106,6 +110,37 @@ public class SimpleHistory {
         drawGraphics.dispose();
     }
     
+    protected BufferedImage getActionImage() {
+        return this.actionImage;
+    }
+    
+    protected void setActionImage(BufferedImage image) {
+        this.actionImage = image;
+    }
+    
+    protected Layer getActionFilter() {
+        return this.actionFilter;
+    }
+    
+    protected BufferedImage getFinalImage() {
+        return this.finalImage;
+    }
+    
+    protected void setFinalImage(BufferedImage image) {
+        this.finalImage = image;
+    }
+    
+    protected Layer getLayer() {
+        return this.layerObject;
+    }
+    
+    protected String getHistoryName() {
+        return this.historyName;
+    }
+    
+    protected void setHistoryName(String name) {
+        this.historyName = name;
+    }
     
     public static void main(String[] args)
     {
@@ -115,13 +150,13 @@ public class SimpleHistory {
     // Variable Declaration
     private ImageCraft imageCraft;
     // Snapshot of the action
-    protected BufferedImage actionImage;
+    private BufferedImage actionImage;
     // This is the exact filter command
     // This type will change, assuming we create a Filter type
-    protected final Layer actionFilter;
+    private Layer actionFilter;
     // Snapshot of the layer up to this point, including this action
-    protected BufferedImage finalImage;
-    protected final Layer layerObject;
-    protected String historyName;
+    private BufferedImage finalImage;
+    private final Layer layerObject;
+    private String historyName;
     //End of variable declaration
 }

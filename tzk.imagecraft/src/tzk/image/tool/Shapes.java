@@ -22,15 +22,11 @@
  */
 package tzk.image.tool;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.SwingUtilities;
 import tzk.image.ui.ImageCraft;
@@ -80,8 +76,8 @@ public class Shapes extends SimpleTool {
         
         // Create a new temporary workspace and save it to this object
         imageCraft.drawingArea1.instantiateWorkSpace();
-        workSpace = imageCraft.drawingArea1.workSpace;
-        workSpaceGraphics = (Graphics2D) imageCraft.drawingArea1.workSpace.getGraphics();
+        workSpace = imageCraft.drawingArea1.getWorkSpace();
+        workSpaceGraphics = (Graphics2D) imageCraft.drawingArea1.getWorkSpace().getGraphics();
         
         //Determine which color to paint with and set the imageGraphics to that color
         Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);        
@@ -163,7 +159,7 @@ public class Shapes extends SimpleTool {
         // Clean up resources
         drawingGraphics.dispose();
         workSpaceGraphics.dispose();
-        imageCraft.drawingArea1.workSpace = null;
+        imageCraft.drawingArea1.setWorkSpace(null);
     }
     
     private short[] points(short x2, short y2) {
