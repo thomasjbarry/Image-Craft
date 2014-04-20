@@ -10,7 +10,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * The drawing area allows users to create their own
+ * ImageCrafts where they can draw on, import other images ect.
+ * 
  * @author Thomas
  */
 public class DrawingArea extends javax.swing.JPanel {

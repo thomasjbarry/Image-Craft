@@ -27,7 +27,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 /**
- *
+ * The Easel is a jPanel under the drawing area that allows users to
+ * resize the drawing area.
+ * 
+ * It will hopefully be used more later, but we aren't sure what for. 
  * @author Drew
  */
 public class Easel extends javax.swing.JPanel {
@@ -80,6 +83,14 @@ public class Easel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    /**
+     * This checks if the mouse is hovering above one of the 3 resizers. 
+     * Resizers are small squares at the edge of the easel that users drag
+     * to resize the easel and the drawing area.
+     * 
+     * @param evt 
+     */
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         // finds out if the user clicked the right box, then sets
         // the vertical, horizontal, or corner bools to true.
@@ -100,13 +111,14 @@ public class Easel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_formMousePressed
 
+    
+    /**
+     * This is where the resize functions get called. When the mouse is released, 
+     * the easel and drawing area are resized.
+     * 
+     * @param evt 
+     */
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        /*
-         In each, I resize the drawingarea1 and the easel
-         repaint, then revalidate, then set the dragging booleans
-         to false
-         */
-
         if (horizontal) {       
             this.resizeEasel(evt.getX() - width, 0);            
             imageCraft.drawingArea1.resizeDrawing(evt.getX() - width, 0);
@@ -126,6 +138,11 @@ public class Easel extends javax.swing.JPanel {
         System.out.println("Drawing area resized: " + width + ", " + height);
     }//GEN-LAST:event_formMouseReleased
 
+    
+    /**
+     * I overrode the paintComponent method so that I could draw in the
+     * squares that represent the resizers.
+    */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

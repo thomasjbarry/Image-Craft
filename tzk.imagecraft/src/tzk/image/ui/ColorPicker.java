@@ -26,7 +26,9 @@ package tzk.image.ui;
 import java.awt.event.WindowEvent;
 
 /**
- *
+ * This class allows the user to pick color to paint with,
+ * draw shapes with, and draw with. 
+ * 
  * @author Zach
  */
 public class ColorPicker extends javax.swing.JFrame {

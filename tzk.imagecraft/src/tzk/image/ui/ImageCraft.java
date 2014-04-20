@@ -35,10 +35,13 @@ import tzk.image.tool.Shapes;
 import tzk.image.tool.SimpleTool;
 
 /**
+ * ImageCraft is an application where users can draw, and edit images. The images
+ * that users craft are saveable and can be re- opened in ImageCraft
+ * 
  *
- * DrewTest
- *
- * @author Zach
+ * Contributers: Thomas James Barry
+ *               Zachary Gately
+ *               K Drew Gonzales
  */
 public class ImageCraft extends javax.swing.JFrame {
 
