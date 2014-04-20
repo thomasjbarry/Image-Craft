@@ -71,14 +71,14 @@ public class LayerTree extends JTree {
         //Sets the CellRenderer to an object of the private class layerTreeCellRenderer
         DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) new LayerTree.layerTreeCellRenderer();
         setCellRenderer(renderer);
-        
+
         //Creates ImageIcon for Layers and SimpleHistory objects from file name
         ImageIcon historyIcon = new ImageIcon("src/tzk/image/img/historyIcon.png");
         ImageIcon layerIcon = new ImageIcon("src/tzk/image/img/layerIcon.png");
         renderer.setLeafIcon(historyIcon);
         renderer.setOpenIcon(layerIcon);
         renderer.setClosedIcon(layerIcon);
-        
+
     }
 
     //Classes
@@ -600,18 +600,11 @@ public class LayerTree extends JTree {
         else {
             //Call removeHistory method on the clickedHistory to remove it from
             //this LayerTree
+            Layer layer = clickedHistory.layerObject;
             this.removeHistory(clickedHistory, clickedHistory.layerObject);
 
-            //Remove the clickedHistory from its layer's historyArray
-            clickedHistory.layerObject.historyArray.remove(clickedHistory);
-
-            //Reset the clickedHistory's layer's undoIndex so that none of the 
-            //remaining SimpleHistory objects in the layer are UNDOne
-            clickedHistory.layerObject.undoIndex = (short) (clickedHistory.layerObject.historyArray.size() - 1);
-
-            //Repaint the Drawing Area
-            imageCraft.drawingArea1.repaint();
             System.out.println("You just deleted " + clickedHistory.historyName);
+            System.out.println("Removed: " + !layer.historyArray.contains(clickedHistory));
         }
     }
 
@@ -648,6 +641,7 @@ public class LayerTree extends JTree {
         DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) root.getChildAt(imageCraft.layerList.indexOf(layer));
         DefaultMutableTreeNode parentNode = root;
 
+        TreePath[] selected = this.getSelectionPaths();
         //Remove the childNode from the tree
         model.removeNodeFromParent(childNode);
 
@@ -656,17 +650,17 @@ public class LayerTree extends JTree {
 
         //Make the childNode visible
         this.scrollPathToVisible(new TreePath(parentNode.getPath()));
+
         this.setSelectionRow(0);
     }
-
-    /**
-     * Add a SimpleHistory object to the tree as a child of the SimpleHistory
-     * object's Layer
-     *
-     * @param history SimpleHistory Object
-     * @param layer Layer Object corresponding to the location of the
-     * SimpleHistory object
-     */
+        /**
+         * Add a SimpleHistory object to the tree as a child of the
+         * SimpleHistory object's Layer
+         *
+         * @param history SimpleHistory Object
+         * @param layer Layer Object corresponding to the location of the
+         * SimpleHistory object
+         */
     public void addHistory(SimpleHistory history, Layer layer) {
         //Set the childNode (a SimpleHistory Object) and parentNode (a Layer Object) 
         DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(history.historyName);
@@ -708,11 +702,22 @@ public class LayerTree extends JTree {
         //Insert the childNode into the tree
         model.removeNodeFromParent(childNode);
 
+        //Notifies this LayerTree's TreeModel that the parentNode's structure changed
+        model.nodeStructureChanged(parentNode);
+
         //Make the childNode visible
         this.scrollPathToVisible(new TreePath(parentNode.getPath()));
 
-        //Notifies this LayerTree's TreeModel that the parentNode's structure changed
-        model.nodeStructureChanged(parentNode);
+        //Remove the clickedHistory from its layer's historyArray
+        clickedHistory.layerObject.historyArray.remove(clickedHistory);
+
+        //Reset the clickedHistory's layer's undoIndex so that none of the 
+        //remaining SimpleHistory objects in the layer are UNDOne
+        clickedHistory.layerObject.undoIndex = (short) (clickedHistory.layerObject.historyArray.size() - 1);
+
+        //Repaint the Drawing Area
+        imageCraft.drawingArea1.revalidate();
+        imageCraft.drawingArea1.repaint();
     }
 
     /**
@@ -809,39 +814,38 @@ public class LayerTree extends JTree {
 
     /**
      * Gets the selected rows and separates them into two int[], one for Layer
-     * objects and one for SimpleHistory objects, and returns them in an ArrayList.
+     * objects and one for SimpleHistory objects, and returns them in an
+     * ArrayList.
      *
      * @return ArrayList<int[]>
      */
     protected ArrayList<int[]> getSelected() {
         //Initialize ArrayList<int[]> to return
         ArrayList<int[]> selected = new ArrayList<>();
-        
+
         //Initialize int[]s that hold the selected rows and those that will hold
         //the selected layers, and the selected histories
         int[] selectedRows = this.getSelectionRows();
         int[] selectedLayers, selectedHistory;
-        
+
         //Initialize counters for layers and histories
         int layerNum = 0;
         int historyNum = 0;
-        
+
         //Accumulate the counters
         for (int i : selectedRows) {
             //If the clicked row is a layer then count layerNum
             if (getClickedLayer(i) != null) {
                 layerNum++;
-            } 
-            //If the clicked row is a SimpleHistory then count historyNum
+            } //If the clicked row is a SimpleHistory then count historyNum
             else if (getClickedHistory(i) != null) {
                 historyNum++;
-            } 
-            //Else send error message
+            } //Else send error message
             else {
                 System.out.println("Error: unknown type selected in getSelected()");
             }
         }
-        
+
         //Create proper size for the int[]s for the selectedLayers and selectedHistory
         if (layerNum > 0) {
             selectedLayers = new int[layerNum];
@@ -853,7 +857,7 @@ public class LayerTree extends JTree {
         } else {
             selectedHistory = new int[1];
         }
-        
+
         //Add the rows to the correct int[]
         for (int layer = 0, history = 0, i = 0; i < selectedRows.length && layer < selectedLayers.length && history < selectedHistory.length; i++) {
             if (getClickedLayer(i) != null) {
@@ -867,31 +871,32 @@ public class LayerTree extends JTree {
         //Add the int[]s to the ArrayList<int[]>
         selected.add(selectedLayers);
         selected.add(selectedHistory);
-        
+
         //return the ArrayList<int[]>
         return selected;
     }
 
     /**
      * Selects the node corresponding to layer
+     *
      * @param layer Layer whose node is to be selected
      */
     protected void setSelected(Layer layer) {
         //Get layer's node
-        DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)
-                imageCraft.layerTree1.root.getChildAt(
-                        imageCraft.layerList.indexOf(layer));
-        
+        DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) imageCraft.layerTree1.root.getChildAt(
+                imageCraft.layerList.indexOf(layer));
+
         //Get node's TreePath
         TreePath path = new TreePath(childNode.getPath());
-        
+
         //Select the TreePath
         this.setSelectionPath(path);
     }
 
     /**
      * Enables all of the MenuItems in the passed JPopupMenu
-     * @param menu 
+     *
+     * @param menu
      */
     private void enableAllMenuOptions(JPopupMenu menu) {
         //enable each item in the menu's components
@@ -899,7 +904,6 @@ public class LayerTree extends JTree {
             item.setEnabled(true);
         }
     }
-    
 
     //Initialize Variables
     private ImageCraft imageCraft;
