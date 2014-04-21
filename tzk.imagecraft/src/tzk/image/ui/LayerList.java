@@ -193,7 +193,7 @@ public class LayerList extends JList {
             imageCraft.currentLayer = imageCraft.layerList.get(
                     getSelectedIndex());
             this.repaint();
-            imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
+            imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
         }
     }
 

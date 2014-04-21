@@ -64,7 +64,7 @@ public class Fill extends SimpleTool {
         int y = evt.getY();
         
         // The current, visible BufferedImage canvas area
-        BufferedImage image = imageCraft.drawingArea1.getCurrentDrawing();
+        BufferedImage image = imageCraft.drawingArea.getCurrentDrawing();
         
         // This is the color that we will paint over.
         // Second parameter of Color constructor keeps alpha channel
@@ -222,8 +222,8 @@ public class Fill extends SimpleTool {
         }
         
         // Draw our final image
-        imageCraft.drawingArea1.getGraphics().drawImage(image, 0, 0, null);
-        imageCraft.drawingArea1.getGraphics().drawImage(fillImage, 0, 0, null);
+        imageCraft.drawingArea.getGraphics().drawImage(image, 0, 0, null);
+        imageCraft.drawingArea.getGraphics().drawImage(fillImage, 0, 0, null);
         
         // Create new history object in layer
         imageCraft.currentLayer.addHistory(fillImage, "Fill");

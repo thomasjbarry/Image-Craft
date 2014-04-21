@@ -34,6 +34,11 @@ public class ComplexHistory {
         this.layerObject = layer;
         this.filterType = filter;
     }
+    
+    /**
+     * Calls the proper filter method with the index of this ComplexHistory
+     * object in its layer's HistoryArray
+     */
     protected void filter() {
         switch (filterType) {
             case "Grayscale":
@@ -44,6 +49,11 @@ public class ComplexHistory {
         }
     }
     
+    /**
+     * Grayscale filter applied to all SimpleHistory objects before this object
+     * in layerObject's HistoryArray.
+     * @param index 
+     */
     protected void grayScale(short index) {
         for (int i = 0; i < index; i++) {
             //apply grayscale BufferedImageOp to layerObject.getHistoryArray.get(i) (if SimpleHistory);

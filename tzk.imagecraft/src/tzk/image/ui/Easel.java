@@ -121,13 +121,13 @@ public class Easel extends javax.swing.JPanel {
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         if (horizontal) {       
             this.resizeEasel(evt.getX() - width, 0);            
-            imageCraft.drawingArea1.resizeDrawing(evt.getX() - width, 0);
+            imageCraft.drawingArea.resizeDrawing(evt.getX() - width, 0);
         } else if (vertical) {
             this.resizeEasel(0, evt.getY() - height);
-            imageCraft.drawingArea1.resizeDrawing(0, evt.getY() - height);
+            imageCraft.drawingArea.resizeDrawing(0, evt.getY() - height);
         } else if (corner) {
             this.resizeEasel(evt.getX() - width, evt.getY() - height);
-            imageCraft.drawingArea1.resizeDrawing(evt.getX() - width, evt.getY() - height);
+            imageCraft.drawingArea.resizeDrawing(evt.getX() - width, evt.getY() - height);
         }
         
         // Unset all flags
@@ -152,8 +152,8 @@ public class Easel extends javax.swing.JPanel {
             return;
         }
         
-        width = imageCraft.drawingArea1.getWidth() + 10;
-        height = imageCraft.drawingArea1.getHeight() + 10;
+        width = imageCraft.drawingArea.getWidth() + 10;
+        height = imageCraft.drawingArea.getHeight() + 10;
 
         g.setColor(Color.BLUE);
         g.fillRect(width - 10, (height - 10) / 2, 6, 6);//horizontal resizer

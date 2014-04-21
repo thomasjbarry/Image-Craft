@@ -58,10 +58,10 @@ public class Layer {
     protected void drawLayer() {
         if (historyArray != null && historyArray.size() > 0 && undoIndex > -1) {
             BufferedImage snapshot = ((SimpleHistory) historyArray.get(undoIndex)).getFinalImage();
-            imageCraft.drawingArea1.getCurrentDrawing().getGraphics().drawImage(
+            imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
                     snapshot, 0, 0, null);
-            imageCraft.drawingArea1.getGraphics().drawImage(
-                    imageCraft.drawingArea1.getCurrentDrawing(), 0, 0, null);
+            imageCraft.drawingArea.getGraphics().drawImage(
+                    imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
         }
     }
 
@@ -106,10 +106,10 @@ public class Layer {
         undoIndex++;
         imageCraft.layerTree1.addHistory(history, this);
         historyArray.add(history);
-        imageCraft.drawingArea1.getCurrentDrawing().getGraphics().drawImage(
+        imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
                 image, 0, 0, null);
 
-        imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
+        imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
 
     }
 
@@ -122,7 +122,7 @@ public class Layer {
         if (undoIndex > -1) {
             undoIndex--;
             imageCraft.layerTree1.repaint();
-            imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
+            imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
             System.out.println(undoIndex);
         }
     }
@@ -131,7 +131,7 @@ public class Layer {
         if (undoIndex < historyArray.size() - 1) {
             undoIndex++;
             imageCraft.layerTree1.repaint();
-            imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
+            imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
             System.out.println(undoIndex);
         }
     }

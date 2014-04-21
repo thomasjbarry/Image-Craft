@@ -208,7 +208,7 @@ public class IO {
                 } catch (IOException err) {
                     System.out.println("err");
                 }
-                format = ".png";
+                format = "png";
             }
 
             //Attempts to write the file and open it in the Desktop
@@ -232,14 +232,14 @@ public class IO {
             BufferedImage bufferedFile = ImageIO.read(file);
 
             //If the bufferedFile is too big resize it
-            if (bufferedFile.getWidth() > imageCraft.drawingArea1.getWidth()
-                    || bufferedFile.getHeight() > imageCraft.drawingArea1.getHeight()) {
-                iC.drawingArea1.resizeDrawing(
-                        bufferedFile.getWidth() - iC.drawingArea1.getWidth(),
-                        bufferedFile.getHeight() - iC.drawingArea1.getHeight());
+            if (bufferedFile.getWidth() > imageCraft.drawingArea.getWidth()
+                    || bufferedFile.getHeight() > imageCraft.drawingArea.getHeight()) {
+                iC.drawingArea.resizeDrawing(
+                        bufferedFile.getWidth() - iC.drawingArea.getWidth(),
+                        bufferedFile.getHeight() - iC.drawingArea.getHeight());
             }
             layer.addHistory(bufferedFile, "Imported Image");
-            iC.drawingArea1.paintComponent(iC.drawingArea1.getGraphics());
+            iC.drawingArea.paintComponent(iC.drawingArea.getGraphics());
         } catch (IOException err) {
             System.out.println("Not a real image..."); // You shmuck
         }

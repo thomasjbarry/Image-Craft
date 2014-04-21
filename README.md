@@ -2,19 +2,24 @@ Image-Craft
 ===========
 
 Bugs:
-
-	LayerTree- doesn't repaint drawing area upon deleting first drawn SimpleHistory object
-				StackOverFlowError when selecting SH objects
-	Export- If no file extension is written in the filename the file will not save
-	Shapes- redraws the entire drawing area making it choppy
+	High Priority:
+		LayerTree- doesn't repaint drawing area upon deleting first drawn SimpleHistory object
+					StackOverFlowError when selecting SH objects
+		Export- If no file extension is written in the filename the file will not save
+				JPG pinkish tone
+				
+	Low Priority:				
+		Shapes- redraws the entire drawing area making it choppy
 
 TODO:
 
-	ZACH: Shapes Bug (layered JPanels), More efficient Fill Tool
+	ZACH:
 
-	THOMAS: LayerTree bugs
+	THOMAS: 
+		LayerTree bugs
 
-	DREW: Easel: MouseEvent- on mouse over change mouse icon
+	DREW: 
+		Resize Components: MouseEvent- on mouse over change mouse icon
 
 	For anyone:
 	

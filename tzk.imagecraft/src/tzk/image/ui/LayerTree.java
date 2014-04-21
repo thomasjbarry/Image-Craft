@@ -350,7 +350,7 @@ public class LayerTree extends JTree {
             }
 
             //Paint the Drawing Area to reflect the change in selection
-            imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
+            imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
         }
     }
 
@@ -579,7 +579,7 @@ public class LayerTree extends JTree {
 
         //Repaint this LayerTree and the DrawingArea
         this.repaint();
-        imageCraft.drawingArea1.repaint();
+        imageCraft.drawingArea.repaint();
 
         System.out.println("You just cleared " + clickedLayer.getLayerName());
     }
@@ -705,7 +705,7 @@ public class LayerTree extends JTree {
         //Notifies this LayerTree's TreeModel that the parentNode's structure changed
         model.nodeStructureChanged(parentNode);
 
-        //Make the childNode visible
+        //Make the parentNode visible
         this.scrollPathToVisible(new TreePath(parentNode.getPath()));
 
         //Remove the clickedHistory from its layer's historyArray
@@ -716,8 +716,8 @@ public class LayerTree extends JTree {
         clickedHistory.getLayer().setUndoIndex((short) (clickedHistory.getLayer().getHistoryArray().size() - 1));
 
         //Repaint the Drawing Area
-        imageCraft.drawingArea1.revalidate();
-        imageCraft.drawingArea1.repaint();
+        imageCraft.drawingArea.revalidate();
+        imageCraft.drawingArea.repaint();
     }
 
     /**

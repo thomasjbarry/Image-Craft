@@ -83,7 +83,7 @@ public class Draw extends SimpleTool {
         dragging = true;
 
         //Get the graphics objects for the BufferedImage and the JPanel
-        drawingGraphics = imageCraft.drawingArea1.getGraphics();
+        drawingGraphics = imageCraft.drawingArea.getGraphics();
         imageGraphics = currentDrawing.getGraphics();
 
         /*
@@ -186,13 +186,13 @@ public class Draw extends SimpleTool {
             x = 0;
         } else {
             // Set x to the lesser of x or the right edge of the drawingArea
-            x = (short) Math.min(x, imageCraft.drawingArea1.getWidth() - (pen != null ? pen.getWidth() : 1));
+            x = (short) Math.min(x, imageCraft.drawingArea.getWidth() - (pen != null ? pen.getWidth() : 1));
         }
         if (y < 0) {
             y = 0;
         } else {
             // Set y to the lesser of y or the bottom edge of the drawingArea
-            y = (short) Math.min(y, imageCraft.drawingArea1.getHeight() - (pen != null ? pen.getHeight() : 1));
+            y = (short) Math.min(y, imageCraft.drawingArea.getHeight() - (pen != null ? pen.getHeight() : 1));
         }
 
         return new Point(x, y);

@@ -75,9 +75,9 @@ public class Shapes extends SimpleTool {
         startY = (short) evt.getY();
         
         // Create a new temporary workspace and save it to this object
-        imageCraft.drawingArea1.instantiateWorkSpace();
-        workSpace = imageCraft.drawingArea1.getWorkSpace();
-        workSpaceGraphics = (Graphics2D) imageCraft.drawingArea1.getWorkSpace().getGraphics();
+        imageCraft.drawingArea.instantiateWorkSpace();
+        workSpace = imageCraft.drawingArea.getWorkSpace();
+        workSpaceGraphics = (Graphics2D) imageCraft.drawingArea.getWorkSpace().getGraphics();
         
         //Determine which color to paint with and set the imageGraphics to that color
         Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);        
@@ -87,7 +87,7 @@ public class Shapes extends SimpleTool {
         // Set the backgroundColor so that we can use clearRect
         workSpaceGraphics.setBackground(new Color(0, 0, 0, 0));
         
-        drawingGraphics = imageCraft.drawingArea1.getGraphics();
+        drawingGraphics = imageCraft.drawingArea.getGraphics();
     }
 
     /**
@@ -98,7 +98,7 @@ public class Shapes extends SimpleTool {
     @Override
     public void mouseDragged(MouseEvent evt) {
         //Repaint the drawing area before we draw to forget any previous dragged shapes
-        imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
+        imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
         
         // Clear the workSpace image
         // This may be deprecated. Can we update?
@@ -159,7 +159,7 @@ public class Shapes extends SimpleTool {
         // Clean up resources
         drawingGraphics.dispose();
         workSpaceGraphics.dispose();
-        imageCraft.drawingArea1.setWorkSpace(null);
+        imageCraft.drawingArea.setWorkSpace(null);
     }
     
     private short[] points(short x2, short y2) {
@@ -172,13 +172,13 @@ public class Shapes extends SimpleTool {
             x2 = 0;
         } else {
             // Set x to the lesser of x or the right edge of the drawingArea
-            x2 = (short) Math.min(x2, imageCraft.drawingArea1.getWidth() - penWidth);
+            x2 = (short) Math.min(x2, imageCraft.drawingArea.getWidth() - penWidth);
         }
         if (y2 < 0) {
             y2 = 0;
         } else {
             // Set y to the lesser of y or the bottom edge of the drawingArea
-            y2 = (short) Math.min(y2, imageCraft.drawingArea1.getHeight() - penWidth);
+            y2 = (short) Math.min(y2, imageCraft.drawingArea.getHeight() - penWidth);
         }
         
         // Swap left and right

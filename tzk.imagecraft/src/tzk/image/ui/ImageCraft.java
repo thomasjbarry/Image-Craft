@@ -106,7 +106,7 @@ public class ImageCraft extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         easel1 = new tzk.image.ui.Easel(this);
-        drawingArea1 = new DrawingArea(this);
+        drawingArea = new DrawingArea(this);
         jMenuBar1 = new javax.swing.JMenuBar();
         jFile = new javax.swing.JMenu();
         jNew = new javax.swing.JMenuItem();
@@ -283,21 +283,21 @@ public class ImageCraft extends javax.swing.JFrame {
         easel1.setDoubleBuffered(false);
         easel1.setPreferredSize(new java.awt.Dimension(500, 300));
 
-        drawingArea1.setPreferredSize(new java.awt.Dimension(500, 300));
-        drawingArea1.setLayout(new javax.swing.BoxLayout(drawingArea1, javax.swing.BoxLayout.LINE_AXIS));
+        drawingArea.setPreferredSize(new java.awt.Dimension(500, 300));
+        drawingArea.setLayout(new javax.swing.BoxLayout(drawingArea, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout easel1Layout = new javax.swing.GroupLayout(easel1);
         easel1.setLayout(easel1Layout);
         easel1Layout.setHorizontalGroup(
             easel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(easel1Layout.createSequentialGroup()
-                .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(drawingArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(215, Short.MAX_VALUE))
         );
         easel1Layout.setVerticalGroup(
             easel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(easel1Layout.createSequentialGroup()
-                .addComponent(drawingArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(drawingArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(105, Short.MAX_VALUE))
         );
 
@@ -479,7 +479,7 @@ public class ImageCraft extends javax.swing.JFrame {
 
     private void jRightPaneComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jRightPaneComponentResized
         //Draw the BufferedImage to the JPanel
-        drawingArea1.paintComponent(drawingArea1.getGraphics());
+        drawingArea.paintComponent(drawingArea.getGraphics());
     }//GEN-LAST:event_jRightPaneComponentResized
 
     @SuppressWarnings("unchecked")
@@ -492,7 +492,7 @@ public class ImageCraft extends javax.swing.JFrame {
         //and the layer object to the layerObjectList
         Layer layer = new Layer(this);
 
-        drawingArea1.paintComponent(drawingArea1.getGraphics());
+        drawingArea.paintComponent(drawingArea.getGraphics());
 
         System.out.println("New Layer: " + layer.getLayerName()
                 + " ; " + layer);
@@ -653,8 +653,8 @@ public class ImageCraft extends javax.swing.JFrame {
 
      public BufferedImage newBlankImage() {
         return new BufferedImage(
-                (int) drawingArea1.getPreferredSize().getWidth(),
-                (int) drawingArea1.getPreferredSize().getHeight(),
+                (int) drawingArea.getPreferredSize().getWidth(),
+                (int) drawingArea.getPreferredSize().getHeight(),
                 BufferedImage.TYPE_INT_ARGB);
     }
 
@@ -768,7 +768,7 @@ public class ImageCraft extends javax.swing.JFrame {
     // End variables declaration
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public tzk.image.ui.DrawingArea drawingArea1;
+    public tzk.image.ui.DrawingArea drawingArea;
     private tzk.image.ui.Easel easel1;
     private javax.swing.JMenuItem jAbout;
     private javax.swing.JMenuItem jClose;

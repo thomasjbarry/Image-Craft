@@ -493,7 +493,7 @@
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="drawingArea1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="drawingArea" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace pref="215" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -501,14 +501,14 @@
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="drawingArea1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="drawingArea" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace pref="105" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
                       </Layout>
                       <SubComponents>
-                        <Container class="tzk.image.ui.DrawingArea" name="drawingArea1">
+                        <Container class="tzk.image.ui.DrawingArea" name="drawingArea">
                           <Properties>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[500, 300]"/>
