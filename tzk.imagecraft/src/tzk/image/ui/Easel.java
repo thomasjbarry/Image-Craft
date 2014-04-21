@@ -156,9 +156,9 @@ public class Easel extends javax.swing.JPanel {
         height = imageCraft.drawingArea1.getHeight() + 10;
 
         g.setColor(Color.BLUE);
-        g.fillRect(width - 10, (height - 10) / 2, 10, 10);//horizontal resizer
-        g.fillRect(width - 10, height - 10, 10, 10);//corner rezier
-        g.fillRect((width - 10) / 2, height - 10, 10, 10); //vertical resizer
+        g.fillRect(width - 10, (height - 10) / 2, 6, 6);//horizontal resizer
+        g.fillRect(width - 10, height - 10, 6, 6);//corner rezier
+        g.fillRect((width - 10) / 2, height - 10, 6, 6); //vertical resizer
     }
 
     /**
