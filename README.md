@@ -3,7 +3,8 @@ Image-Craft
 
 Bugs:
 
-	LayerTree- doesn't repaint drawing area upon deleting a SimpleHistory object
+	LayerTree- doesn't repaint drawing area upon deleting first drawn SimpleHistory object
+				StackOverFlowError when selecting SH objects
 	Export- If no file extension is written in the filename the file will not save
 	Shapes- redraws the entire drawing area making it choppy
 
@@ -13,7 +14,7 @@ TODO:
 
 	THOMAS: LayerTree bugs
 
-	DREW: Easel: make components clickable outside of where it is colored
+	DREW: Easel: MouseEvent- on mouse over change mouse icon
 
 	For anyone:
 	
@@ -23,14 +24,12 @@ TODO:
 		Tools: Draw (Penstrokes), Eraser, Select, Zoom, Resize, Text
 
 		System Clipboard: Copy/Paste
+		
+		Complex History class (filters-- BufferedImageOp)		
 
 		Drag and Drop: How to modify the size/location of an object after creating it (shapes, pasting pictures, etc.)
 
-		Complex History class (filters-- BufferedImageOp)
-
 		Clean up ColorPicker to be more user friendly
-
-		Scroll Panes
 
 		Anti-Aliasing
 		
