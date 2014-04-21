@@ -103,7 +103,8 @@ public class DrawingArea extends javax.swing.JPanel {
     public void resizeDrawing(int x, int y) {
         // Update BufferedImage objects in layers
         for (Layer layer : imageCraft.layerList) {
-            for (SimpleHistory simpleHistoryObj : layer.getHistoryArray()) {
+            for (Object obj : layer.getHistoryArray()) {
+                SimpleHistory simpleHistoryObj = (SimpleHistory) obj;
                 // finalImage is what this layer looks like after this action is performed
                 simpleHistoryObj.setFinalImage(imageCraft.resize(simpleHistoryObj.getFinalImage(),
                         simpleHistoryObj.getFinalImage().getWidth() + x,

@@ -57,7 +57,7 @@ public class Layer {
     // draws all objects in a layer to a BufferedImage object passed as a param
     protected void drawLayer() {
         if (historyArray != null && historyArray.size() > 0 && undoIndex > -1) {
-            BufferedImage snapshot = historyArray.get(undoIndex).getFinalImage();
+            BufferedImage snapshot = ((SimpleHistory) historyArray.get(undoIndex)).getFinalImage();
             imageCraft.drawingArea1.getCurrentDrawing().getGraphics().drawImage(
                     snapshot, 0, 0, null);
             imageCraft.drawingArea1.getGraphics().drawImage(
@@ -69,7 +69,7 @@ public class Layer {
         int size = historyArray.size();
         if (size > 0) {
             // Return a copy of the last snapshot
-            BufferedImage image = historyArray.get(size - 1).getFinalImage();
+            BufferedImage image = ((SimpleHistory) historyArray.get(size - 1)).getFinalImage();
             ColorModel model = image.getColorModel();
             WritableRaster raster = image.copyData(null);
             return new BufferedImage(model, raster, model.isAlphaPremultiplied(), null);
@@ -99,7 +99,7 @@ public class Layer {
     public void addHistory(BufferedImage image, String historyType) {
         //For all indices after the undoIndex delete the SimpleHistory object
         for (int i = historyArray.size() - 1; i > undoIndex; i--) {
-            imageCraft.layerTree1.removeHistory(historyArray.get(historyArray.size() - i - 1), this);
+            imageCraft.layerTree1.removeHistory((SimpleHistory) historyArray.get(historyArray.size() - i - 1), this);
             historyArray.remove(i);
         }
         SimpleHistory history = new SimpleHistory(imageCraft, this, image, historyType);
@@ -152,7 +152,7 @@ public class Layer {
         this.layerName = name;
     }
 
-    public ArrayList<SimpleHistory> getHistoryArray() {
+    public ArrayList<Object> getHistoryArray() {
         return this.historyArray;
     }
 
@@ -195,7 +195,7 @@ public class Layer {
     private short undoIndex;
 
     private String layerName;
-    private final ArrayList<SimpleHistory> historyArray;
+    private final ArrayList<Object> historyArray;
     private final ImageCraft imageCraft;
 
     private short drawNum = 0;

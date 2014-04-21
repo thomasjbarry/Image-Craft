@@ -461,7 +461,7 @@ public class LayerTree extends JTree {
 
             //Create a friend SimpleHistory to swap the clickedHistory with the
             //one before it in its layer's historyArray
-            SimpleHistory friend = clickedHistory.getLayer().getHistoryArray().get(index - 1);
+            SimpleHistory friend = (SimpleHistory) clickedHistory.getLayer().getHistoryArray().get(index - 1);
             clickedHistory.getLayer().getHistoryArray().set(index - 1, clickedHistory);
             clickedHistory.getLayer().getHistoryArray().set(index, friend);
 
@@ -529,7 +529,7 @@ public class LayerTree extends JTree {
 
             //Create a friend SimpleHistory to swap the clickedHistory with the
             //one after it in its layer's historyArray
-            SimpleHistory friend = clickedHistory.getLayer().getHistoryArray().get(index + 1);
+            SimpleHistory friend = (SimpleHistory) clickedHistory.getLayer().getHistoryArray().get(index + 1);
             clickedHistory.getLayer().getHistoryArray().set(index + 1, clickedHistory);
             clickedHistory.getLayer().getHistoryArray().set(index, friend);
 
@@ -780,7 +780,7 @@ public class LayerTree extends JTree {
         SimpleHistory history;
         try {
             //set history to the clicked node's corresponding SimpleHistory
-            history = imageCraft.layerList.get(root.getIndex(layerNode)).getHistoryArray().get(layerNode.getIndex(historyNode));
+            history = (SimpleHistory) imageCraft.layerList.get(root.getIndex(layerNode)).getHistoryArray().get(layerNode.getIndex(historyNode));
         } catch (Exception e) {
             //if the clicked node isn't a SimpleHistory then set history to null
             history = null;
@@ -803,7 +803,7 @@ public class LayerTree extends JTree {
         SimpleHistory history;
         try {
             //set history to the clicked node's corresponding SimpleHistory
-            history = imageCraft.layerList.get(root.getIndex(layerNode)).getHistoryArray().get(layerNode.getIndex(historyNode));
+            history = (SimpleHistory) imageCraft.layerList.get(root.getIndex(layerNode)).getHistoryArray().get(layerNode.getIndex(historyNode));
         } catch (Exception e) {
             //if the clicked node isn't a SimpleHistory then set history to null
             history = null;
