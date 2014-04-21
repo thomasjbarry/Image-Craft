@@ -106,10 +106,10 @@ public class PickAColor extends SimpleTool {
         //Set pickedColor to white if we selected a purely transparent background
         //otherwise set it to the selected color
         Color pickedColor;
-        if (imageCraft.drawingArea1.currentDrawing.getRGB(evt.getX(), evt.getY()) == 0) {
+        if (imageCraft.drawingArea1.getCurrentDrawing().getRGB(evt.getX(), evt.getY()) == 0) {
             pickedColor = Color.white;
         } else {
-            pickedColor = new Color(imageCraft.drawingArea1.currentDrawing.getRGB(evt.getX(), evt.getY()));
+            pickedColor = new Color(imageCraft.drawingArea1.getCurrentDrawing().getRGB(evt.getX(), evt.getY()));
         }
         
         //Set the primary/secondary color to pickedColor

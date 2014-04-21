@@ -59,7 +59,7 @@ public class ImageCraft extends javax.swing.JFrame {
         // Create a default background layer
         Layer layer = new Layer(this);
         System.out.println("New Current Layer: "
-                + layer.layerName + " ; " + layer);
+                + layer.getLayerName() + " ; " + layer);
 
         selectedAll = false;
 
@@ -494,7 +494,7 @@ public class ImageCraft extends javax.swing.JFrame {
 
         drawingArea1.paintComponent(drawingArea1.getGraphics());
 
-        System.out.println("New Layer: " + layer.layerName
+        System.out.println("New Layer: " + layer.getLayerName()
                 + " ; " + layer);
     }//GEN-LAST:event_newLayerMouseClicked
 
@@ -510,8 +510,8 @@ public class ImageCraft extends javax.swing.JFrame {
                 && this.layerList.size() > 1) {
             int[] indices = new int[this.layerList.size()];
 
-            for (int i = 0; i < layerTree1.root.getChildCount(); i++) {
-                indices[i] = layerTree1.getRowForPath(new TreePath(((DefaultMutableTreeNode) layerTree1.root.getChildAt(i)).getPath()));
+            for (int i = 0; i < layerTree1.getRoot().getChildCount(); i++) {
+                indices[i] = layerTree1.getRowForPath(new TreePath(((DefaultMutableTreeNode) layerTree1.getRoot().getChildAt(i)).getPath()));
             }
 //            layerList1.setSelectedIndices(indexes);
             layerTree1.setSelectionRows(indices);

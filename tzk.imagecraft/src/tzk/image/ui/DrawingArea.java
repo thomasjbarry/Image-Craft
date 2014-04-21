@@ -103,19 +103,19 @@ public class DrawingArea extends javax.swing.JPanel {
     public void resizeDrawing(int x, int y) {
         // Update BufferedImage objects in layers
         for (Layer layer : imageCraft.layerList) {
-            for (SimpleHistory simpleHistoryObj : layer.historyArray) {
+            for (SimpleHistory simpleHistoryObj : layer.getHistoryArray()) {
                 // finalImage is what this layer looks like after this action is performed
-                simpleHistoryObj.finalImage = imageCraft.resize(simpleHistoryObj.finalImage,
-                        simpleHistoryObj.finalImage.getWidth() + x,
-                        simpleHistoryObj.finalImage.getHeight() + y);
+                simpleHistoryObj.setFinalImage(imageCraft.resize(simpleHistoryObj.getFinalImage(),
+                        simpleHistoryObj.getFinalImage().getWidth() + x,
+                        simpleHistoryObj.getFinalImage().getHeight() + y));
 
                 // actionImage contains a snapshot of the action performed only
                 // One could potentially add this actionImage to the finalImage 
                 // of the last simpleHistory element to get this simpleHistory
                 // object's finalImage
-                simpleHistoryObj.actionImage = imageCraft.resize(simpleHistoryObj.actionImage,
-                        simpleHistoryObj.actionImage.getWidth() + x,
-                        simpleHistoryObj.actionImage.getHeight() + y);
+                simpleHistoryObj.setActionImage(imageCraft.resize(simpleHistoryObj.getActionImage(),
+                        simpleHistoryObj.getActionImage().getWidth() + x,
+                        simpleHistoryObj.getActionImage().getHeight() + y));
             }
         }
         // Update swing
@@ -169,12 +169,24 @@ public class DrawingArea extends javax.swing.JPanel {
             g.drawImage(workSpace, 0, 0, this);
         }
     }
+    
+    public BufferedImage getCurrentDrawing() {
+        return this.currentDrawing;
+    }
+    
+    public BufferedImage getWorkSpace() {
+        return this.workSpace;
+    }
+    
+    public void setWorkSpace(BufferedImage image) {
+        this.workSpace = image;
+    }
 
     // Variables declaration
     // The current drawing, set by what is selected in LayerList
-    public BufferedImage currentDrawing;
+    private BufferedImage currentDrawing;
     // A temporary workspace, used with tools such as Shape
-    public BufferedImage workSpace;
+    private BufferedImage workSpace;
     private ImageCraft imageCraft;
     // End of variables declaration
     // Variables declaration - do not modify//GEN-BEGIN:variables

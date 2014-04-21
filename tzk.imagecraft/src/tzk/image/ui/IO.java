@@ -82,7 +82,7 @@ public class IO {
             //If we have never made a new Layer or made a new history element
             //in the background layer then open the file in this ImageCraft in
             //a new layer, otherwise open it in a new ImageCraft instance.
-            if (imageCraft.numLayer == 1 && imageCraft.layerList.get(0).historyArray.isEmpty()) {
+            if (imageCraft.numLayer == 1 && imageCraft.layerList.get(0).getHistoryArray().isEmpty()) {
                 readFile(file, imageCraft, true);
             } else {
                 java.awt.EventQueue.invokeLater(new Runnable() {
@@ -263,8 +263,8 @@ public class IO {
         // Draw each layer on top of the background
         for (int i = layers.size() - 1; i > -1; i--) {
             Layer layer = layers.get(i);
-            if (layer.undoIndex != -1) {
-                g.drawImage(layer.historyArray.get(layer.undoIndex).finalImage, 0, 0, null);
+            if (layer.getUndoIndex() != -1) {
+                g.drawImage(layer.getHistoryArray().get(layer.getUndoIndex()).getFinalImage(), 0, 0, null);
             }
         }
         

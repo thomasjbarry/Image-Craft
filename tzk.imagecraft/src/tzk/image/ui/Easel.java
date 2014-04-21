@@ -176,8 +176,8 @@ public class Easel extends javax.swing.JPanel {
         this.repaint();
     }
 
-    public ImageCraft imageCraft;
-    public int height, width;
+    private ImageCraft imageCraft;
+    private int height, width;
     private boolean corner, vertical, horizontal;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

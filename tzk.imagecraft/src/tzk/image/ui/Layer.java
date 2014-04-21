@@ -57,11 +57,11 @@ public class Layer {
     // draws all objects in a layer to a BufferedImage object passed as a param
     protected void drawLayer() {
         if (historyArray != null && historyArray.size() > 0 && undoIndex > -1) {
-            BufferedImage snapshot = historyArray.get(undoIndex).finalImage;
-            imageCraft.drawingArea1.currentDrawing.getGraphics().drawImage(
+            BufferedImage snapshot = historyArray.get(undoIndex).getFinalImage();
+            imageCraft.drawingArea1.getCurrentDrawing().getGraphics().drawImage(
                     snapshot, 0, 0, null);
             imageCraft.drawingArea1.getGraphics().drawImage(
-                    imageCraft.drawingArea1.currentDrawing, 0, 0, null);
+                    imageCraft.drawingArea1.getCurrentDrawing(), 0, 0, null);
         }
     }
 
@@ -69,7 +69,7 @@ public class Layer {
         int size = historyArray.size();
         if (size > 0) {
             // Return a copy of the last snapshot
-            BufferedImage image = historyArray.get(size - 1).finalImage;
+            BufferedImage image = historyArray.get(size - 1).getFinalImage();
             ColorModel model = image.getColorModel();
             WritableRaster raster = image.copyData(null);
             return new BufferedImage(model, raster, model.isAlphaPremultiplied(), null);
@@ -106,7 +106,7 @@ public class Layer {
         undoIndex++;
         imageCraft.layerTree1.addHistory(history, this);
         historyArray.add(history);
-        imageCraft.drawingArea1.currentDrawing.getGraphics().drawImage(
+        imageCraft.drawingArea1.getCurrentDrawing().getGraphics().drawImage(
                 image, 0, 0, null);
 
         imageCraft.drawingArea1.paintComponent(imageCraft.drawingArea1.getGraphics());
@@ -136,19 +136,71 @@ public class Layer {
         }
     }
 
+    protected short getUndoIndex() {
+        return this.undoIndex;
+    }
+    
+    protected void setUndoIndex(short num) {
+        this.undoIndex = num;
+    }
+
+    protected String getLayerName() {
+        return this.layerName;
+    }
+    
+    protected void setLayerName(String name) {
+        this.layerName = name;
+    }
+
+    public ArrayList<SimpleHistory> getHistoryArray() {
+        return this.historyArray;
+    }
+
+    protected short getDrawNum() {
+        return this.drawNum;
+    }
+    
+    protected void setDrawNum(short num) {
+        this.drawNum = num;
+    }
+
+    protected short getRectangleNum() {
+        return this.rectangleNum;
+    }
+    
+    protected void setRectangleNum(short num) {
+        this.rectangleNum = num;
+    }    
+
+    protected short getFillNum() {
+        return this.fillNum;
+    }
+    
+    protected void setFillNum(short num) {
+        this.fillNum = num;
+    }    
+
+    protected short getImageNum() {
+        return this.imageNum;
+    }
+    
+    protected void setImageNum(short num) {
+        this.imageNum = num;
+    }    
+
     public static void main(String[] args) {
     }
 
     //Declare Variables
-    protected short undoIndex;
+    private short undoIndex;
 
-    protected String layerName;
-    public final ArrayList<SimpleHistory> historyArray;
+    private String layerName;
+    private final ArrayList<SimpleHistory> historyArray;
     private final ImageCraft imageCraft;
 
-    protected short drawNum = 0;
-    protected short rectangleNum = 0;
-    protected short fillNum = 0;
-    protected short imageNum = 0;
+    private short drawNum = 0;
+    private short rectangleNum = 0;
+    private short fillNum = 0;
+    private short imageNum = 0;
     //End of Variable Declaration
 }
