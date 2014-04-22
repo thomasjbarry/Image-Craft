@@ -25,7 +25,10 @@ package tzk.image.ui;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Graphics;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -178,7 +181,7 @@ public class IO {
             //Take a screenshot of all layers in the layerList
             //TODO: screenshot selection of layers (create ArrayList<Layer> 
             //for layers to be screenshot
-            BufferedImage filteredImage = screenshot(imageCraft.layerList);
+            BufferedImage screenShot = screenshot(imageCraft.layerList);
 
             // Attempt JFileChooser save dialogue
             int exportOption = fileChooser.showDialog(imageCraft, "Export");
@@ -210,7 +213,20 @@ public class IO {
                 }
                 format = "png";
             }
-
+            
+            BufferedImage filteredImage;
+            //If exporting to a jpg or jpeg, export a BufferedImage of TYPE_INT_RGB
+            //Else export as BufferedImage of TYPE_INT_ARGB
+            if (format.equals("jpg") || format.equals("jpeg")) {
+                filteredImage = new BufferedImage(
+                        (int) imageCraft.drawingArea.getPreferredSize().getWidth(),
+                        (int) imageCraft.drawingArea.getPreferredSize().getHeight(),
+                        BufferedImage.TYPE_INT_RGB);
+                filteredImage.getGraphics().drawImage(screenShot, 0, 0, null);
+            } else {
+                filteredImage = imageCraft.newBlankImage();
+                filteredImage.getGraphics().drawImage(screenShot, 0, 0, null);
+            }
             //Attempts to write the file and open it in the Desktop
             try {
                 ImageIO.write(filteredImage, format, latestExport);
