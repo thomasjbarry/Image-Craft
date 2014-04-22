@@ -67,6 +67,9 @@ public class Easel extends javax.swing.JPanel {
     private void initComponents() {
 
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
+            }
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 formMouseMoved(evt);
             }
@@ -126,16 +129,6 @@ public class Easel extends javax.swing.JPanel {
      * @param evt
      */
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        if (horizontal) {
-            this.resizeEasel(evt.getX() - width, 0);
-            imageCraft.drawingArea.resizeDrawing(evt.getX() - width, 0);
-        } else if (vertical) {
-            this.resizeEasel(0, evt.getY() - height);
-            imageCraft.drawingArea.resizeDrawing(0, evt.getY() - height);
-        } else if (corner) {
-            this.resizeEasel(evt.getX() - width, evt.getY() - height);
-            imageCraft.drawingArea.resizeDrawing(evt.getX() - width, evt.getY() - height);
-        }
 
         // Unset all flags
         horizontal = false;
@@ -164,6 +157,20 @@ public class Easel extends javax.swing.JPanel {
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }//GEN-LAST:event_formMouseMoved
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+        if (horizontal) {
+            this.resizeEasel(evt.getX() - width, 0);
+            imageCraft.drawingArea.resizeDrawing(evt.getX() - width, 0);
+        } else if (vertical) {
+            this.resizeEasel(0, evt.getY() - height);
+            imageCraft.drawingArea.resizeDrawing(0, evt.getY() - height);
+        } else if (corner) {
+            this.resizeEasel(evt.getX() - width, evt.getY() - height);
+            imageCraft.drawingArea.resizeDrawing(evt.getX() - width, evt.getY() - height);
+        }
+
+    }//GEN-LAST:event_formMouseDragged
 
     /**
      * I overrode the paintComponent method so that I could draw in the squares
