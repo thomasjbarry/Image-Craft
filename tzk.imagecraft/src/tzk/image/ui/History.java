@@ -92,17 +92,25 @@ public class History {
         layerObject = layer;
         actionImage = null;
         actionFilter = filterType;
+        
+        //Increment the filterNum for this History's layerObject and set this
+        //History object's name
+        layerObject.setFilterNum((short) (layerObject.getFilterNum() + 1));
+        historyName = filterType + " Object #" + layerObject.getFilterNum();
 
-        filter(selected);
-        createFinalImage();
+        //Filter the selected History objects and create the finalImage
+        filter(selected);        
     }
 
     /**
      * Create snapshot of finalImage.
      */
     private void createFinalImage() {
-        // TODO: Create final image
+        // Get the most recent snapshot
         BufferedImage lastImage = layerObject.getLastSnapshot();
+        
+        //If this History object is not a filter it has an actionImage;
+        //Draw this actionImage to the lastImage and set it as this finalImage
         if (actionImage != null) {
             finalImage = lastImage;
             finalImage.getGraphics().drawImage(actionImage, 0, 0, null);
@@ -137,14 +145,28 @@ public class History {
      * @param selected
      */
     protected void grayScale(ArrayList<History> selected) {
-        for (History historyObj : selected) {
-            //new BufferedImageOp (filter) to change the color of a BufferedImage to
-            //a grayscale image
-            BufferedImageOp grayScaleOp = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-            
-            //Applies the grayScaleOp to the finalImage of the historyObj
-            historyObj.finalImage = grayScaleOp.filter(historyObj.finalImage, historyObj.finalImage);
+        //new BufferedImageOp (filter) to change the color of a BufferedImage to
+        //a grayscale image
+        BufferedImageOp grayScaleOp = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        
+        //Make a new blank image to copy the History objects to, in order to make
+        //a finalImage for this History object.
+        BufferedImage copy = imageCraft.newBlankImage();
+        Graphics copyGraphics = copy.getGraphics();
+        //For each historyObj in the selected ArrayList apply the grayScaleOp to
+        //its finalImage, then draw its finalImage (whether it was filtered or
+        //not) to copy
+        for (History historyObj : layerObject.getHistoryArray()) {
+            if (selected.contains(historyObj)) {
+                copyGraphics.drawImage(
+                        grayScaleOp.filter(historyObj.finalImage, historyObj.finalImage),
+                        0, 0, null);
+            } else {
+                copyGraphics.drawImage(historyObj.finalImage, 0, 0, null);
+            }
         }
+        //Set this history's finalImage to copy
+        this.finalImage = copy;
     }
 
     protected BufferedImage getActionImage() {

@@ -709,11 +709,11 @@ public class LayerTree extends JTree {
         this.scrollPathToVisible(new TreePath(parentNode.getPath()));
 
         //Remove the clickedHistory from its layer's historyArray
-        clickedHistory.getLayer().getHistoryArray().remove(clickedHistory);
+        history.getLayer().getHistoryArray().remove(history);
 
         //Reset the clickedHistory's layer's undoIndex so that none of the 
         //remaining History objects in the layer are UNDOne
-        clickedHistory.getLayer().setUndoIndex((short) (clickedHistory.getLayer().getHistoryArray().size() - 1));
+        history.getLayer().setUndoIndex((short) (history.getLayer().getHistoryArray().size() - 1));
 
         //Repaint the Drawing Area
         imageCraft.drawingArea.revalidate();

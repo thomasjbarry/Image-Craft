@@ -69,7 +69,7 @@ public class Layer {
         int size = historyArray.size();
         if (size > 0) {
             // Return a copy of the last snapshot
-            BufferedImage image = ((History) historyArray.get(size - 1)).getFinalImage();
+            BufferedImage image = (historyArray.get(size - 1)).getFinalImage();
             ColorModel model = image.getColorModel();
             WritableRaster raster = image.copyData(null);
             return new BufferedImage(model, raster, model.isAlphaPremultiplied(), null);
@@ -99,7 +99,7 @@ public class Layer {
     public void addHistory(BufferedImage image, String historyType) {
         //For all indices after the undoIndex delete the History object
         for (int i = historyArray.size() - 1; i > undoIndex; i--) {
-            imageCraft.layerTree.removeHistory((History) historyArray.get(historyArray.size() - i - 1), this);
+            imageCraft.layerTree.removeHistory(historyArray.get(historyArray.size() - i - 1), this);
             historyArray.remove(i);
         }
         History history = new History(imageCraft, this, image, historyType);
@@ -113,6 +113,38 @@ public class Layer {
 
     }
 
+    /**
+     * Create new History object and add to historyArray.
+     *
+     * @param historyType
+     */
+    public void addHistory(String historyType) {
+        //For all indices after the undoIndex delete the History object
+        for (int i = historyArray.size() - 1; i > undoIndex; i--) {
+            imageCraft.layerTree.removeHistory((History) historyArray.get(historyArray.size() - i - 1), this);
+            historyArray.remove(i);
+        }
+        //Create new History Object for the filter
+        History history = new History(imageCraft, this, historyType, this.historyArray);
+        
+        //Update the undoIndex
+        undoIndex++;
+        
+        //Add the History Object to the LayerTree
+        imageCraft.layerTree.addHistory(history, this);
+        
+        //Add the History Object to this layer's historyArray
+        historyArray.add(history);
+        
+        //Clear the Drawing Area and draw the current snapshot to the current drawing
+        imageCraft.drawingArea.getCurrentDrawing().getGraphics().clearRect(0, 0, imageCraft.drawingArea.getCurrentDrawing().getWidth(), imageCraft.drawingArea.getCurrentDrawing().getHeight());
+        imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
+                history.getFinalImage(), 0, 0, null);
+
+        imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+
+    }
+    
     public void removeHistory(int i) {
         historyArray.remove(i);
         undoIndex = (short) (historyArray.size() - 1);
@@ -188,6 +220,13 @@ public class Layer {
         this.imageNum = num;
     }    
 
+    protected short getFilterNum() {
+        return this.filterNum;
+    }
+    
+    protected void setFilterNum(short num) {
+        this.filterNum = num;
+    }
     public static void main(String[] args) {
     }
 
@@ -202,5 +241,6 @@ public class Layer {
     private short rectangleNum = 0;
     private short fillNum = 0;
     private short imageNum = 0;
+    private short filterNum = 0;
     //End of Variable Declaration
 }

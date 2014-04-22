@@ -122,6 +122,7 @@ public class ImageCraft extends javax.swing.JFrame {
         jUndo = new javax.swing.JMenuItem();
         jRedo = new javax.swing.JMenuItem();
         jFilter = new javax.swing.JMenu();
+        jGrayscale = new javax.swing.JMenuItem();
         jHelp = new javax.swing.JMenu();
         jAbout = new javax.swing.JMenuItem();
 
@@ -447,6 +448,15 @@ public class ImageCraft extends javax.swing.JFrame {
         jMenuBar1.add(jEdit);
 
         jFilter.setText("Filter");
+
+        jGrayscale.setText("Grayscale");
+        jGrayscale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jGrayscaleActionPerformed(evt);
+            }
+        });
+        jFilter.add(jGrayscale);
+
         jMenuBar1.add(jFilter);
 
         jHelp.setText("Help");
@@ -651,6 +661,10 @@ public class ImageCraft extends javax.swing.JFrame {
         this.repaint();
     }//GEN-LAST:event_formComponentResized
 
+    private void jGrayscaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGrayscaleActionPerformed
+         currentLayer.addHistory("Grayscale");
+    }//GEN-LAST:event_jGrayscaleActionPerformed
+
      public BufferedImage newBlankImage() {
         return new BufferedImage(
                 (int) drawingArea.getPreferredSize().getWidth(),
@@ -780,6 +794,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JMenu jFile;
     public javax.swing.JToggleButton jFill;
     private javax.swing.JMenu jFilter;
+    private javax.swing.JMenuItem jGrayscale;
     private javax.swing.JMenu jHelp;
     private javax.swing.JMenuItem jImport;
     private javax.swing.JLabel jLabel1;
