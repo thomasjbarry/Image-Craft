@@ -23,14 +23,17 @@
 package tzk.image.ui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import static java.awt.Frame.E_RESIZE_CURSOR;
 import java.awt.Graphics;
 
 /**
- * The Easel is a jPanel under the drawing area that allows users to
- * resize the drawing area.
- * 
- * It will hopefully be used more later, but we aren't sure what for. 
+ * The Easel is a jPanel under the drawing area that allows users to resize the
+ * drawing area.
+ *
+ * It will hopefully be used more later, but we aren't sure what for.
+ *
  * @author Drew
  */
 public class Easel extends javax.swing.JPanel {
@@ -62,6 +65,12 @@ public class Easel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+        });
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
@@ -83,13 +92,12 @@ public class Easel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    
     /**
-     * This checks if the mouse is hovering above one of the 3 resizers. 
-     * Resizers are small squares at the edge of the easel that users drag
-     * to resize the easel and the drawing area.
-     * 
-     * @param evt 
+     * This checks if the mouse is hovering above one of the 3 resizers.
+     * Resizers are small squares at the edge of the easel that users drag to
+     * resize the easel and the drawing area.
+     *
+     * @param evt
      */
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         // finds out if the user clicked the right box, then sets
@@ -111,16 +119,15 @@ public class Easel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_formMousePressed
 
-    
     /**
-     * This is where the resize functions get called. When the mouse is released, 
-     * the easel and drawing area are resized.
-     * 
-     * @param evt 
+     * This is where the resize functions get called. When the mouse is
+     * released, the easel and drawing area are resized.
+     *
+     * @param evt
      */
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        if (horizontal) {       
-            this.resizeEasel(evt.getX() - width, 0);            
+        if (horizontal) {
+            this.resizeEasel(evt.getX() - width, 0);
             imageCraft.drawingArea.resizeDrawing(evt.getX() - width, 0);
         } else if (vertical) {
             this.resizeEasel(0, evt.getY() - height);
@@ -129,20 +136,39 @@ public class Easel extends javax.swing.JPanel {
             this.resizeEasel(evt.getX() - width, evt.getY() - height);
             imageCraft.drawingArea.resizeDrawing(evt.getX() - width, evt.getY() - height);
         }
-        
+
         // Unset all flags
         horizontal = false;
         vertical = false;
         corner = false;
-        
+
         System.out.println("Drawing area resized: " + width + ", " + height);
     }//GEN-LAST:event_formMouseReleased
 
-    
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        if (evt.getX() > width - 10
+                && evt.getY() > (height - 10) / 2
+                && evt.getY() < (height - 10) / 2 + 10) {
+            //right/horizontal
+            this.setCursor( new Cursor(Cursor.E_RESIZE_CURSOR));
+        } else if (evt.getY() > height - 10
+                && evt.getX() > (width - 10) / 2
+                && evt.getX() < (width - 10) / 2 + 10) {
+            //bottom/vertical
+            this.setCursor( new Cursor(Cursor.N_RESIZE_CURSOR));
+        } else if (evt.getY() > height - 10
+                && evt.getX() > width - 10) {
+            //corner
+            this.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
+        } else {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_formMouseMoved
+
     /**
-     * I overrode the paintComponent method so that I could draw in the
-     * squares that represent the resizers.
-    */
+     * I overrode the paintComponent method so that I could draw in the squares
+     * that represent the resizers.
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -151,7 +177,7 @@ public class Easel extends javax.swing.JPanel {
         if (imageCraft == null) {
             return;
         }
-        
+
         width = imageCraft.drawingArea.getWidth() + 10;
         height = imageCraft.drawingArea.getHeight() + 10;
 
@@ -162,9 +188,8 @@ public class Easel extends javax.swing.JPanel {
     }
 
     /**
-     * Resize the easel.
-     * Updates javax.swing
-     * 
+     * Resize the easel. Updates javax.swing
+     *
      * @param x additional width to add (negative: remove)
      * @param y additional height to add (negative: remove)
      */
@@ -175,6 +200,7 @@ public class Easel extends javax.swing.JPanel {
         this.revalidate();
         this.repaint();
     }
+
 
     private ImageCraft imageCraft;
     private int height, width;
