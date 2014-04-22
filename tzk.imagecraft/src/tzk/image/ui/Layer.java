@@ -57,7 +57,7 @@ public class Layer {
     // draws all objects in a layer to a BufferedImage object passed as a param
     protected void drawLayer() {
         if (historyArray != null && historyArray.size() > 0 && undoIndex > -1) {
-            BufferedImage snapshot = ((SimpleHistory) historyArray.get(undoIndex)).getFinalImage();
+            BufferedImage snapshot = ((History) historyArray.get(undoIndex)).getFinalImage();
             imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
                     snapshot, 0, 0, null);
             imageCraft.drawingArea.getGraphics().drawImage(
@@ -69,7 +69,7 @@ public class Layer {
         int size = historyArray.size();
         if (size > 0) {
             // Return a copy of the last snapshot
-            BufferedImage image = ((SimpleHistory) historyArray.get(size - 1)).getFinalImage();
+            BufferedImage image = ((History) historyArray.get(size - 1)).getFinalImage();
             ColorModel model = image.getColorModel();
             WritableRaster raster = image.copyData(null);
             return new BufferedImage(model, raster, model.isAlphaPremultiplied(), null);
@@ -83,28 +83,28 @@ public class Layer {
         imageCraft.layerList.add(0, this);
 
         //Add this new layer to the layerTree and select it
-        imageCraft.layerTree1.addLayer(this);
-        imageCraft.layerTree1.setSelected(this);
+        imageCraft.layerTree.addLayer(this);
+        imageCraft.layerTree.setSelected(this);
 
         // Make this new layer the current layer
         imageCraft.currentLayer = this;
     }
 
     /**
-     * Create new SimpleHistory object and add to historyArray.
+     * Create new History object and add to historyArray.
      *
      * @param image
      * @param historyType
      */
     public void addHistory(BufferedImage image, String historyType) {
-        //For all indices after the undoIndex delete the SimpleHistory object
+        //For all indices after the undoIndex delete the History object
         for (int i = historyArray.size() - 1; i > undoIndex; i--) {
-            imageCraft.layerTree1.removeHistory((SimpleHistory) historyArray.get(historyArray.size() - i - 1), this);
+            imageCraft.layerTree.removeHistory((History) historyArray.get(historyArray.size() - i - 1), this);
             historyArray.remove(i);
         }
-        SimpleHistory history = new SimpleHistory(imageCraft, this, image, historyType);
+        History history = new History(imageCraft, this, image, historyType);
         undoIndex++;
-        imageCraft.layerTree1.addHistory(history, this);
+        imageCraft.layerTree.addHistory(history, this);
         historyArray.add(history);
         imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
                 image, 0, 0, null);
@@ -121,7 +121,7 @@ public class Layer {
     protected void undo() {
         if (undoIndex > -1) {
             undoIndex--;
-            imageCraft.layerTree1.repaint();
+            imageCraft.layerTree.repaint();
             imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
             System.out.println(undoIndex);
         }
@@ -130,7 +130,7 @@ public class Layer {
     protected void redo() {
         if (undoIndex < historyArray.size() - 1) {
             undoIndex++;
-            imageCraft.layerTree1.repaint();
+            imageCraft.layerTree.repaint();
             imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
             System.out.println(undoIndex);
         }
@@ -152,7 +152,7 @@ public class Layer {
         this.layerName = name;
     }
 
-    public ArrayList<Object> getHistoryArray() {
+    public ArrayList<History> getHistoryArray() {
         return this.historyArray;
     }
 
@@ -195,7 +195,7 @@ public class Layer {
     private short undoIndex;
 
     private String layerName;
-    private final ArrayList<Object> historyArray;
+    private final ArrayList<History> historyArray;
     private final ImageCraft imageCraft;
 
     private short drawNum = 0;

@@ -14,23 +14,23 @@ Bugs:
 TODO:
 
 	ZACH:
+		LayerTree bugs
 
 	THOMAS: 
 		LayerTree bugs
+		Filters
+		LayerTree rename, drag&drop
 
 	DREW: 
 		Resize Components: MouseEvent- on mouse over change mouse icon
-
-	For anyone:
-	
 		IO.java:
 			ImageCraft format - See IO.imageCraftFormat
+
+	For anyone:
 			
-		Tools: Draw (Penstrokes), Eraser, Select, Zoom, Resize, Text
+		Tools: Select, Crop, Resize (scale), Eraser, Zoom, Text, Draw (Penstrokes)
 
 		System Clipboard: Copy/Paste
-		
-		Complex History class (filters-- BufferedImageOp)		
 
 		Drag and Drop: How to modify the size/location of an object after creating it (shapes, pasting pictures, etc.)
 

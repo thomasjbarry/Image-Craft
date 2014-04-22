@@ -103,20 +103,19 @@ public class DrawingArea extends javax.swing.JPanel {
     public void resizeDrawing(int x, int y) {
         // Update BufferedImage objects in layers
         for (Layer layer : imageCraft.layerList) {
-            for (Object obj : layer.getHistoryArray()) {
-                SimpleHistory simpleHistoryObj = (SimpleHistory) obj;
+            for (History historyObj : layer.getHistoryArray()) {
                 // finalImage is what this layer looks like after this action is performed
-                simpleHistoryObj.setFinalImage(imageCraft.resize(simpleHistoryObj.getFinalImage(),
-                        simpleHistoryObj.getFinalImage().getWidth() + x,
-                        simpleHistoryObj.getFinalImage().getHeight() + y));
+                historyObj.setFinalImage(imageCraft.resize(historyObj.getFinalImage(),
+                        historyObj.getFinalImage().getWidth() + x,
+                        historyObj.getFinalImage().getHeight() + y));
 
                 // actionImage contains a snapshot of the action performed only
                 // One could potentially add this actionImage to the finalImage 
                 // of the last simpleHistory element to get this simpleHistory
                 // object's finalImage
-                simpleHistoryObj.setActionImage(imageCraft.resize(simpleHistoryObj.getActionImage(),
-                        simpleHistoryObj.getActionImage().getWidth() + x,
-                        simpleHistoryObj.getActionImage().getHeight() + y));
+                historyObj.setActionImage(imageCraft.resize(historyObj.getActionImage(),
+                        historyObj.getActionImage().getWidth() + x,
+                        historyObj.getActionImage().getHeight() + y));
             }
         }
         // Update swing
@@ -150,16 +149,16 @@ public class DrawingArea extends javax.swing.JPanel {
         // Get selected layers from ImageCraft object
         // Paint those layers to a new bufferedImage
         // And draw the buffered image onto the panel
-        int[] selectedIndices = imageCraft.layerTree1.getSelectionRows();
+        int[] selectedIndices = imageCraft.layerTree.getSelectionRows();
         currentDrawing = new BufferedImage(this.getWidth(),
                 this.getHeight(), BufferedImage.TYPE_INT_ARGB);
         // With LayerTree, layers are in reversed order.
         for (int i = selectedIndices.length - 1; i > -1; i--) {
             int selectedIndex = selectedIndices[i];
-            if (imageCraft.layerTree1.getClickedLayer(selectedIndex) != null) {
-                imageCraft.layerTree1.getClickedLayer(selectedIndex).drawLayer();
+            if (imageCraft.layerTree.getClickedLayer(selectedIndex) != null) {
+                imageCraft.layerTree.getClickedLayer(selectedIndex).drawLayer();
             } else {
-                imageCraft.layerTree1.getClickedHistory(selectedIndex).draw(currentDrawing);
+                imageCraft.layerTree.getClickedHistory(selectedIndex).draw(currentDrawing);
             }
         }
         g.drawImage(currentDrawing, 0, 0, this);

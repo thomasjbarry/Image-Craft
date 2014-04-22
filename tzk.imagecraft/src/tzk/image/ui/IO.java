@@ -264,7 +264,7 @@ public class IO {
         for (int i = layers.size() - 1; i > -1; i--) {
             Layer layer = layers.get(i);
             if (layer.getUndoIndex() != -1) {
-                g.drawImage(((SimpleHistory) layer.getHistoryArray().get(layer.getUndoIndex())).getFinalImage(), 0, 0, null);
+                g.drawImage(((History) layer.getHistoryArray().get(layer.getUndoIndex())).getFinalImage(), 0, 0, null);
             }
         }
         

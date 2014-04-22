@@ -53,7 +53,7 @@ public class LayerTree extends JTree {
         //children (which means it doesn't consider an empty layer node a leaf)
         this.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(), true));
 
-        //Hides the root node so we only see the Layers and Simple History Objects
+        //Hides the root node so we only see the Layers and History Objects
         this.setRootVisible(false);
 
         //This shows the lines from layer nodes to history nodes
@@ -72,7 +72,7 @@ public class LayerTree extends JTree {
         DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) new LayerTree.layerTreeCellRenderer();
         setCellRenderer(renderer);
 
-        //Creates ImageIcon for Layers and SimpleHistory objects from file name
+        //Creates ImageIcon for Layers and History objects from file name
         ImageIcon historyIcon = new ImageIcon("src/tzk/image/img/historyIcon.png");
         ImageIcon layerIcon = new ImageIcon("src/tzk/image/img/layerIcon.png");
         renderer.setLeafIcon(historyIcon);
@@ -104,15 +104,15 @@ public class LayerTree extends JTree {
                     setForeground(Color.RED);
                     jtree.repaint();
                 } //Else if the childNode is not a layer node, and the parentNode
-                //exists (which means this is a SimpleHistory object), and the
-                //childNode represents a SimpleHistory object that was not UNDOne
+                //exists (which means this is a History object), and the
+                //childNode represents a History object that was not UNDOne
                 //then set the node's text color to Blue. Repaint the tree to 
-                //ensure only the proper SimpleHistory objects are blue.
+                //ensure only the proper History objects are blue.
                 else if (!root.isNodeChild(childNode) && parentNode != null && parentNode.getIndex(childNode) <= imageCraft.layerList.get(root.getIndex(parentNode)).getUndoIndex()) {
                     setForeground(Color.BLUE);
                     jtree.repaint();
                 } //Else the node is a layer that is not the current layer, or it 
-                //is a SimpleHistory object that was UNDOne. Set the node's text
+                //is a History object that was UNDOne. Set the node's text
                 //color to Black. Repaint the tree to ensure these are all black.
                 else {
                     setForeground(Color.BLACK);
@@ -147,7 +147,7 @@ public class LayerTree extends JTree {
         });
 
         //Add jMenuItemRename to jPopupMenu, set its text, and add an action listener
-        //to the menu item. This will rename the Layer or SimpleHistory object.      
+        //to the menu item. This will rename the Layer or History object.      
         jPopupMenu.add(jMenuItemRename);
         jMenuItemRename.setText("Rename");
         jMenuItemRename.addActionListener(new java.awt.event.ActionListener() {
@@ -158,7 +158,7 @@ public class LayerTree extends JTree {
         });
 
         //Add jMenuItemMoveUp to jPopupMenu, set its text, and add an action listener
-        //to the menu item. This will move the Layer or SimpleHistory object up
+        //to the menu item. This will move the Layer or History object up
         //in the tree.
         jPopupMenu.add(jMenuItemMoveUp);
         jMenuItemMoveUp.setText("Move up");
@@ -170,7 +170,7 @@ public class LayerTree extends JTree {
         });
 
         //Add jMenuItemMoveDown to jPopupMenu, set its text, and add an action listener
-        //to the menu item. This will move the Layer or SimpleHistory object down
+        //to the menu item. This will move the Layer or History object down
         //in the tree.        
         jPopupMenu.add(jMenuItemMoveDown);
         jMenuItemMoveDown.setText("Move down");
@@ -193,7 +193,7 @@ public class LayerTree extends JTree {
         });
 
         //Add jMenuItemDelete to jPopupMenu, set its text, and add an action listener
-        //to the menu item. This will delete the Layer or SimpleHistory object
+        //to the menu item. This will delete the Layer or History object
         //from the tree.
         jPopupMenu.add(jMenuItemDelete);
         jMenuItemDelete.setText("Delete");
@@ -230,7 +230,7 @@ public class LayerTree extends JTree {
      */
     private void jLayerTreeMouseClicked(java.awt.event.MouseEvent evt) {
         //Set the boolean isLayer to true if we clicked a Layer and false if we
-        //clicked a SimpleHistory
+        //clicked a History
         isLayer = getClickedLayer(evt.getX(), evt.getY()) != null;
 
         //If we clicked a layer then set the clickedLayer, else set the clickedHistory
@@ -277,21 +277,21 @@ public class LayerTree extends JTree {
                 jPopupMenu.show(this, evt.getX(), evt.getY());
 
                 System.out.println("You right clicked " + clickedLayer.getLayerName());
-            } //Else you right clicked a SimpleHistory node then customize which 
-            //menu items display for SimpleHistory objects            
+            } //Else you right clicked a History node then customize which 
+            //menu items display for History objects            
             else {
                 //First enable all of the menu items for jPopupMenu, we will
                 //disable the ones we don't need.                
                 enableAllMenuOptions(jPopupMenu);
 
-                //If the SimpleHistory you clicked was the first in its layer,
+                //If the History you clicked was the first in its layer,
                 //then it can't be moved up so disable that MenuItem. Disable
                 //ClearLayer and SetCL because they should only be used on layers.
                 if (clickedHistory == clickedHistory.getLayer().getHistoryArray().get(0)) {
                     jMenuItemMoveUp.setEnabled(false);
                     jMenuItemClearLayer.setEnabled(false);
                     jMenuItemSetCL.setEnabled(false);
-                } //Else if the SimpleHistory you clicked was the last in its layer,
+                } //Else if the History you clicked was the last in its layer,
                 //then it can't be moved down so disable that MenuItem. Disable
                 //ClearLayer and SetCL because they should only be used on layers.                
                 else if (clickedHistory == clickedHistory.getLayer().getHistoryArray().get(clickedHistory.getLayer().getHistoryArray().size() - 1)) {
@@ -371,7 +371,7 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Renames the clicked Layer or SimpleHistory object
+     * Renames the clicked Layer or History object
      *
      * @param evt
      */
@@ -398,7 +398,7 @@ public class LayerTree extends JTree {
                 //has changed to update its UserObject
                 model.nodeChanged(node);
             }
-        } //Else the clicked node is a SimpleHistory node, rename it.
+        } //Else the clicked node is a History node, rename it.
         else {
             //Set the renameText to the input given from the InputDialog (by
             //default this is the clickedLayer's current layerName.            
@@ -424,14 +424,14 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Moves the clicked Layer or SimpleHistory object's node up in this
-     * LayerTree
+     * Moves the clicked Layer or History object's node up in this
+ LayerTree
      *
      * @param evt
      */
     private void jMenuItemMoveUpActionPerformed(java.awt.event.ActionEvent evt) {
         //Get the selected rows indices and store them in an int[], and initialize
-        //index to hold the index of the clicked Layer or SimpleHistory node
+        //index to hold the index of the clicked Layer or History node
         int[] selected = this.getSelectionRows();
         int index;
 
@@ -454,14 +454,14 @@ public class LayerTree extends JTree {
             model.nodeStructureChanged(root);
 
             System.out.println("You just moved " + clickedLayer.getLayerName() + " up.");
-        } //Else the clicked node is a SimpleHistory node, move it up.
+        } //Else the clicked node is a History node, move it up.
         else {
             //Set the index to the index of the clickedHistory in its layer's historyArray
             index = clickedHistory.getLayer().getHistoryArray().indexOf(clickedHistory);
 
-            //Create a friend SimpleHistory to swap the clickedHistory with the
+            //Create a friend History to swap the clickedHistory with the
             //one before it in its layer's historyArray
-            SimpleHistory friend = (SimpleHistory) clickedHistory.getLayer().getHistoryArray().get(index - 1);
+            History friend = (History) clickedHistory.getLayer().getHistoryArray().get(index - 1);
             clickedHistory.getLayer().getHistoryArray().set(index - 1, clickedHistory);
             clickedHistory.getLayer().getHistoryArray().set(index, friend);
 
@@ -473,7 +473,7 @@ public class LayerTree extends JTree {
             //Insert the clickedHistory into the previous index in its parentNode,
             //and notify this LayerTree's TreeModel that the parentNode's
             //structure has changed. The TreeModel will automatically push the
-            //rest of the SimpleHistory nodes down in this LayerTree.
+            //rest of the History nodes down in this LayerTree.
             parentNode.insert(childNode, index - 1);
             model.nodeStructureChanged(parentNode);
 
@@ -492,14 +492,14 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Moves the clicked Layer or SimpleHistory object's node down in this
-     * LayerTree
+     * Moves the clicked Layer or History object's node down in this
+ LayerTree
      *
      * @param evt
      */
     private void jMenuItemMoveDownActionPerformed(java.awt.event.ActionEvent evt) {
         //Get the selected rows indices and store them in an int[], and initialize
-        //index to hold the index of the clicked Layer or SimpleHistory node
+        //index to hold the index of the clicked Layer or History node
         int[] selected = this.getSelectionRows();
         int index;
 
@@ -522,14 +522,14 @@ public class LayerTree extends JTree {
             model.nodeStructureChanged(root);
 
             System.out.println("You just moved " + clickedLayer.getLayerName() + " up.");
-        } //Else the clicked node is a SimpleHistory node, move it down.
+        } //Else the clicked node is a History node, move it down.
         else {
             //Set the index to the index of the clickedHistory in its layer's historyArray
             index = clickedHistory.getLayer().getHistoryArray().indexOf(clickedHistory);
 
-            //Create a friend SimpleHistory to swap the clickedHistory with the
+            //Create a friend History to swap the clickedHistory with the
             //one after it in its layer's historyArray
-            SimpleHistory friend = (SimpleHistory) clickedHistory.getLayer().getHistoryArray().get(index + 1);
+            History friend = (History) clickedHistory.getLayer().getHistoryArray().get(index + 1);
             clickedHistory.getLayer().getHistoryArray().set(index + 1, clickedHistory);
             clickedHistory.getLayer().getHistoryArray().set(index, friend);
 
@@ -541,7 +541,7 @@ public class LayerTree extends JTree {
             //Insert the clickedHistory into the next index in its parentNode,
             //and notify this LayerTree's TreeModel that the parentNode's
             //structure has changed. The TreeModel will automatically push the
-            //rest of the SimpleHistory nodes up in this LayerTree.
+            //rest of the History nodes up in this LayerTree.
             parentNode.insert(childNode, index + 1);
             model.nodeStructureChanged(parentNode);
 
@@ -560,18 +560,18 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Clears the clickedLayer, deleting all SimpleHistory objects in its
-     * historyArray
+     * Clears the clickedLayer, deleting all History objects in its
+ historyArray
      *
      * @param evt
      */
     private void jMenuItemClearLayerActionPerformed(java.awt.event.ActionEvent evt) {
-        //Gets the node selected and removes all of the SimpleHistoryNodes
+        //Gets the node selected and removes all of the HistoryNodes
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) root.getChildAt(imageCraft.layerList.indexOf(clickedLayer));
         node.removeAllChildren();
         model.nodeStructureChanged(node);
 
-        //Clear the layer's historyArray to delete the SimpleHistory objects.
+        //Clear the layer's historyArray to delete the History objects.
         clickedLayer.getHistoryArray().clear();
 
         //Reset the undoIndex to -1 for this layer because it is now empty
@@ -585,7 +585,7 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Deletes the clicked Layer or SimpleHistory object and its node
+     * Deletes the clicked Layer or History object and its node
      *
      * @param evt
      */
@@ -654,15 +654,15 @@ public class LayerTree extends JTree {
     }
     
     /**
-     * Add a SimpleHistory object to the tree as a child of the SimpleHistory
-     * object's Layer
+     * Add a History object to the tree as a child of the History
+ object's Layer
      *
-     * @param history SimpleHistory Object
+     * @param history History Object
      * @param layer Layer Object corresponding to the location of the
-     * SimpleHistory object
+ History object
      */
-    protected void addHistory(SimpleHistory history, Layer layer) {
-        //Set the childNode (a SimpleHistory Object) and parentNode (a Layer Object) 
+    protected void addHistory(History history, Layer layer) {
+        //Set the childNode (a History Object) and parentNode (a Layer Object) 
         DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(history.getHistoryName());
         DefaultMutableTreeNode parentNode
                 = (DefaultMutableTreeNode) treeModel.getChild(root, imageCraft.layerList.indexOf(layer));
@@ -686,15 +686,15 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Remove a SimpleHistory object from the tree as a child of the
-     * SimpleHistory object's Layer
+     * Remove a History object from the tree as a child of the
+ History object's Layer
      *
-     * @param history SimpleHistory Object
+     * @param history History Object
      * @param layer Layer Object corresponding to the location of the
-     * SimpleHistory object
+ History object
      */
-    protected void removeHistory(SimpleHistory history, Layer layer) {
-        //Set the childNode (a SimpleHistory Object) and parentNode (a Layer Object) 
+    protected void removeHistory(History history, Layer layer) {
+        //Set the childNode (a History Object) and parentNode (a Layer Object) 
         DefaultMutableTreeNode parentNode
                 = (DefaultMutableTreeNode) root.getChildAt(imageCraft.layerList.indexOf(layer));
         DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(layer.getHistoryArray().indexOf(history));
@@ -712,7 +712,7 @@ public class LayerTree extends JTree {
         clickedHistory.getLayer().getHistoryArray().remove(clickedHistory);
 
         //Reset the clickedHistory's layer's undoIndex so that none of the 
-        //remaining SimpleHistory objects in the layer are UNDOne
+        //remaining History objects in the layer are UNDOne
         clickedHistory.getLayer().setUndoIndex((short) (clickedHistory.getLayer().getHistoryArray().size() - 1));
 
         //Repaint the Drawing Area
@@ -766,23 +766,23 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Gets the clicked SimpleHistory based on the location clicked
+     * Gets the clicked History based on the location clicked
      *
      * @param x
      * @param y
-     * @return SimpleHistory
+     * @return History
      */
-    private SimpleHistory getClickedHistory(int x, int y) {
+    private History getClickedHistory(int x, int y) {
         //Gets the historyNode and the layerNode
         DefaultMutableTreeNode historyNode = ((DefaultMutableTreeNode) (this.getClosestPathForLocation(x, y)).getLastPathComponent());
         DefaultMutableTreeNode layerNode = ((DefaultMutableTreeNode) (historyNode.getParent()));
 
-        SimpleHistory history;
+        History history;
         try {
-            //set history to the clicked node's corresponding SimpleHistory
-            history = (SimpleHistory) imageCraft.layerList.get(root.getIndex(layerNode)).getHistoryArray().get(layerNode.getIndex(historyNode));
+            //set history to the clicked node's corresponding History
+            history = (History) imageCraft.layerList.get(root.getIndex(layerNode)).getHistoryArray().get(layerNode.getIndex(historyNode));
         } catch (Exception e) {
-            //if the clicked node isn't a SimpleHistory then set history to null
+            //if the clicked node isn't a History then set history to null
             history = null;
         }
 
@@ -790,22 +790,22 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Gets the clicked SimpleHistory based on the row clicked
+     * Gets the clicked History based on the row clicked
      *
      * @param row
-     * @return SimpleHistory
+     * @return History
      */
-    protected SimpleHistory getClickedHistory(int row) {
+    protected History getClickedHistory(int row) {
         //Gets the historyNode and the layerNode
         DefaultMutableTreeNode historyNode = ((DefaultMutableTreeNode) this.getPathForRow(row).getLastPathComponent());
         DefaultMutableTreeNode layerNode = ((DefaultMutableTreeNode) (historyNode.getParent()));
 
-        SimpleHistory history;
+        History history;
         try {
-            //set history to the clicked node's corresponding SimpleHistory
-            history = (SimpleHistory) imageCraft.layerList.get(root.getIndex(layerNode)).getHistoryArray().get(layerNode.getIndex(historyNode));
+            //set history to the clicked node's corresponding History
+            history = (History) imageCraft.layerList.get(root.getIndex(layerNode)).getHistoryArray().get(layerNode.getIndex(historyNode));
         } catch (Exception e) {
-            //if the clicked node isn't a SimpleHistory then set history to null
+            //if the clicked node isn't a History then set history to null
             history = null;
         }
 
@@ -814,8 +814,8 @@ public class LayerTree extends JTree {
 
     /**
      * Gets the selected rows and separates them into two int[], one for Layer
-     * objects and one for SimpleHistory objects, and returns them in an
-     * ArrayList.
+ objects and one for History objects, and returns them in an
+ ArrayList.
      *
      * @return ArrayList<int[]>
      */
@@ -837,7 +837,7 @@ public class LayerTree extends JTree {
             //If the clicked row is a layer then count layerNum
             if (getClickedLayer(i) != null) {
                 layerNum++;
-            } //If the clicked row is a SimpleHistory then count historyNum
+            } //If the clicked row is a History then count historyNum
             else if (getClickedHistory(i) != null) {
                 historyNum++;
             } //Else send error message
@@ -891,7 +891,7 @@ public class LayerTree extends JTree {
      */
     protected void setSelected(Layer layer) {
         //Get layer's node
-        DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) imageCraft.layerTree1.root.getChildAt(
+        DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) imageCraft.layerTree.root.getChildAt(
                 imageCraft.layerList.indexOf(layer));
 
         //Get node's TreePath
@@ -918,7 +918,7 @@ public class LayerTree extends JTree {
     private DefaultTreeModel model;
     private DefaultMutableTreeNode root;
     private Layer clickedLayer;
-    private SimpleHistory clickedHistory;
+    private History clickedHistory;
     private JPopupMenu jPopupMenu;
     private JMenuItem jMenuItemSetCL, jMenuItemRename, jMenuItemMoveUp,
             jMenuItemMoveDown, jMenuItemClearLayer, jMenuItemDelete;
