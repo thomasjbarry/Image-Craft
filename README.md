@@ -7,9 +7,6 @@ Bugs:
 					StackOverFlowError when selecting SH objects
 					Undo/Redo no longer works properly
 		Export- If no file extension is written in the filename the file will not save
-				
-	Low Priority:				
-		Shapes- redraws the entire drawing area making it choppy
 
 TODO:
 

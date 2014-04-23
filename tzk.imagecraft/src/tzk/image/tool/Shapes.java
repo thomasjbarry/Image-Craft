@@ -98,7 +98,7 @@ public class Shapes extends SimpleTool {
     @Override
     public void mouseDragged(MouseEvent evt) {
         //Repaint the drawing area before we draw to forget any previous dragged shapes
-        imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+        imageCraft.drawingArea.repaint();
         
         // Clear the workSpace image
         // This may be deprecated. Can we update?
