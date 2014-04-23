@@ -18,7 +18,6 @@ TODO:
 
 	THOMAS: 
 		LayerTree bugs
-		Filters
 		LayerTree rename, drag&drop
 
 	DREW: 

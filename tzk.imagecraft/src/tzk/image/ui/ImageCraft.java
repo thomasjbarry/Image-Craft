@@ -372,6 +372,7 @@ public class ImageCraft extends javax.swing.JFrame {
         });
         jFile.add(jSave);
 
+        jSaveAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jSaveAs.setText("Save As");
         jSaveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -389,6 +390,7 @@ public class ImageCraft extends javax.swing.JFrame {
         });
         jFile.add(jExport);
 
+        jExportAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jExportAs.setText("Export As");
         jExportAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
