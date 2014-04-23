@@ -2,11 +2,9 @@ Image-Craft
 ===========
 
 Bugs:
-	High Priority:
-		LayerTree- doesn't repaint drawing area upon deleting first drawn SimpleHistory object
-					StackOverFlowError when selecting SH objects
-					Undo/Redo no longer works properly
-		Export- If no file extension is written in the filename the file will not save
+	LayerTree-  doesn't repaint drawing area upon deleting first drawn SimpleHistory object
+				StackOverFlowError when selecting SH objects
+				Undo/Redo no longer works properly
 
 TODO:
 
@@ -18,7 +16,6 @@ TODO:
 		LayerTree rename, drag&drop
 
 	DREW: 
-		Resize Components: MouseEvent- on mouse over change mouse icon
 		IO.java:
 			ImageCraft format - See IO.imageCraftFormat
 

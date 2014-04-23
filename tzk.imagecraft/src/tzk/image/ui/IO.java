@@ -174,16 +174,21 @@ public class IO {
      */
     protected void export(boolean unique) {
         if (unique || latestExport == null) {
-            // Set available image file formats
+            // Set available image file formats to PNG, GIF, JPG
             fileChooser.resetChoosableFileFilters();
-            fileChooser.setFileFilter(imageFormats);
+
+            fileChooser.addChoosableFileFilter(pngFormat);
+            fileChooser.addChoosableFileFilter(gifFormat);
+            fileChooser.addChoosableFileFilter(jpgFormat);
+            fileChooser.removeChoosableFileFilter(fileChooser.getFileFilter());
+            fileChooser.setFileFilter(pngFormat);
 
             //Take a screenshot of all layers in the layerList
             //TODO: screenshot selection of layers (create ArrayList<Layer> 
             //for layers to be screenshot
             BufferedImage screenShot = screenshot(imageCraft.layerList);
 
-            // Attempt JFileChooser save dialogue
+            // Attempt JFileChooser export dialogue
             int exportOption = fileChooser.showDialog(imageCraft, "Export");
             // Returns JFileChooser.APPROVE_OPTION if the user clicked "Export"
             if (exportOption != JFileChooser.APPROVE_OPTION) {
@@ -191,27 +196,35 @@ public class IO {
                 return;
             }
 
-            // New file chosen, export
+            // New file chosen to export image to
             latestExport = fileChooser.getSelectedFile();
 
             //Splits up the filename wherever a period is to get the extension
             String[] fileNameParts = latestExport.toString().split("\\.");
             String format;
 
+            //Set the file's format based on which FileFilter is selected
+            switch (fileChooser.getFileFilter().getDescription()) {
+                case "GIF Images":
+                    format = "gif";
+                    break;
+                case "PNG Images":
+                    format = "png";
+                    break;
+                case "JPG Images":
+                    format = "jpg";
+                    break;
+                default:
+                    format = "png";
+            }
+
             //If the latestExport string was able to be split then set the last
             //element to be the format.
-            //Otherwise force the filename into default type PNG
+            //Otherwise force the filename into the selected format
             if (fileNameParts.length > 1) {
                 format = fileNameParts[fileNameParts.length - 1];
             } else {
-                Path source = latestExport.toPath();
-                String formattedName = latestExport.toString() + ".png";
-                try {
-                    Files.move(source, source.resolveSibling(formattedName));
-                } catch (IOException err) {
-                    System.out.println("err");
-                }
-                format = "png";
+                latestExport = new File(latestExport.toString() + "." + format);
             }
             
             BufferedImage filteredImage;
@@ -263,7 +276,7 @@ public class IO {
 
     /**
      * Build a screenshot of the current drawing.
-     * 
+     *
      * @param layers which layers to show in screenshot
      * @return screenshot
      */
@@ -271,11 +284,11 @@ public class IO {
         // Create a new BufferedImage
         BufferedImage image = imageCraft.newBlankImage();
         Graphics g = image.getGraphics();
-        
+
         // Draw a white background on the image
         g.setColor(Color.white);
         g.fillRect(0, 0, image.getWidth(), image.getHeight());
-        
+
         // Draw each layer on top of the background
         for (int i = layers.size() - 1; i > -1; i--) {
             Layer layer = layers.get(i);
@@ -283,7 +296,7 @@ public class IO {
                 g.drawImage(((History) layer.getHistoryArray().get(layer.getUndoIndex())).getFinalImage(), 0, 0, null);
             }
         }
-        
+
         // Return the screenshot
         return image;
     }
@@ -298,7 +311,10 @@ public class IO {
     private static final FileNameExtensionFilter imageCraftFormat = new FileNameExtensionFilter("ImageCraft File", "icf");
     // What images we are willing to import: *.gif, *.jpg, *.jpeg, *.png
     // We can knock this down depending on its level of difficulty
-    private static final FileNameExtensionFilter imageFormats = new FileNameExtensionFilter("GIF, JPG, and PNG Images", "gif", "jpg", "jpeg", "png");
+    private static final FileNameExtensionFilter imageFormats = new FileNameExtensionFilter("All Image Formats", "gif", "jpg", "jpeg", "png");
+    private static final FileNameExtensionFilter gifFormat = new FileNameExtensionFilter("GIF Images", "gif");
+    private static final FileNameExtensionFilter jpgFormat = new FileNameExtensionFilter("JPG/JPEG Images", "jpg", "jpeg");
+    private static final FileNameExtensionFilter pngFormat = new FileNameExtensionFilter("PNG Images", "png");
 
     // When something has been saved or exported, save to appropriate string.
     // When "Save" is clicked, lastSave is overwritten.
