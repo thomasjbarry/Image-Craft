@@ -26,9 +26,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import tzk.image.ui.ImageCraft;
 
 /**
@@ -45,6 +48,15 @@ public class Shapes extends SimpleTool {
         penWidth = 1;
         penIndex = 0;
         super.setButton(imageCraft.jShape);
+        
+        timer = new Timer(delay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                dragProcedure();
+            }
+        });
+        timer.setRepeats(false);
+        timer.setInitialDelay(delay);
     }
 
     /**
@@ -62,31 +74,31 @@ public class Shapes extends SimpleTool {
         }
         //You are about to drag the mouse
         dragging = true;
-        
+
         /*
          * set the boolean rightButton to remember the button that we first
          * started pressing so that we can ignore another mouse click 
          * with the other button while drawing
-         */        
+         */
         rightButton = SwingUtilities.isRightMouseButton(evt);
-        
+
         //Store initial point that was clicked
         startX = (short) evt.getX();
         startY = (short) evt.getY();
-        
+
         // Create a new temporary workspace and save it to this object
         imageCraft.drawingArea.instantiateWorkSpace();
         workSpace = imageCraft.drawingArea.getWorkSpace();
         workSpaceGraphics = (Graphics2D) imageCraft.drawingArea.getWorkSpace().getGraphics();
-        
+
         //Determine which color to paint with and set the imageGraphics to that color
-        Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);        
+        Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);
         workSpaceGraphics.setColor(toColor);
         workSpaceGraphics.setStroke(new BasicStroke(penWidth));
-        
+
         // Set the backgroundColor so that we can use clearRect
         workSpaceGraphics.setBackground(new Color(0, 0, 0, 0));
-        
+
         drawingGraphics = imageCraft.drawingArea.getGraphics();
     }
 
@@ -97,33 +109,10 @@ public class Shapes extends SimpleTool {
      */
     @Override
     public void mouseDragged(MouseEvent evt) {
-        //Repaint the drawing area before we draw to forget any previous dragged shapes
-        imageCraft.drawingArea.repaint();
-        
-        // Clear the workSpace image
-        // This may be deprecated. Can we update?
-        workSpaceGraphics.clearRect(0, 0, workSpace.getWidth(), workSpace.getHeight());
-       
-        // Get the top left and bottom right coordinates
-        short[] coordinates = points((short) evt.getX(), (short) evt.getY());
-        short x1, y1, x2, y2;
-        // Left
-        x1 = coordinates[0];
-        // Top
-        y1 = coordinates[1];
-        // Right
-        x2 = coordinates[2];
-        // Bottom
-        y2 = coordinates[3];
-        
-        // Draw the shape
-        if (shapeType.equals("Rectangle")) {
-            // drawRect param: x, y, width, height
-            workSpaceGraphics.drawRect(
-                    x1, y1, x2 - x1, y2 - y1);
-        } else {
-            System.out.println("No Shape of type" + shapeType);
-        }
+        dragEvt = evt;
+        if (!timer.isRunning()) {
+            timer.restart();
+        }        
     }
 
     /**
@@ -133,6 +122,7 @@ public class Shapes extends SimpleTool {
      */
     @Override
     public void mouseReleased(MouseEvent evt) {
+        timer.stop();
         // If we aren't dragging then we clicked a second mouse button
         // Ignore
         if (!dragging) {
@@ -152,7 +142,7 @@ public class Shapes extends SimpleTool {
 
         //No longer dragging
         dragging = false;
-        
+
         // Create new history object in layer
         imageCraft.currentLayer.addHistory(workSpace, shapeType);
 
@@ -161,11 +151,41 @@ public class Shapes extends SimpleTool {
         workSpaceGraphics.dispose();
         imageCraft.drawingArea.setWorkSpace(null);
     }
-    
+
+    private void dragProcedure() {
+        //Repaint the drawing area before we draw to forget any previous dragged shapes
+        imageCraft.drawingArea.repaint();
+
+        // Clear the workSpace image
+        // This may be deprecated. Can we update?
+        workSpaceGraphics.clearRect(0, 0, workSpace.getWidth(), workSpace.getHeight());
+
+        // Get the top left and bottom right coordinates
+        short[] coordinates = points((short) dragEvt.getX(), (short) dragEvt.getY());
+        short x1, y1, x2, y2;
+        // Left
+        x1 = coordinates[0];
+        // Top
+        y1 = coordinates[1];
+        // Right
+        x2 = coordinates[2];
+        // Bottom
+        y2 = coordinates[3];
+
+        // Draw the shape
+        if (shapeType.equals("Rectangle")) {
+            // drawRect param: x, y, width, height
+            workSpaceGraphics.drawRect(
+                    x1, y1, x2 - x1, y2 - y1);
+        } else {
+            System.out.println("No Shape of type" + shapeType);
+        }
+    }
+
     private short[] points(short x2, short y2) {
         short x1 = startX;
         short y1 = startY;
-        
+
         //If we dragged the mouse outside of the JPanel
         //Set the x/y value to the border value
         if (x2 < 0) {
@@ -180,7 +200,7 @@ public class Shapes extends SimpleTool {
             // Set y to the lesser of y or the bottom edge of the drawingArea
             y2 = (short) Math.min(y2, imageCraft.drawingArea.getHeight() - penWidth);
         }
-        
+
         // Swap left and right
         // if new point is left of original point
         if (x2 < x1) {
@@ -188,7 +208,7 @@ public class Shapes extends SimpleTool {
             x2 = x1;
             x1 = friend;
         }
-        
+
         // Swap top and bottom
         // if new point is above original point
         if (y2 < y1) {
@@ -196,21 +216,20 @@ public class Shapes extends SimpleTool {
             y2 = y1;
             y1 = friend;
         }
-        
+
         // Return array of coordinates
         short[] r = {x1, y1, x2, y2};
         return r;
     }
-    
+
     @Override
-    public void select()
-    {
+    public void select() {
         super.select();
         //select the tool and then enable the ability to select a size
         imageCraft.jSize.setEnabled(true);
         imageCraft.jSize.setSelectedIndex(penIndex);
-    } 
-    
+    }
+
     /**
      *
      * @param width
@@ -225,7 +244,7 @@ public class Shapes extends SimpleTool {
         } else {
             penIndex = 2;
         }
-    }    
+    }
 
     // Variables declaration
     private final ImageCraft imageCraft;
@@ -236,5 +255,8 @@ public class Shapes extends SimpleTool {
     private Graphics2D workSpaceGraphics;
     private Graphics drawingGraphics;
     private int penWidth, penIndex;
+    private final Timer timer;
+    private final int delay = 15;
+    private MouseEvent dragEvt;
     // End of variables declaration
 }
