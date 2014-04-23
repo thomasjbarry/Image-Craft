@@ -109,7 +109,7 @@ public class Layer {
         imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
                 image, 0, 0, null);
 
-        imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+        imageCraft.drawingArea.repaint();
 
     }
 
@@ -141,7 +141,7 @@ public class Layer {
         imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
                 history.getFinalImage(), 0, 0, null);
 
-        imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+        imageCraft.drawingArea.repaint();
 
     }
     
@@ -154,7 +154,7 @@ public class Layer {
         if (undoIndex > -1) {
             undoIndex--;
             imageCraft.layerTree.repaint();
-            imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+            imageCraft.drawingArea.repaint();
             System.out.println(undoIndex);
         }
     }
@@ -163,7 +163,7 @@ public class Layer {
         if (undoIndex < historyArray.size() - 1) {
             undoIndex++;
             imageCraft.layerTree.repaint();
-            imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+            imageCraft.drawingArea.repaint();
             System.out.println(undoIndex);
         }
     }

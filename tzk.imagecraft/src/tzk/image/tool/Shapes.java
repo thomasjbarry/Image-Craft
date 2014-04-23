@@ -49,13 +49,18 @@ public class Shapes extends SimpleTool {
         penIndex = 0;
         super.setButton(imageCraft.jShape);
         
+        //Create a new Swing Timer that delays drawing a shape by delay (in milliseconds)
         timer = new Timer(delay, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 dragProcedure();
             }
         });
+        //This timer does not repeat (otherwise it will repaint every delay milliseconds
+        //until we release the mouse.
         timer.setRepeats(false);
+        
+        //Set the initial delay to the delay value
         timer.setInitialDelay(delay);
     }
 
@@ -109,7 +114,12 @@ public class Shapes extends SimpleTool {
      */
     @Override
     public void mouseDragged(MouseEvent evt) {
+        //Update the drag event to this event
         dragEvt = evt;
+        
+        //If the timer isn't running then restart it (this will trigger a call
+        //to dragProcedure())
+        //Else the timer is running so we shouldn't repaint with the new evt
         if (!timer.isRunning()) {
             timer.restart();
         }        

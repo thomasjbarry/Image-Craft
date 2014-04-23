@@ -137,7 +137,7 @@ public class ColorPicker extends javax.swing.JFrame {
             }
             
             //Paint jColorSwatch component to the newly selected color
-            imageCraft.jColorSwatch.paintComponent(imageCraft.jColorSwatch.getGraphics());
+            imageCraft.jColorSwatch.repaint();
         }
         //Close the ColorPicker
         this.dispatchEvent(windowClosing);

@@ -491,7 +491,7 @@ public class ImageCraft extends javax.swing.JFrame {
 
     private void jRightPaneComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jRightPaneComponentResized
         //Draw the BufferedImage to the JPanel
-        drawingArea.paintComponent(drawingArea.getGraphics());
+        drawingArea.repaint();
     }//GEN-LAST:event_jRightPaneComponentResized
 
     @SuppressWarnings("unchecked")
@@ -504,7 +504,7 @@ public class ImageCraft extends javax.swing.JFrame {
         //and the layer object to the layerObjectList
         Layer layer = new Layer(this);
 
-        drawingArea.paintComponent(drawingArea.getGraphics());
+        drawingArea.repaint();
 
         System.out.println("New Layer: " + layer.getLayerName()
                 + " ; " + layer);

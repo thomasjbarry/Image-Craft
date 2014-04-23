@@ -350,7 +350,7 @@ public class LayerTree extends JTree {
             }
 
             //Paint the Drawing Area to reflect the change in selection
-            imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+            imageCraft.drawingArea.repaint();
         }
     }
 

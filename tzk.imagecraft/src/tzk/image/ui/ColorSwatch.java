@@ -105,7 +105,7 @@ public class ColorSwatch extends javax.swing.JPanel {
             Color c = imageCraft.primaryColor;
             imageCraft.primaryColor = imageCraft.secondaryColor;
             imageCraft.secondaryColor = c;
-            paintComponent(getGraphics());
+            repaint();
         }
         
         if (doPicker) 
