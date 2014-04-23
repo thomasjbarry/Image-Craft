@@ -31,8 +31,6 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ColorConvertOp;
-import java.awt.image.LookupOp;
-import java.awt.image.ShortLookupTable;
 import java.util.ArrayList;
 
 public class History {
@@ -153,16 +151,16 @@ public class History {
         //a finalImage for this History object.
         BufferedImage copy = imageCraft.newBlankImage();
         Graphics copyGraphics = copy.getGraphics();
+        
         //For each historyObj in the selected ArrayList apply the grayScaleOp to
-        //its finalImage, then draw its finalImage (whether it was filtered or
-        //not) to copy
+        //its actionImage, then draw it (whether it was filtered or not) to copy
         for (History historyObj : layerObject.getHistoryArray()) {
             if (selected.contains(historyObj)) {
                 copyGraphics.drawImage(
-                        grayScaleOp.filter(historyObj.finalImage, historyObj.finalImage),
+                        grayScaleOp.filter(historyObj.actionImage, historyObj.actionImage),
                         0, 0, null);
             } else {
-                copyGraphics.drawImage(historyObj.finalImage, 0, 0, null);
+                copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
             }
         }
         //Set this history's finalImage to copy
