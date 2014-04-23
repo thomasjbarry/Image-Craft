@@ -25,7 +25,6 @@ package tzk.image.ui;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import static java.awt.Frame.E_RESIZE_CURSOR;
 import java.awt.Graphics;
 
 /**
@@ -40,6 +39,7 @@ public class Easel extends javax.swing.JPanel {
 
     /**
      * Creates new form Easel
+     * @deprecated 
      */
     public Easel() {
         initComponents();
@@ -48,7 +48,6 @@ public class Easel extends javax.swing.JPanel {
     public Easel(ImageCraft iC) {
         imageCraft = iC;
         initComponents();
-
     }
 
     /**
@@ -59,7 +58,6 @@ public class Easel extends javax.swing.JPanel {
      * @param args
      */
     public static void main(String[] args) {
-
     }
 
     @SuppressWarnings("unchecked")
@@ -138,6 +136,13 @@ public class Easel extends javax.swing.JPanel {
         System.out.println("Drawing area resized: " + width + ", " + height);
     }//GEN-LAST:event_formMouseReleased
 
+    
+    /**
+     * This sets the cursor to a drag cursor if it is above a resizer, it changes
+     * the cursor. Otherwise it just uses the default cursor.
+     * 
+     * @param evt 
+     */
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
         if (evt.getX() > width - 10
                 && evt.getY() > (height - 10) / 2
@@ -158,6 +163,12 @@ public class Easel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_formMouseMoved
 
+    /**
+     * This resizes the drawing area and the easel when the resizers
+     * are dragged.
+     * 
+     * @param evt 
+     */
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         if (horizontal) {
             this.resizeEasel(evt.getX() - width, 0);
@@ -169,7 +180,6 @@ public class Easel extends javax.swing.JPanel {
             this.resizeEasel(evt.getX() - width, evt.getY() - height);
             imageCraft.drawingArea.resizeDrawing(evt.getX() - width, evt.getY() - height);
         }
-
     }//GEN-LAST:event_formMouseDragged
 
     /**

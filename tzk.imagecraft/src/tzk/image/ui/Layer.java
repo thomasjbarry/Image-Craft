@@ -23,7 +23,8 @@
 package tzk.image.ui;
 
 /**
- *
+ * The user can make as many layers as they want. Each has their own buffered
+ * image. 
  * @author Thomas
  */
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ public class Layer {
 
     public Layer(ImageCraft iC) {
         imageCraft = iC;
-
         if (imageCraft.numLayer == 0) {
             layerName = "Background Layer";
             imageCraft.numLayer++;
@@ -110,7 +110,6 @@ public class Layer {
                 image, 0, 0, null);
 
         imageCraft.drawingArea.repaint();
-
     }
 
     /**

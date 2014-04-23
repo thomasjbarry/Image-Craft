@@ -542,7 +542,6 @@ public class ImageCraft extends javax.swing.JFrame {
     }//GEN-LAST:event_jFillActionPerformed
 
     private void jDrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDrawActionPerformed
-        // TODO add your handling code here:
         drawTool.select();
     }//GEN-LAST:event_jDrawActionPerformed
 

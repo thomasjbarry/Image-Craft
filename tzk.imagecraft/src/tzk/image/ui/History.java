@@ -31,14 +31,14 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ColorConvertOp;
-import java.awt.image.LookupOp;
-import java.awt.image.ShortLookupTable;
 import java.util.ArrayList;
 
 public class History {
 
     /**
-     * Create new History image object.
+     * Create new History image object. The History object stores the color of
+     * whatever change was made to the drawing area and any other information 
+     * needed to redraw for the undo history. 
      *
      * @param iC the ImageCraft to which the Layer object belongs
      * @param layer the Layer to which this History object belongs
@@ -47,7 +47,6 @@ public class History {
      */
     public History(ImageCraft iC, Layer layer, BufferedImage image, String historyType) {
         imageCraft = iC;
-        // Save parameters to object
         layerObject = layer;
         actionImage = image;
         actionFilter = null;
@@ -117,16 +116,23 @@ public class History {
         }
     }
 
-    //draws the History object to a BufferedImage object passed as a param
+    /**
+     * This method redraws the historyobject. If you press ctrl z this method is 
+     * called to redraw the history object.
+     * 
+     * @param image pass in the drawing area so that the undo history draws
+     *              draws to the current drawing. 
+     */
     protected void draw(BufferedImage image) {
         Graphics drawGraphics = image.getGraphics();
         drawGraphics.drawImage(actionImage, 0, 0, null);
         drawGraphics.dispose();
     }
 
+    
     /**
-     * Calls the proper filter method with the index of this History object in
-     * its layer's HistoryArray
+     * The method adds filters to all the other drawn actions in the drawing area.
+     * @param selected 
      */
     private void filter(ArrayList<History> selected) {
         switch (actionFilter) {
@@ -207,12 +213,8 @@ public class History {
 
     // Variable Declaration
     private ImageCraft imageCraft;
-    // Snapshot of the action
     private BufferedImage actionImage;
-    // This is the exact filter command
-    // This type will change, assuming we create a Filter type
     private String actionFilter;
-    // Snapshot of the layer up to this point, including this action
     private BufferedImage finalImage;
     private final Layer layerObject;
     private String historyName;

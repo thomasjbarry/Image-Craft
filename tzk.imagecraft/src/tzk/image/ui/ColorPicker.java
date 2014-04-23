@@ -33,15 +33,14 @@ import java.awt.event.WindowEvent;
  */
 public class ColorPicker extends javax.swing.JFrame {
 
+
     /**
-     * Creates new form ColorPicker
-     * WARNING! Do not use this constructor
+     * Used to make a new ColorPicker. Allows user to pick a color to fill,
+     * draw, and shape with. 
+     *@deprecated 
      */
     public ColorPicker() {
-        //No specified ImageCraft object for this ColorPicker
-        imageCraft = null;
-        
-        //Create the GUI components
+        imageCraft = null;        
         initComponents();
     }
     

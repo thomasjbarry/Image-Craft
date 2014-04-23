@@ -75,6 +75,12 @@ public class DrawingArea extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * These three methods tell the ImageCraft that the mouse is drawing 
+     * on the drawing area.
+     * 
+     * @param evt 
+     */
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         if (imageCraft.currentTool != null) {
             imageCraft.currentTool.mousePressed(evt);
