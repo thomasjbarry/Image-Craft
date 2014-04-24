@@ -10,9 +10,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
- * The drawing area allows users to create their own
- * ImageCrafts where they can draw on, import other images ect.
- * 
+ * The drawing area allows users to create their own ImageCrafts where they can
+ * draw on, import other images ect.
+ *
  * @author Thomas
  */
 public class DrawingArea extends javax.swing.JPanel {
@@ -76,10 +76,10 @@ public class DrawingArea extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * These three methods tell the ImageCraft that the mouse is drawing 
-     * on the drawing area.
-     * 
-     * @param evt 
+     * These three methods tell the ImageCraft that the mouse is drawing on the
+     * drawing area.
+     *
+     * @param evt
      */
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         if (imageCraft.currentTool != null) {
@@ -100,8 +100,8 @@ public class DrawingArea extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseReleased
 
     /**
-     * Resizes this entire drawing.
-     * Updates all layers, history items, and javax.swing with new size
+     * Resizes this entire drawing. Updates all layers, history items, and
+     * javax.swing with new size
      *
      * @param x the additional width of the document
      * @param y the additional height of the document
@@ -110,11 +110,11 @@ public class DrawingArea extends javax.swing.JPanel {
         //Initialize the resized width and height
         int resizedWidth = (int) this.getPreferredSize().getWidth() + x;
         int resizedHeight = (int) this.getPreferredSize().getHeight() + y;
-        
+
         //Check that the resized width and height aren't smaller than the minimum values
         resizedWidth = resizedWidth < minWidth ? minWidth : resizedWidth;
         resizedHeight = resizedHeight < minHeight ? minHeight : resizedHeight;
-        
+
         // Update BufferedImage objects in layers
         for (Layer layer : imageCraft.layerList) {
             for (History historyObj : layer.getHistoryArray()) {
@@ -134,10 +134,10 @@ public class DrawingArea extends javax.swing.JPanel {
         this.revalidate();
         this.repaint();
     }
-    
+
     /**
-     * Create a new temporary workSpace.
-     * To remove the workspace, just set it to null
+     * Create a new temporary workSpace. To remove the workspace, just set it to
+     * null
      */
     public void instantiateWorkSpace() {
         workSpace = new BufferedImage(
@@ -171,30 +171,30 @@ public class DrawingArea extends javax.swing.JPanel {
             }
         }
         g.drawImage(currentDrawing, 0, 0, this);
-        
+
         // Paint the temporary workspace if it exists
         // Paint this over the currentDrawing so that it is visible
         if (workSpace != null) {
             g.drawImage(workSpace, 0, 0, this);
         }
     }
-    
+
     public BufferedImage getCurrentDrawing() {
         return this.currentDrawing;
     }
-    
+
     public BufferedImage getWorkSpace() {
         return this.workSpace;
     }
-    
+
     public void setWorkSpace(BufferedImage image) {
         this.workSpace = image;
     }
-    
+
     protected int getMinWidth() {
         return minWidth;
     }
-    
+
     protected int getMinHeight() {
         return minHeight;
     }

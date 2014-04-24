@@ -696,7 +696,10 @@ public class ImageCraft extends javax.swing.JFrame {
     }
 
     public BufferedImage resize(BufferedImage bufferedImage, int width, int height) {
-        BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage resizedImage = new BufferedImage(
+                Math.max(width, bufferedImage.getWidth()),
+                Math.max(height, bufferedImage.getHeight()),
+                BufferedImage.TYPE_INT_ARGB);
         resizedImage.getGraphics().drawImage(bufferedImage, 0, 0, null);
         return resizedImage;
     }
