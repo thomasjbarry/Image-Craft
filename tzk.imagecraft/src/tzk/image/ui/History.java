@@ -161,7 +161,9 @@ public class History {
         Graphics copyGraphics = copy.getGraphics();
         
         //For each historyObj in the selected ArrayList apply the grayScaleOp to
-        //its actionImage, then draw it (whether it was filtered or not) to copy
+        //its actionImage , then draw it (whether it was filtered or not) to copy
+        //If a historyObj is not in the selected, or it is a filter history object
+        //then don't apply the filter.
         for (History historyObj : layerObject.getHistoryArray()) {
             if (selected.contains(historyObj) && historyObj.actionImage != null) {
                 copyGraphics.drawImage(

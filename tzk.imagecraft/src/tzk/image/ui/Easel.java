@@ -193,6 +193,7 @@ public class Easel extends javax.swing.JPanel {
     /**
      * I overrode the paintComponent method so that I could draw in the squares
      * that represent the resizers.
+     * @param g
      */
     @Override
     public void paintComponent(Graphics g) {
@@ -203,8 +204,8 @@ public class Easel extends javax.swing.JPanel {
             return;
         }
 
-        width = imageCraft.drawingArea.getWidth() + 10;
-        height = imageCraft.drawingArea.getHeight() + 10;
+        width = imageCraft.drawingArea.getWidth() + offset;
+        height = imageCraft.drawingArea.getHeight() + offset;
 
         g.setColor(Color.BLUE);
         g.fillRect(width - 10, (height / 2) - 5, 6, 6);//horizontal resizer
@@ -219,9 +220,18 @@ public class Easel extends javax.swing.JPanel {
      * @param y additional height to add (negative: remove)
      */
     public void resizeEasel(int x, int y) {
-        this.setPreferredSize(new Dimension(
-                (int) this.getPreferredSize().getWidth() + x,
-                (int) this.getPreferredSize().getHeight() + y));
+        //Initialize the resized width and height
+        int resizedWidth = (int) this.getPreferredSize().getWidth() + x;
+        int resizedHeight = (int) this.getPreferredSize().getHeight() + y;
+        
+        //Check that the resized width and height aren't smaller than the minimum values
+        resizedWidth = resizedWidth < imageCraft.drawingArea.getMinWidth() ?
+                imageCraft.drawingArea.getMinWidth() : resizedWidth;
+        resizedHeight = resizedHeight < imageCraft.drawingArea.getMinHeight() ?
+                imageCraft.drawingArea.getMinHeight() : resizedHeight;
+        
+        //Update GUI
+        this.setPreferredSize(new Dimension(resizedWidth, resizedHeight));
         this.revalidate();
         this.repaint();
     }

@@ -47,8 +47,18 @@ public class Shapes extends SimpleTool {
         shapeType = shape;
         penWidth = 1;
         penIndex = 0;
-        super.setButton(imageCraft.jShape);
         
+        switch (shapeType) {
+            case "Rectangle":
+                super.setButton(imageCraft.jRectangle);
+                break;
+            case "Oval":
+                super.setButton(imageCraft.jOval);
+                break;
+            default:
+                System.out.println("Error: no button for this shape");
+        }
+
         //Create a new Swing Timer that delays drawing a shape by delay (in milliseconds)
         timer = new Timer(delay, new ActionListener() {
             @Override
@@ -59,7 +69,7 @@ public class Shapes extends SimpleTool {
         //This timer does not repeat (otherwise it will repaint every delay milliseconds
         //until we release the mouse.
         timer.setRepeats(false);
-        
+
         //Set the initial delay to the delay value
         timer.setInitialDelay(delay);
     }
@@ -116,13 +126,13 @@ public class Shapes extends SimpleTool {
     public void mouseDragged(MouseEvent evt) {
         //Update the drag event to this event
         dragEvt = evt;
-        
+
         //If the timer isn't running then restart it (this will trigger a call
         //to dragProcedure())
         //Else the timer is running so we shouldn't repaint with the new evt
         if (!timer.isRunning()) {
             timer.restart();
-        }        
+        }
     }
 
     /**
@@ -183,12 +193,17 @@ public class Shapes extends SimpleTool {
         y2 = coordinates[3];
 
         // Draw the shape
-        if (shapeType.equals("Rectangle")) {
-            // drawRect param: x, y, width, height
-            workSpaceGraphics.drawRect(
-                    x1, y1, x2 - x1, y2 - y1);
-        } else {
-            System.out.println("No Shape of type" + shapeType);
+        switch (shapeType) {
+            case "Rectangle":
+                // drawRect param: x, y, width, height
+                workSpaceGraphics.drawRect(x1, y1, x2 - x1, y2 - y1);
+                break;
+            case "Oval":
+                // drawOval param: x, y, width, height
+                workSpaceGraphics.drawOval(x1, y1, x2 - x1, y2 - y1);
+                break;
+            default:
+                System.out.println("No Shape of type" + shapeType);
         }
     }
 

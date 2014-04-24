@@ -107,27 +107,30 @@ public class DrawingArea extends javax.swing.JPanel {
      * @param y the additional height of the document
      */
     public void resizeDrawing(int x, int y) {
+        //Initialize the resized width and height
+        int resizedWidth = (int) this.getPreferredSize().getWidth() + x;
+        int resizedHeight = (int) this.getPreferredSize().getHeight() + y;
+        
+        //Check that the resized width and height aren't smaller than the minimum values
+        resizedWidth = resizedWidth < minWidth ? minWidth : resizedWidth;
+        resizedHeight = resizedHeight < minHeight ? minHeight : resizedHeight;
+        
         // Update BufferedImage objects in layers
         for (Layer layer : imageCraft.layerList) {
             for (History historyObj : layer.getHistoryArray()) {
                 // finalImage is what this layer looks like after this action is performed
-                historyObj.setFinalImage(imageCraft.resize(historyObj.getFinalImage(),
-                        historyObj.getFinalImage().getWidth() + x,
-                        historyObj.getFinalImage().getHeight() + y));
+                historyObj.setFinalImage(imageCraft.resize(historyObj.getFinalImage(), resizedWidth, resizedHeight));
 
                 // actionImage contains a snapshot of the action performed only
                 // One could potentially add this actionImage to the finalImage 
                 // of the last simpleHistory element to get this simpleHistory
                 // object's finalImage
-                historyObj.setActionImage(imageCraft.resize(historyObj.getActionImage(),
-                        historyObj.getActionImage().getWidth() + x,
-                        historyObj.getActionImage().getHeight() + y));
+                historyObj.setActionImage(imageCraft.resize(historyObj.getActionImage(), resizedWidth, resizedHeight));
             }
         }
         // Update swing
-        this.setPreferredSize(new Dimension(
-                (int) this.getPreferredSize().getWidth() + x,
-                (int) this.getPreferredSize().getHeight() + y));
+
+        this.setPreferredSize(new Dimension(resizedWidth, resizedHeight));
         this.revalidate();
         this.repaint();
     }
@@ -187,6 +190,14 @@ public class DrawingArea extends javax.swing.JPanel {
     public void setWorkSpace(BufferedImage image) {
         this.workSpace = image;
     }
+    
+    protected int getMinWidth() {
+        return minWidth;
+    }
+    
+    protected int getMinHeight() {
+        return minHeight;
+    }
 
     // Variables declaration
     // The current drawing, set by what is selected in LayerList
@@ -194,6 +205,8 @@ public class DrawingArea extends javax.swing.JPanel {
     // A temporary workspace, used with tools such as Shape
     private BufferedImage workSpace;
     private ImageCraft imageCraft;
+    private final int minWidth = 15;
+    private final int minHeight = 15;
     // End of variables declaration
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
