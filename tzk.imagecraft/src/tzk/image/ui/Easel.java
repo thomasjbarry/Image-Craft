@@ -103,21 +103,25 @@ public class Easel extends javax.swing.JPanel {
     private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
         // finds out if the user clicked the right box, then sets
         // the vertical, horizontal, or corner bools to true.
-        if (evt.getX() > width - 10
-                && evt.getY() > (height - 10) / 2
-                && evt.getY() < (height - 10) / 2 + 10) {
+        if (evt.getX() > width - offset
+                && evt.getX() < width + (2 * offset)
+                && evt.getY() > (height / 2) - offset
+                && evt.getY() < (height / 2) + offset) {
             //right/horizontal
             horizontal = true;
-        } else if (evt.getY() > height - 10
-                && evt.getX() > (width - 10) / 2
-                && evt.getX() < (width - 10) / 2 + 10) {
+        } else if (evt.getY() > height - offset
+                && evt.getY() < height + (2 * offset)
+                && evt.getX() > (width / 2) - offset
+                && evt.getX() < (width / 2) + offset) {
             //bottom/vertical
             vertical = true;
-        } else if (evt.getY() > height - 10
-                && evt.getX() > width - 10) {
+        } else if (evt.getY() > height - offset
+                && evt.getY() < height + (2 * offset)
+                && evt.getX() > width - offset
+                && evt.getX() < width + (2 * offset)) {
             //corner
             corner = true;
-        }
+        }        
     }//GEN-LAST:event_formMousePressed
 
     /**
@@ -144,18 +148,22 @@ public class Easel extends javax.swing.JPanel {
      * @param evt 
      */
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
-        if (evt.getX() > width - 10
-                && evt.getY() > (height - 10) / 2
-                && evt.getY() < (height - 10) / 2 + 10) {
+        if (evt.getX() > width - offset
+                && evt.getX() < width + (2 * offset)
+                && evt.getY() > (height / 2) - offset
+                && evt.getY() < (height / 2) + offset) {
             //right/horizontal
             this.setCursor( new Cursor(Cursor.E_RESIZE_CURSOR));
-        } else if (evt.getY() > height - 10
-                && evt.getX() > (width - 10) / 2
-                && evt.getX() < (width - 10) / 2 + 10) {
+        } else if (evt.getY() > height - offset
+                && evt.getY() < height + (2 * offset)
+                && evt.getX() > (width / 2) - offset
+                && evt.getX() < (width / 2) + offset) {
             //bottom/vertical
             this.setCursor( new Cursor(Cursor.N_RESIZE_CURSOR));
-        } else if (evt.getY() > height - 10
-                && evt.getX() > width - 10) {
+        } else if (evt.getY() > height - offset
+                && evt.getY() < height + (2 * offset)
+                && evt.getX() > width - offset
+                && evt.getX() < width + (2 * offset)) {
             //corner
             this.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
         } else {
@@ -199,9 +207,9 @@ public class Easel extends javax.swing.JPanel {
         height = imageCraft.drawingArea.getHeight() + 10;
 
         g.setColor(Color.BLUE);
-        g.fillRect(width - 10, (height - 10) / 2, 6, 6);//horizontal resizer
+        g.fillRect(width - 10, (height / 2) - 5, 6, 6);//horizontal resizer
         g.fillRect(width - 10, height - 10, 6, 6);//corner rezier
-        g.fillRect((width - 10) / 2, height - 10, 6, 6); //vertical resizer
+        g.fillRect((width / 2) - 5, height - 10, 6, 6); //vertical resizer
     }
 
     /**
@@ -221,6 +229,7 @@ public class Easel extends javax.swing.JPanel {
 
     private ImageCraft imageCraft;
     private int height, width;
+    private final int offset = 10;
     private boolean corner, vertical, horizontal;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
