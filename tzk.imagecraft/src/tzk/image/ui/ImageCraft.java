@@ -696,6 +696,8 @@ public class ImageCraft extends javax.swing.JFrame {
     }
 
     public BufferedImage resize(BufferedImage bufferedImage, int width, int height) {
+        //Only change the dimensions of the BufferedImage if it has increased in
+        //size. This ensures data isn't lost by resizing.
         BufferedImage resizedImage = new BufferedImage(
                 Math.max(width, bufferedImage.getWidth()),
                 Math.max(height, bufferedImage.getHeight()),
