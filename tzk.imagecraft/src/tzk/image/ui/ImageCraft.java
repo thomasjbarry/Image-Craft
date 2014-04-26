@@ -783,7 +783,7 @@ public class ImageCraft extends javax.swing.JFrame {
     public Color primaryColor = Color.black;
     public Color secondaryColor = Color.green;
 
-    // Whether all layers are selected
+    // Whether all *layers* are selected within LayerTree
     protected boolean selectedAll;
 
     // FileChooser is inside of this input-output object

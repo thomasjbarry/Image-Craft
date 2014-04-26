@@ -2,9 +2,12 @@ Image-Craft
 ===========
 
 Bugs:
-	LayerTree-  doesn't repaint drawing area upon deleting first drawn SimpleHistory object
-				StackOverFlowError when selecting SH objects
-				Undo/Redo no longer works properly
+	LayerTree
+		doesn't repaint drawing area upon deleting first drawn SimpleHistory object
+		Undo/Redo no longer works properly
+			I think this might work properly now... What is properly?
+			Whatever it's doing, it's pretty sweet
+		History "Move Up"/"Move Down" is pretty funky
 
 TODO:
 
@@ -14,13 +17,15 @@ TODO:
 	THOMAS: 
 		LayerTree bugs
 		LayerTree rename, drag&drop
+		LayerTree.setSelected(History history)  pretty please?
+			see the end of jLayerTreeMouseClicked
 
 	DREW: 
 		IO.java:
 			ImageCraft format - See IO.imageCraftFormat
 
 	For anyone:
-			
+
 		Tools: Select, Crop, Resize (scale), Eraser, Zoom, Text, Draw (Penstrokes)
 
 		System Clipboard: Copy/Paste
