@@ -17,8 +17,6 @@ TODO:
 	THOMAS: 
 		LayerTree bugs
 		LayerTree rename, drag&drop
-		LayerTree.setSelected(History history)  pretty please?
-			see the end of jLayerTreeMouseClicked
 
 	DREW: 
 		IO.java:

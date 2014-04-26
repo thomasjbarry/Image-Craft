@@ -529,13 +529,17 @@ public class ImageCraft extends javax.swing.JFrame {
     }//GEN-LAST:event_newLayerMouseClicked
 
     private void jSelectAllLayersItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jSelectAllLayersItemStateChanged
+        // Do not do anything flag
+        // LayerTree uses this when setting selectAll checkbox on the fly
+        if (layerTree.inhibitEvents) {
+            return;
+        }
+
         //If the checkbox is deselected then select the first layer. 
-        //Otherwise if all layers were selected manually do nothing.
         //Otherwise if the checkbox is selected and there is more than one layer
         //in the layerNameList then select all of the layers.
         if (evt.getStateChange() == java.awt.event.ItemEvent.DESELECTED) {
             layerTree.setSelectionRow(0);
-        } else if (layerTree.getSelected().get(0).length == this.layerList.size()) {
         } else if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED
                 && this.layerList.size() > 1) {
             int[] indices = new int[this.layerList.size()];

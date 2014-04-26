@@ -88,7 +88,7 @@ public class LayerTree extends JTree {
         renderer.setClosedIcon(layerIcon);
 
         // Whether to fire events
-        fireValueChanged = true;
+        inhibitEvents = false;
     }
 
     //Classes
@@ -332,15 +332,6 @@ public class LayerTree extends JTree {
             //Show the jPopupMenu at the location you clicked in this LayerTree.
             jPopupMenu.show(this, evt.getX(), evt.getY());
         }
-        // left click layer - set as current layer and repaint
-        else if (isLayer && clickedLayer != null) {
-            imageCraft.currentLayer = clickedLayer;
-            setSelected(clickedLayer);
-        }
-        // left click history - select history object
-        else if (clickedHistory != null) {
-            setSelected(clickedHistory);
-        }
     }
 
     /**
@@ -354,17 +345,17 @@ public class LayerTree extends JTree {
      */
     private void jLayerTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {
         // Do not fire layer events - something is already working on it
-        if (!fireValueChanged) {
+        if (inhibitEvents) {
             return;
         }
         // This is a flag to say that we are changing items
         // Prevents valueChanged from getting out of hand and into infinite loops
-        fireValueChanged = false;
+        inhibitEvents = true;
         
         // No selected index - nothing to do
         // Such as before background layer is added to LayerTree
         if (getMinSelectionRow() == -1) {
-            fireValueChanged = true;
+            inhibitEvents = false;
             return;
         }
 
@@ -385,7 +376,7 @@ public class LayerTree extends JTree {
         }
         
         // Turn off layerTree "working" flag
-        fireValueChanged = true;
+        inhibitEvents = false;
 
         //Paint the Drawing Area to reflect the change in selection
         imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
@@ -963,6 +954,6 @@ public class LayerTree extends JTree {
     private JMenuItem jMenuItemSetCL, jMenuItemRename, jMenuItemMoveUp,
             jMenuItemMoveDown, jMenuItemClearLayer, jMenuItemDelete;
     private boolean isLayer;
-    private boolean fireValueChanged;
+    protected boolean inhibitEvents;
     //End of Initialize Variables
 }
