@@ -66,20 +66,23 @@ public class Easel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                formMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                formMouseReleased(evt);
+            }
+        });
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseDragged(java.awt.event.MouseEvent evt) {
                 formMouseDragged(evt);
             }
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 formMouseMoved(evt);
-            }
-        });
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                formMousePressed(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                formMouseReleased(evt);
             }
         });
 
@@ -156,7 +159,7 @@ public class Easel extends javax.swing.JPanel {
                 && evt.getY() > (height / 2) - offset
                 && evt.getY() < (height / 2) + offset) {
             //right/horizontal
-            newCursor = cursorE;
+            newCursor = cursorW;
         } else if (evt.getY() > height - offset
                 && evt.getY() < height + (2 * offset)
                 && evt.getX() > (width / 2) - offset
@@ -173,7 +176,7 @@ public class Easel extends javax.swing.JPanel {
             // Only change to default if it is not already
             newCursor = cursorDefault;
         }
-        // Set newCursor
+        // Set newCursor only if it hasn't changed
         if (newCursor != cursor) {
             cursor = newCursor;
             this.setCursor(cursor);
@@ -198,6 +201,10 @@ public class Easel extends javax.swing.JPanel {
             imageCraft.drawingArea.resizeDrawing(evt.getX() - width, evt.getY() - height);
         }
     }//GEN-LAST:event_formMouseDragged
+
+    private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
+        setCursor();
+    }//GEN-LAST:event_formMouseExited
 
     /**
      * I overrode the paintComponent method so that I could draw in the squares
@@ -245,13 +252,22 @@ public class Easel extends javax.swing.JPanel {
         this.repaint();
     }
 
+    /**
+     * Set default cursor.
+     */
+    protected void setCursor() {
+        if (cursor != cursorDefault) {
+            cursor = cursorDefault;
+            setCursor(cursor);
+        }
+    }
 
     private ImageCraft imageCraft;
     private int height, width;
     private final int offset = 10;
     private boolean corner, vertical, horizontal;
     private Cursor cursor;
-    private final Cursor cursorE = new Cursor(Cursor.E_RESIZE_CURSOR);
+    private final Cursor cursorW = new Cursor(Cursor.W_RESIZE_CURSOR);
     private final Cursor cursorN = new Cursor(Cursor.N_RESIZE_CURSOR);
     private final Cursor cursorNW = new Cursor(Cursor.NW_RESIZE_CURSOR);
     private final Cursor cursorDefault = new Cursor(Cursor.DEFAULT_CURSOR);
