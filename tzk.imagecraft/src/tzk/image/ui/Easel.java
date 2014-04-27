@@ -42,10 +42,12 @@ public class Easel extends javax.swing.JPanel {
      * @deprecated 
      */
     public Easel() {
+        cursor = cursorDefault;
         initComponents();
     }
 
     public Easel(ImageCraft iC) {
+        cursor = cursorDefault;
         imageCraft = iC;
         initComponents();
     }
@@ -148,26 +150,33 @@ public class Easel extends javax.swing.JPanel {
      * @param evt 
      */
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        Cursor newCursor = null;
         if (evt.getX() > width - offset
                 && evt.getX() < width + (2 * offset)
                 && evt.getY() > (height / 2) - offset
                 && evt.getY() < (height / 2) + offset) {
             //right/horizontal
-            this.setCursor( new Cursor(Cursor.E_RESIZE_CURSOR));
+            newCursor = cursorE;
         } else if (evt.getY() > height - offset
                 && evt.getY() < height + (2 * offset)
                 && evt.getX() > (width / 2) - offset
                 && evt.getX() < (width / 2) + offset) {
             //bottom/vertical
-            this.setCursor( new Cursor(Cursor.N_RESIZE_CURSOR));
+            newCursor = cursorN;
         } else if (evt.getY() > height - offset
                 && evt.getY() < height + (2 * offset)
                 && evt.getX() > width - offset
                 && evt.getX() < width + (2 * offset)) {
             //corner
-            this.setCursor(new Cursor(Cursor.NW_RESIZE_CURSOR));
-        } else {
-            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            newCursor = cursorNW;
+        } else if (cursor != cursorDefault) {
+            // Only change to default if it is not already
+            newCursor = cursorDefault;
+        }
+        // Set newCursor
+        if (newCursor != cursor) {
+            cursor = newCursor;
+            this.setCursor(cursor);
         }
     }//GEN-LAST:event_formMouseMoved
 
@@ -241,6 +250,11 @@ public class Easel extends javax.swing.JPanel {
     private int height, width;
     private final int offset = 10;
     private boolean corner, vertical, horizontal;
+    private Cursor cursor;
+    private final Cursor cursorE = new Cursor(Cursor.E_RESIZE_CURSOR);
+    private final Cursor cursorN = new Cursor(Cursor.N_RESIZE_CURSOR);
+    private final Cursor cursorNW = new Cursor(Cursor.NW_RESIZE_CURSOR);
+    private final Cursor cursorDefault = new Cursor(Cursor.DEFAULT_CURSOR);
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
