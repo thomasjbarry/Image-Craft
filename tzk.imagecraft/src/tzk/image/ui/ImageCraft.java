@@ -106,7 +106,7 @@ public class ImageCraft extends javax.swing.JFrame {
         jColorSwatch = new ColorSwatch(this);
         jOval = new javax.swing.JToggleButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
+        jDesk = new javax.swing.JPanel();
         jEasel = new tzk.image.ui.Easel(this);
         drawingArea = new DrawingArea(this);
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -125,6 +125,7 @@ public class ImageCraft extends javax.swing.JFrame {
         jRedo = new javax.swing.JMenuItem();
         jFilter = new javax.swing.JMenu();
         jGrayscale = new javax.swing.JMenuItem();
+        jNegative = new javax.swing.JMenuItem();
         jHelp = new javax.swing.JMenu();
         jAbout = new javax.swing.JMenuItem();
 
@@ -295,7 +296,7 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jDesk.setBackground(new java.awt.Color(204, 204, 204));
 
         jEasel.setBackground(new java.awt.Color(210, 210, 230));
         jEasel.setToolTipText("");
@@ -320,22 +321,22 @@ public class ImageCraft extends javax.swing.JFrame {
                 .addContainerGap(105, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jDeskLayout = new javax.swing.GroupLayout(jDesk);
+        jDesk.setLayout(jDeskLayout);
+        jDeskLayout.setHorizontalGroup(
+            jDeskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 715, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDeskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jEasel, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jDeskLayout.setVerticalGroup(
+            jDeskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 405, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDeskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jEasel, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE))
         );
 
-        jScrollPane2.setViewportView(jPanel1);
+        jScrollPane2.setViewportView(jDesk);
 
         javax.swing.GroupLayout jRightPaneLayout = new javax.swing.GroupLayout(jRightPane);
         jRightPane.setLayout(jRightPaneLayout);
@@ -476,6 +477,14 @@ public class ImageCraft extends javax.swing.JFrame {
             }
         });
         jFilter.add(jGrayscale);
+
+        jNegative.setText("Negative");
+        jNegative.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jNegativeActionPerformed(evt);
+            }
+        });
+        jFilter.add(jNegative);
 
         jMenuBar1.add(jFilter);
 
@@ -692,6 +701,10 @@ public class ImageCraft extends javax.swing.JFrame {
         ovalShape.select();
     }//GEN-LAST:event_jOvalActionPerformed
 
+    private void jNegativeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jNegativeActionPerformed
+      currentLayer.addHistory("Negative");
+    }//GEN-LAST:event_jNegativeActionPerformed
+
      public BufferedImage newBlankImage() {
         return new BufferedImage(
                 (int) drawingArea.getPreferredSize().getWidth(),
@@ -818,6 +831,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JMenuItem jAbout;
     private javax.swing.JMenuItem jClose;
     public tzk.image.ui.ColorSwatch jColorSwatch;
+    protected javax.swing.JPanel jDesk;
     public javax.swing.JToggleButton jDraw;
     private tzk.image.ui.Easel jEasel;
     private javax.swing.JMenu jEdit;
@@ -832,10 +846,10 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jLayersPane;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jNegative;
     private javax.swing.JMenuItem jNew;
     private javax.swing.JMenuItem jOpen;
     public javax.swing.JToggleButton jOval;
-    private javax.swing.JPanel jPanel1;
     public javax.swing.JToggleButton jPick;
     private javax.swing.JMenuItem jQuit;
     public javax.swing.JToggleButton jRectangle;

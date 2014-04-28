@@ -3,30 +3,34 @@ Image-Craft
 
 Bugs:
 	LayerTree
-		doesn't repaint drawing area upon deleting first drawn SimpleHistory object
-		Undo/Redo no longer works properly
-			I think this might work properly now... What is properly?
-			Whatever it's doing, it's pretty sweet
-		History "Move Up"/"Move Down" is pretty funky
-
+		update finalImage of history objects: move up/down, delete
+			in its own method so we can call that method to rebuild the layers
 TODO:
 
 	ZACH:
-		LayerTree bugs
-
-	THOMAS: 
-		LayerTree bugs
-		LayerTree rename, drag&drop
-
-	DREW: 
 		IO.java:
 			ImageCraft format - See IO.imageCraftFormat
 
-	For anyone:
+	THOMAS: 
+		Filters - function to build all selected layers into copy BufferedImage
+		Background of drawingArea to checkerboard/crosshair/etc
 
-		Tools: Select, Crop, Resize (scale), Eraser, Zoom, Text, Draw (Penstrokes)
+	DREW: 
+		2/3 Pen strokes and 5 Filters(different types?)
 
+	High priority:
+		Other types of layouts
+	
+		Tools: Select, Crop,  Eraser (BufferedImageOp to selection? Change drawing type like clearRect?)
+
+	Low Priority:
+		Merge Down layers (merges to bottommost selected layer)
+		
+		Resize (scale),
+		
 		System Clipboard: Copy/Paste
+		
+		When resizing, draw currently selected layers as alpha to jDesk
 
 		Drag and Drop: How to modify the size/location of an object after creating it (shapes, pasting pictures, etc.)
 
@@ -34,4 +38,6 @@ TODO:
 
 		Anti-Aliasing
 		
+		LayerTree rename, drag&drop
+
 		Custom PopupDialog to allow for saving, exporting selections, specific layers, or all layers

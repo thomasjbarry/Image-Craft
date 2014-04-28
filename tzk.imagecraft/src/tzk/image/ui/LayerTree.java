@@ -693,7 +693,7 @@ public class LayerTree extends JTree {
         //Set the childNode to not allow children
         childNode.setAllowsChildren(false);
         //Insert the childNode into the tree
-        model.insertNodeInto(childNode, parentNode, 0);
+        model.insertNodeInto(childNode, parentNode, parentNode.getChildCount());
 
         //Add the childNode to the parentNode
         parentNode.add(childNode);

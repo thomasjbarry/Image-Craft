@@ -39,7 +39,8 @@ public class Easel extends javax.swing.JPanel {
 
     /**
      * Creates new form Easel
-     * @deprecated 
+     *
+     * @deprecated
      */
     public Easel() {
         cursor = cursorDefault;
@@ -126,7 +127,17 @@ public class Easel extends javax.swing.JPanel {
                 && evt.getX() < width + (2 * offset)) {
             //corner
             corner = true;
-        }        
+        }
+
+        //If a resize component is selected then draw the current drawing to the easel
+        if (horizontal || vertical || corner) {
+            this.getGraphics().drawImage(imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
+            imageCraft.jDesk.getGraphics().drawImage(imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
+            revalidate();
+            repaint();
+            imageCraft.jDesk.revalidate();
+            imageCraft.jDesk.repaint();
+        }
     }//GEN-LAST:event_formMousePressed
 
     /**
@@ -145,12 +156,11 @@ public class Easel extends javax.swing.JPanel {
         System.out.println("Drawing area resized: " + width + ", " + height);
     }//GEN-LAST:event_formMouseReleased
 
-    
     /**
-     * This sets the cursor to a drag cursor if it is above a resizer, it changes
-     * the cursor. Otherwise it just uses the default cursor.
-     * 
-     * @param evt 
+     * This sets the cursor to a drag cursor if it is above a resizer, it
+     * changes the cursor. Otherwise it just uses the default cursor.
+     *
+     * @param evt
      */
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
         Cursor newCursor = null;
@@ -184,10 +194,10 @@ public class Easel extends javax.swing.JPanel {
     }//GEN-LAST:event_formMouseMoved
 
     /**
-     * This resizes the drawing area and the easel when the resizers
-     * are dragged.
-     * 
-     * @param evt 
+     * This resizes the drawing area and the easel when the resizers are
+     * dragged.
+     *
+     * @param evt
      */
     private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
         if (horizontal) {
@@ -209,6 +219,7 @@ public class Easel extends javax.swing.JPanel {
     /**
      * I overrode the paintComponent method so that I could draw in the squares
      * that represent the resizers.
+     *
      * @param g
      */
     @Override
@@ -239,13 +250,13 @@ public class Easel extends javax.swing.JPanel {
         //Initialize the resized width and height
         int resizedWidth = (int) this.getPreferredSize().getWidth() + x;
         int resizedHeight = (int) this.getPreferredSize().getHeight() + y;
-        
+
         //Check that the resized width and height aren't smaller than the minimum values
-        resizedWidth = resizedWidth < imageCraft.drawingArea.getMinWidth() ?
-                imageCraft.drawingArea.getMinWidth() : resizedWidth;
-        resizedHeight = resizedHeight < imageCraft.drawingArea.getMinHeight() ?
-                imageCraft.drawingArea.getMinHeight() : resizedHeight;
-        
+        resizedWidth = resizedWidth < imageCraft.drawingArea.getMinWidth()
+                ? imageCraft.drawingArea.getMinWidth() : resizedWidth;
+        resizedHeight = resizedHeight < imageCraft.drawingArea.getMinHeight()
+                ? imageCraft.drawingArea.getMinHeight() : resizedHeight;
+
         //Update GUI
         this.setPreferredSize(new Dimension(resizedWidth, resizedHeight));
         this.revalidate();

@@ -31,14 +31,16 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ColorConvertOp;
+import java.awt.image.LookupOp;
+import java.awt.image.ShortLookupTable;
 import java.util.ArrayList;
 
 public class History {
 
     /**
      * Create new History image object. The History object stores the color of
-     * whatever change was made to the drawing area and any other information 
-     * needed to redraw for the undo history. 
+     * whatever change was made to the drawing area and any other information
+     * needed to redraw for the undo history.
      *
      * @param iC the ImageCraft to which the Layer object belongs
      * @param layer the Layer to which this History object belongs
@@ -91,14 +93,14 @@ public class History {
         layerObject = layer;
         actionImage = null;
         actionFilter = filterType;
-        
+
         //Increment the filterNum for this History's layerObject and set this
         //History object's name
         layerObject.setFilterNum((short) (layerObject.getFilterNum() + 1));
         historyName = filterType + " Object #" + layerObject.getFilterNum();
 
         //Filter the selected History objects and create the finalImage
-        filter(selected);        
+        filter(selected);
     }
 
     /**
@@ -107,7 +109,7 @@ public class History {
     private void createFinalImage() {
         // Get the most recent snapshot
         BufferedImage lastImage = layerObject.getLastSnapshot();
-        
+
         //If this History object is not a filter it has an actionImage;
         //Draw this actionImage to the lastImage and set it as this finalImage
         if (actionImage != null) {
@@ -117,11 +119,11 @@ public class History {
     }
 
     /**
-     * This method redraws the historyobject. If you press ctrl z this method is 
+     * This method redraws the historyobject. If you press ctrl z this method is
      * called to redraw the history object.
-     * 
+     *
      * @param image pass in the drawing area so that the undo history draws
-     *              draws to the current drawing. 
+     * draws to the current drawing.
      */
     protected void draw(BufferedImage image) {
         Graphics drawGraphics = image.getGraphics();
@@ -129,15 +131,19 @@ public class History {
         drawGraphics.dispose();
     }
 
-    
     /**
-     * The method adds filters to all the other drawn actions in the drawing area.
-     * @param selected 
+     * The method adds filters to all the other drawn actions in the drawing
+     * area.
+     *
+     * @param selected
      */
     private void filter(ArrayList<History> selected) {
         switch (actionFilter) {
             case "Grayscale":
                 grayScale(selected);
+                break;
+            case "Negative":
+                negative(selected);
                 break;
             default:
                 break;
@@ -154,12 +160,12 @@ public class History {
         //new BufferedImageOp (filter) to change the color of a BufferedImage to
         //a grayscale image
         BufferedImageOp grayScaleOp = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-        
+
         //Make a new blank image to copy the History objects to, in order to make
         //a finalImage for this History object.
         BufferedImage copy = imageCraft.newBlankImage();
         Graphics copyGraphics = copy.getGraphics();
-        
+
         //For each historyObj in the selected ArrayList apply the grayScaleOp to
         //its actionImage , then draw it (whether it was filtered or not) to copy
         //If a historyObj is not in the selected, or it is a filter history object
@@ -174,6 +180,44 @@ public class History {
             }
         }
         //Set this history's finalImage to copy
+        this.finalImage = copy;
+    }
+
+    /**
+     * Applies negative filter to layer. 
+     * 
+     * @param selected array of history objects that will be negative'd
+     */
+    private void negative(ArrayList<History> selected) {
+
+        short[] red = new short[256];
+        short[] green = new short[256];
+        short[] blue = new short[256];
+        short[] alpha = new short[256];
+
+        for (int i = 0; i < 256; i++) {
+            alpha[i] = (short) i;
+            red[i] = green[i] = blue[i] = (short) (255 - i);
+        }
+
+        short[][] lookup = {red, green, blue, alpha};
+
+        BufferedImageOp negativeOp = new LookupOp(new ShortLookupTable(0, lookup), null);
+
+        BufferedImage copy = imageCraft.newBlankImage();
+        Graphics copyGraphics = copy.getGraphics();
+        
+        
+        for (History historyObj : layerObject.getHistoryArray()) {
+            if (selected.contains(historyObj) && historyObj.actionImage != null) {
+                copyGraphics.drawImage(
+                        negativeOp.filter(historyObj.actionImage, historyObj.actionImage),
+                        0, 0, null);
+            } else {
+                copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
+            }
+        }
+
         this.finalImage = copy;
     }
 
