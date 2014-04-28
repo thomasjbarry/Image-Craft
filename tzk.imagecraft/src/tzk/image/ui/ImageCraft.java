@@ -126,6 +126,8 @@ public class ImageCraft extends javax.swing.JFrame {
         jFilter = new javax.swing.JMenu();
         jGrayscale = new javax.swing.JMenuItem();
         jNegative = new javax.swing.JMenuItem();
+        jSharpen = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jHelp = new javax.swing.JMenu();
         jAbout = new javax.swing.JMenuItem();
 
@@ -486,6 +488,22 @@ public class ImageCraft extends javax.swing.JFrame {
         });
         jFilter.add(jNegative);
 
+        jSharpen.setText("Sharpen");
+        jSharpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSharpenActionPerformed(evt);
+            }
+        });
+        jFilter.add(jSharpen);
+
+        jMenuItem1.setText("Blur");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jFilter.add(jMenuItem1);
+
         jMenuBar1.add(jFilter);
 
         jHelp.setText("Help");
@@ -705,6 +723,14 @@ public class ImageCraft extends javax.swing.JFrame {
       currentLayer.addHistory("Negative");
     }//GEN-LAST:event_jNegativeActionPerformed
 
+    private void jSharpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSharpenActionPerformed
+    currentLayer.addHistory("Sharpen");
+    }//GEN-LAST:event_jSharpenActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        currentLayer.addHistory("Blur");
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
      public BufferedImage newBlankImage() {
         return new BufferedImage(
                 (int) drawingArea.getPreferredSize().getWidth(),
@@ -846,6 +872,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jLayersPane;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jNegative;
     private javax.swing.JMenuItem jNew;
     private javax.swing.JMenuItem jOpen;
@@ -860,6 +887,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     protected javax.swing.JCheckBox jSelectAllLayers;
+    private javax.swing.JMenuItem jSharpen;
     public javax.swing.JComboBox jSize;
     private javax.swing.JSplitPane jSplitPane;
     private javax.swing.JPanel jToolBar;

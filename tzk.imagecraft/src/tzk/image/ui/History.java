@@ -23,6 +23,9 @@
 package tzk.image.ui;
 
 /**
+ * This class holds information about all actions done to the project. It also
+ * holds the filters
+ *
  *
  * @author Thomas
  */
@@ -31,6 +34,8 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ColorConvertOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.awt.image.LookupOp;
 import java.awt.image.ShortLookupTable;
 import java.util.ArrayList;
@@ -145,6 +150,10 @@ public class History {
             case "Negative":
                 negative(selected);
                 break;
+            case "Sharpen":
+                sharpen(selected);
+            case "Blur":
+                blur(selected);
             default:
                 break;
         }
@@ -184,8 +193,8 @@ public class History {
     }
 
     /**
-     * Applies negative filter to layer. 
-     * 
+     * Applies negative filter to layer.
+     *
      * @param selected array of history objects that will be negative'd
      */
     private void negative(ArrayList<History> selected) {
@@ -206,12 +215,61 @@ public class History {
 
         BufferedImage copy = imageCraft.newBlankImage();
         Graphics copyGraphics = copy.getGraphics();
-        
-        
+
         for (History historyObj : layerObject.getHistoryArray()) {
             if (selected.contains(historyObj) && historyObj.actionImage != null) {
                 copyGraphics.drawImage(
                         negativeOp.filter(historyObj.actionImage, historyObj.actionImage),
+                        0, 0, null);
+            } else {
+                copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
+            }
+        }
+
+        this.finalImage = copy;
+    }
+
+    private void sharpen(ArrayList<History> selected) {
+        float[] sharpKernel = {
+            0.0f, -1.0f, 0.0f,
+            -1.0f, 5.0f, -1.0f,
+            0.0f, -1.0f, 0.0f
+        };
+        BufferedImageOp sharpenOp = new ConvolveOp(new Kernel(3, 3, sharpKernel),
+                ConvolveOp.EDGE_NO_OP, null);
+
+        BufferedImage copy = imageCraft.newBlankImage();
+        Graphics copyGraphics = copy.getGraphics();
+
+        for (History historyObj : layerObject.getHistoryArray()) {
+            if (selected.contains(historyObj) && historyObj.actionImage != null) {
+                copyGraphics.drawImage(
+                        sharpenOp.filter(historyObj.actionImage, null),
+                        0, 0, null);
+            } else {
+                copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
+            }
+        }
+
+        this.finalImage = copy;
+    }
+
+    private void blur(ArrayList<History> selected) {
+        float ninth = 1.0f / 9.0f;
+        float[] blurKernel = {
+            ninth, ninth, ninth,
+            ninth, ninth, ninth,
+            ninth, ninth, ninth
+        };
+        BufferedImageOp blurOp = new ConvolveOp(new Kernel(3, 3, blurKernel));
+
+        BufferedImage copy = imageCraft.newBlankImage();
+        Graphics copyGraphics = copy.getGraphics();
+
+        for (History historyObj : layerObject.getHistoryArray()) {
+            if (selected.contains(historyObj) && historyObj.actionImage != null) {
+                copyGraphics.drawImage(
+                        blurOp.filter(historyObj.actionImage, null),
                         0, 0, null);
             } else {
                 copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);

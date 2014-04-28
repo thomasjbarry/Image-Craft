@@ -24,6 +24,8 @@ TODO:
 		Tools: Select, Crop,  Eraser (BufferedImageOp to selection? Change drawing type like clearRect?)
 
 	Low Priority:
+		import/open file needs to be converted to ARGB
+
 		Merge Down layers (merges to bottommost selected layer)
 		
 		Resize (scale),
