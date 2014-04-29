@@ -841,7 +841,7 @@ public class LayerTree extends JTree {
      *
      * @return ArrayList<int[]>
      */
-    protected ArrayList<int[]> getSelected() {
+    public ArrayList<int[]> getSelected() {
         //Initialize ArrayList<int[]> to return
         ArrayList<int[]> selected = new ArrayList<>();
 

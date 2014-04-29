@@ -65,7 +65,7 @@ public class Layer {
         }
     }
 
-    protected BufferedImage getLastSnapshot() {
+    public BufferedImage getLastSnapshot() {
         int size = historyArray.size();
         if (size > 0) {
             // Return a copy of the last snapshot

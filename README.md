@@ -12,8 +12,7 @@ TODO:
 			ImageCraft format - See IO.imageCraftFormat
 
 	THOMAS: 
-		Filters - function to build all selected layers into copy BufferedImage
-		Background of drawingArea to checkerboard/crosshair/etc
+		LayerTree bug
 
 	DREW: 
 		2/3 Pen strokes and 5 Filters(different types?)
@@ -21,11 +20,9 @@ TODO:
 	High priority:
 		Other types of layouts
 	
-		Tools: Select, Crop,  Eraser (BufferedImageOp to selection? Change drawing type like clearRect?)
+		Tools: Select, Eraser (BufferedImageOp to selection? Change drawing type like clearRect?)
 
 	Low Priority:
-		import/open file needs to be converted to ARGB
-
 		Merge Down layers (merges to bottommost selected layer)
 		
 		Resize (scale),

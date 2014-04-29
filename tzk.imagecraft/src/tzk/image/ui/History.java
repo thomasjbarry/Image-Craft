@@ -240,11 +240,11 @@ public class History {
         this.finalImage = copy;
     }
 
-    protected BufferedImage getActionImage() {
+    public BufferedImage getActionImage() {
         return this.actionImage;
     }
 
-    protected void setActionImage(BufferedImage image) {
+    public void setActionImage(BufferedImage image) {
         this.actionImage = image;
     }
 
@@ -252,11 +252,11 @@ public class History {
         return this.actionFilter;
     }
 
-    protected BufferedImage getFinalImage() {
+    public BufferedImage getFinalImage() {
         return this.finalImage;
     }
 
-    protected void setFinalImage(BufferedImage image) {
+    public void setFinalImage(BufferedImage image) {
         this.finalImage = image;
     }
 

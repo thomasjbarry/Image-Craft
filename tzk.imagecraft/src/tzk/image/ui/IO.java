@@ -25,14 +25,9 @@ package tzk.image.ui;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Graphics;
-import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -257,16 +252,26 @@ public class IO {
 
     private void readFile(File file, ImageCraft iC, boolean newIC) {
         try {
+            //The layer we're importing/opening the file to
             Layer layer = newIC ? new Layer(iC) : iC.currentLayer;
-            BufferedImage bufferedFile = ImageIO.read(file);
+            
+            //Read the file and then draw it to a BufferedImage of TYPE_INT_ARGB
+            //This guarantees that the file has an alpha (JPG's do not)
+            BufferedImage readFile = ImageIO.read(file);
+            BufferedImage bufferedFile = new BufferedImage(readFile.getWidth(),
+                    readFile.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            bufferedFile.getGraphics().drawImage(readFile, 0, 0, null);
 
-            //If the bufferedFile is too big resize it
+            //If the bufferedFile is too big resize the Drawing Area
             if (bufferedFile.getWidth() > imageCraft.drawingArea.getWidth()
                     || bufferedFile.getHeight() > imageCraft.drawingArea.getHeight()) {
                 iC.drawingArea.resizeDrawing(
                         bufferedFile.getWidth() - iC.drawingArea.getWidth(),
                         bufferedFile.getHeight() - iC.drawingArea.getHeight());
             }
+            
+            //Create a new history object for the imported image and add it to
+            //the layer
             layer.addHistory(bufferedFile, "Imported Image");
             iC.drawingArea.repaint();
         } catch (IOException err) {

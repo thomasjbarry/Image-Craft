@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import tzk.image.tool.Crop;
 import tzk.image.tool.Draw;
 import tzk.image.tool.Fill;
 import tzk.image.tool.PickAColor;
@@ -66,12 +67,13 @@ public class ImageCraft extends javax.swing.JFrame {
         // Update the title
         setTitle();
 
-        // Initiate ImageCraft tools
+        // Initiatalize ImageCraft tools
         drawTool = new Draw(this);
         fillTool = new Fill(this);
         rectangleShape = new Shapes(this, "Rectangle");
         ovalShape = new Shapes(this, "Oval");
         pickAColor = new PickAColor(this);
+        cropTool = new Crop(this);
 
         // Select default tool
         drawTool.select();
@@ -105,6 +107,7 @@ public class ImageCraft extends javax.swing.JFrame {
         jSize = new javax.swing.JComboBox();
         jColorSwatch = new ColorSwatch(this);
         jOval = new javax.swing.JToggleButton();
+        jCrop = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jDesk = new javax.swing.JPanel();
         jEasel = new tzk.image.ui.Easel(this);
@@ -255,6 +258,13 @@ public class ImageCraft extends javax.swing.JFrame {
             }
         });
 
+        jCrop.setText("Crop");
+        jCrop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCropActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jToolBarLayout = new javax.swing.GroupLayout(jToolBar);
         jToolBar.setLayout(jToolBarLayout);
         jToolBarLayout.setHorizontalGroup(
@@ -272,6 +282,8 @@ public class ImageCraft extends javax.swing.JFrame {
                     .addComponent(jOval, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSize, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jCrop, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jColorSwatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -285,6 +297,7 @@ public class ImageCraft extends javax.swing.JFrame {
                     .addComponent(jFill, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jDraw, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPick, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCrop, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jToolBarLayout.createSequentialGroup()
                         .addGroup(jToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jToolBarLayout.createSequentialGroup()
@@ -731,6 +744,10 @@ public class ImageCraft extends javax.swing.JFrame {
         currentLayer.addHistory("Blur");
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jCropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCropActionPerformed
+        cropTool.select();
+    }//GEN-LAST:event_jCropActionPerformed
+
      public BufferedImage newBlankImage() {
         return new BufferedImage(
                 (int) drawingArea.getPreferredSize().getWidth(),
@@ -834,13 +851,13 @@ public class ImageCraft extends javax.swing.JFrame {
 
     //Number of New Layers, List of all layers, currently selected layer
     protected int numLayer;
-    protected ArrayList<Layer> layerList;
+    public ArrayList<Layer> layerList;
     public Layer currentLayer;
 
     // Current tool selected
     public SimpleTool currentTool = null;
     // All available tools
-    public SimpleTool drawTool, fillTool, rectangleShape, ovalShape, pickAColor;
+    public SimpleTool drawTool, fillTool, rectangleShape, ovalShape, pickAColor, cropTool;
 
     // Name of the current file
     public String currentTitle = "Untitled";
@@ -857,6 +874,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JMenuItem jAbout;
     private javax.swing.JMenuItem jClose;
     public tzk.image.ui.ColorSwatch jColorSwatch;
+    public javax.swing.JButton jCrop;
     protected javax.swing.JPanel jDesk;
     public javax.swing.JToggleButton jDraw;
     private tzk.image.ui.Easel jEasel;
@@ -892,7 +910,7 @@ public class ImageCraft extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane;
     private javax.swing.JPanel jToolBar;
     private javax.swing.JMenuItem jUndo;
-    protected tzk.image.ui.LayerTree layerTree;
+    public tzk.image.ui.LayerTree layerTree;
     private javax.swing.JButton newLayer;
     // End of variables declaration//GEN-END:variables
 }
