@@ -45,8 +45,8 @@ public class Shapes extends SimpleTool {
 
         imageCraft = iC;
         shapeType = shape;
-        penWidth = 1;
-        penIndex = 0;
+        penWidth = 2;
+        penIndex = 1;
         
         switch (shapeType) {
             case "Rectangle":

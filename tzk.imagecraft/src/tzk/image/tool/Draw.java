@@ -47,7 +47,7 @@ public class Draw extends SimpleTool {
 
         imageCraft = iC;
         penStroke = "src/tzk/image/img/standardPen_1.png";
-        penIndex = 0;        
+        penIndex = 1;        
 
         super.setButton(imageCraft.jDraw);
     }

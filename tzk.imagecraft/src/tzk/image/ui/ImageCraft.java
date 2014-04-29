@@ -824,7 +824,7 @@ public class ImageCraft extends javax.swing.JFrame {
     // Variables declaration
     // Make colors accessible to other packages
     public Color primaryColor = Color.black;
-    public Color secondaryColor = Color.green;
+    public Color secondaryColor = Color.white;
 
     // Whether all *layers* are selected within LayerTree
     protected boolean selectedAll;
