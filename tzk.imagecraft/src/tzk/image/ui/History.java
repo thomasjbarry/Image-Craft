@@ -105,7 +105,22 @@ public class History {
         historyName = filterType + " Object #" + layerObject.getFilterNum();
 
         //Filter the selected History objects and create the finalImage
-        filter(selected);
+        switch (actionFilter) {
+            case "Grayscale":
+                grayScale(selected);
+                break;
+            case "Negative":
+                negative(selected);
+                break;
+            case "Sharpen":
+                sharpen(selected);
+                break;
+            case "Blur":
+                blur(selected);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -137,59 +152,17 @@ public class History {
     }
 
     /**
-     * The method adds filters to all the other drawn actions in the drawing
-     * area.
-     *
-     * @param selected
-     */
-    private void filter(ArrayList<History> selected) {
-        switch (actionFilter) {
-            case "Grayscale":
-                grayScale(selected);
-                break;
-            case "Negative":
-                negative(selected);
-                break;
-            case "Sharpen":
-                sharpen(selected);
-            case "Blur":
-                blur(selected);
-            default:
-                break;
-        }
-    }
-
-    /**
      * Grayscale filter applied to all History objects before this object in
      * layerObject's HistoryArray.
      *
      * @param selected
      */
-    protected void grayScale(ArrayList<History> selected) {
+    private void grayScale(ArrayList<History> selected) {
         //new BufferedImageOp (filter) to change the color of a BufferedImage to
         //a grayscale image
         BufferedImageOp grayScaleOp = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
 
-        //Make a new blank image to copy the History objects to, in order to make
-        //a finalImage for this History object.
-        BufferedImage copy = imageCraft.newBlankImage();
-        Graphics copyGraphics = copy.getGraphics();
-
-        //For each historyObj in the selected ArrayList apply the grayScaleOp to
-        //its actionImage , then draw it (whether it was filtered or not) to copy
-        //If a historyObj is not in the selected, or it is a filter history object
-        //then don't apply the filter.
-        for (History historyObj : layerObject.getHistoryArray()) {
-            if (selected.contains(historyObj) && historyObj.actionImage != null) {
-                copyGraphics.drawImage(
-                        grayScaleOp.filter(historyObj.actionImage, historyObj.actionImage),
-                        0, 0, null);
-            } else {
-                copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
-            }
-        }
-        //Set this history's finalImage to copy
-        this.finalImage = copy;
+        applyFilter(grayScaleOp, selected);
     }
 
     /**
@@ -199,34 +172,19 @@ public class History {
      */
     private void negative(ArrayList<History> selected) {
 
-        short[] red = new short[256];
-        short[] green = new short[256];
-        short[] blue = new short[256];
-        short[] alpha = new short[256];
+        short[] normal = new short[256];
+        short[] reverse = new short[256];
 
         for (int i = 0; i < 256; i++) {
-            alpha[i] = (short) i;
-            red[i] = green[i] = blue[i] = (short) (255 - i);
+            normal[i] = (short) i;
+            reverse[i] = (short) (255 - i);
         }
 
-        short[][] lookup = {red, green, blue, alpha};
+        short[][] lookup = {reverse, reverse, reverse, normal};
 
         BufferedImageOp negativeOp = new LookupOp(new ShortLookupTable(0, lookup), null);
 
-        BufferedImage copy = imageCraft.newBlankImage();
-        Graphics copyGraphics = copy.getGraphics();
-
-        for (History historyObj : layerObject.getHistoryArray()) {
-            if (selected.contains(historyObj) && historyObj.actionImage != null) {
-                copyGraphics.drawImage(
-                        negativeOp.filter(historyObj.actionImage, historyObj.actionImage),
-                        0, 0, null);
-            } else {
-                copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
-            }
-        }
-
-        this.finalImage = copy;
+        applyFilter(negativeOp, selected);
     }
 
     private void sharpen(ArrayList<History> selected) {
@@ -238,20 +196,7 @@ public class History {
         BufferedImageOp sharpenOp = new ConvolveOp(new Kernel(3, 3, sharpKernel),
                 ConvolveOp.EDGE_NO_OP, null);
 
-        BufferedImage copy = imageCraft.newBlankImage();
-        Graphics copyGraphics = copy.getGraphics();
-
-        for (History historyObj : layerObject.getHistoryArray()) {
-            if (selected.contains(historyObj) && historyObj.actionImage != null) {
-                copyGraphics.drawImage(
-                        sharpenOp.filter(historyObj.actionImage, null),
-                        0, 0, null);
-            } else {
-                copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
-            }
-        }
-
-        this.finalImage = copy;
+        applyFilter(sharpenOp, selected);
     }
 
     private void blur(ArrayList<History> selected) {
@@ -263,19 +208,35 @@ public class History {
         };
         BufferedImageOp blurOp = new ConvolveOp(new Kernel(3, 3, blurKernel));
 
+        applyFilter(blurOp, selected);
+    }
+
+    private void applyFilter(BufferedImageOp op, ArrayList<History> selected) {
+        //Make a blank BufferedImage to hold the new filtered image
         BufferedImage copy = imageCraft.newBlankImage();
         Graphics copyGraphics = copy.getGraphics();
 
-        for (History historyObj : layerObject.getHistoryArray()) {
-            if (selected.contains(historyObj) && historyObj.actionImage != null) {
-                copyGraphics.drawImage(
-                        blurOp.filter(historyObj.actionImage, null),
-                        0, 0, null);
-            } else {
-                copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
-            }
-        }
-
+        //For each History object in this layers HistoryArray, if its in the
+        //selection to be filtered and it isn't a filter itself, draw the 
+        //filtered version of that History object to the copy. Else draw the
+        //unfiltered version of that History object to the copy.
+//        for (History historyObj : layerObject.getHistoryArray()) {
+//            if (historyObj.actionImage == null) {
+//            } else {
+//                if (selected.contains(historyObj)) {
+//                    copyGraphics.drawImage(
+//                            op.filter(historyObj.actionImage, null),
+//                            0, 0, null);
+//                } else {
+//                    copyGraphics.drawImage(historyObj.actionImage, 0, 0, null);
+//                }
+//            }
+//        }
+        copyGraphics.drawImage(op.filter(layerObject.getLastSnapshot(),null), 0, 0, null);
+        
+        //Clean up resources and set this History object's finalImage to the
+        //now filtered image
+        copyGraphics.dispose();
         this.finalImage = copy;
     }
 
