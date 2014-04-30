@@ -203,6 +203,16 @@ public class Draw extends SimpleTool {
         return new Point(x, y);
     }
 
+    /**
+     * SetPenColor takes an image and if the background is white enough, it will
+     * use the non-white part of the picture as the brush stroke. This will allow
+     * users to use any picture with a white background as a pen. 
+     * 
+     * 
+     * @param image
+     * @param color
+     * @return 
+     */
     private BufferedImage setPenColor(BufferedImage image, Color color) {
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
