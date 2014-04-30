@@ -233,10 +233,15 @@ public class ImageCraft extends javax.swing.JFrame {
             }
         });
 
-        jSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pen Width: 1", "Pen Width: 2", "Pen Width: 5" }));
+        jSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pen Width: 1", "Pen Width: 2", "Pen Width: 5", "Caligraphy" }));
         jSize.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jSizeItemStateChanged(evt);
+            }
+        });
+        jSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSizeActionPerformed(evt);
             }
         });
 
@@ -709,9 +714,12 @@ public class ImageCraft extends javax.swing.JFrame {
             } else if (jSize.getSelectedIndex() == 1) {
                 currentTool.setPenStroke("src/tzk/image/img/standardPen_2.png");
                 currentTool.setPenWidth(2);                
-            }else {
+            } else if (jSize.getSelectedIndex() == 2){
                 currentTool.setPenStroke("src/tzk/image/img/standardPen_5.png");
                 currentTool.setPenWidth(5);               
+            } else {
+                currentTool.setPenStroke("src/tzk/image/img/caligraphy_1.png");
+                currentTool.setPenWidth(5);
             }           
         }
     }//GEN-LAST:event_jSizeItemStateChanged
@@ -747,6 +755,10 @@ public class ImageCraft extends javax.swing.JFrame {
     private void jCropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCropActionPerformed
         cropTool.select();
     }//GEN-LAST:event_jCropActionPerformed
+
+    private void jSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSizeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jSizeActionPerformed
 
      public BufferedImage newBlankImage() {
         return new BufferedImage(

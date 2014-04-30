@@ -47,7 +47,7 @@ public class Draw extends SimpleTool {
 
         imageCraft = iC;
         penStroke = "src/tzk/image/img/standardPen_1.png";
-        penIndex = 1;        
+        penIndex = 1;
 
         super.setButton(imageCraft.jDraw);
     }
@@ -100,15 +100,20 @@ public class Draw extends SimpleTool {
 
         //Try to open the penStroke file and set the penColor to the toColor
         try {
-            BufferedImage initialPen = ImageIO.read(
-                    new File(penStroke));
-            pen = setPenColor(initialPen, toColor);
+  
+            
+
+            BufferedImage readFile = ImageIO.read(new File(penStroke));
+            BufferedImage bufferedFile = new BufferedImage(readFile.getWidth(),
+                    readFile.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            bufferedFile.getGraphics().drawImage(readFile, 0, 0, null);
+            pen = setPenColor(bufferedFile, toColor);
         } catch (IOException err) {
             System.out.println("Not a real image..."); // You shmuck
             pen = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB, null);
         }
-        
-        imageGraphics.drawImage(pen, x, y, null);        
+
+        imageGraphics.drawImage(pen, x, y, null);
 
         //Store these mouse coordinates as the previous point
         prevX = x;
@@ -178,7 +183,7 @@ public class Draw extends SimpleTool {
         drawingGraphics.dispose();
         imageGraphics.dispose();
     }
-    
+
     private Point adjustBorderPoints(short x, short y) {
         //If we dragged the mouse outside of the JPanel
         //Set the x/y value to the border value
@@ -199,26 +204,16 @@ public class Draw extends SimpleTool {
     }
 
     private BufferedImage setPenColor(BufferedImage image, Color color) {
-        //Creates short arrays to represent all possible values of Color components
-        short[] red = new short[256];
-        short[] green = new short[256];
-        short[] blue = new short[256];
-        short[] alpha = new short[256];
-        
-        //Set the values of each possible value with the value corresponding the the color
-        for (int i = 0; i < 256; i++) {
-            red[i] = (short) color.getRed();
-            green[i] = (short) color.getGreen();
-            blue[i] = (short) color.getBlue();
-            alpha[i] = (short) color.getAlpha();
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                if (Color.WHITE.getRGB() - image.getRGB(x, y) < 50) {
+                    image.setRGB(x, y, blackTransparent);
+                } else {
+                    image.setRGB(x, y, color.getRGB());
+                }
+            }
         }
-
-        //2D short array to be used as a LookupTable to determine the color
-        short[][] penColor = new short[][]{red, green, blue, alpha};
-        //new BufferedImageOp (filter) to change the color of a BufferedImage
-        BufferedImageOp penColorOp = new LookupOp(new ShortLookupTable(0, penColor), null);
-        //return the passed BufferedImage after being filtered by the penColorOp
-        return penColorOp.filter(image, image);
+        return image;
     }
 
     @Override
@@ -238,9 +233,12 @@ public class Draw extends SimpleTool {
                 break;
             case "src/tzk/image/img/standardPen_2.png":
                 penIndex = 1;
-                break;        
-            default:
+                break;
+            case "src/tzk/image/img/standardPen_5.png":
                 penIndex = 2;
+                break;
+            case "src/tzk/image/img/caligraphy_1.png":
+                penIndex = 3;
                 break;
         }
     }
@@ -249,14 +247,14 @@ public class Draw extends SimpleTool {
         //The range of X and Y
         int deltaX = x2 - x1;
         int deltaY = y2 - y1;
-        
+
         //Assign the numerator and denomerator of the slope of the line
         //so that it is in the range [-1,1]
         int slopeDenom = Math.max(Math.abs(deltaX), Math.abs(deltaY));
-        int slopeNumer = Math.min(Math.abs(deltaX), Math.abs(deltaY)); 
-        
+        int slopeNumer = Math.min(Math.abs(deltaX), Math.abs(deltaY));
+
         //The signs of the slopes depending on the octet that the line is in
-        int dX1, dY1, dX2, dY2;        
+        int dX1, dY1, dX2, dY2;
 
         //Assigns the signs of the slopes according to the octet the line is in
         dX1 = (int) Math.signum(deltaX);
@@ -271,10 +269,10 @@ public class Draw extends SimpleTool {
         for (int i = 0; i <= slopeDenom; i++) {
             //Draw current pixel with current pen image
             imageGraphics.drawImage(pen, x1, y1, null);
-            
+
             //update the error value with the slope numerator            
             error += slopeNumer;
-            
+
             //If the slope is not in the range [-1,1] then subtract 1 from the
             // absolute value of the slope and then add appropriate dX&dY values
             //Else the slope is in range [-1,1] then add appropiate dX&dY values
@@ -287,17 +285,19 @@ public class Draw extends SimpleTool {
                 y1 += dY2;
             }
         }
-    }    
+    }
 
     // Variables declaration
     private final ImageCraft imageCraft;
 
+    private static int alpha = 0, red = 0, green = 0, blue = 0;
+    private static int blackTransparent = (alpha << 24) | (red << 16) | (green << 8) | blue;
     private Graphics drawingGraphics, imageGraphics;
     private boolean dragging, rightButton;
     private BufferedImage currentDrawing;
     private short prevX, prevY;
     private BufferedImage pen;
-    private String penStroke;    
+    private String penStroke;
     private int penIndex;
     // End of variables declaration
 }
