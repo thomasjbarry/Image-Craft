@@ -15,7 +15,8 @@ TODO:
 		LayerTree bug
 
 	DREW: 
-		2/3 Pen strokes and 5 Filters(different types?)
+		Scale filter: SimpleTool method => Resizing Penstrokes && Resize Tool
+		Importing image as penstroke
 
 	High priority:
 		Other types of layouts
@@ -24,8 +25,6 @@ TODO:
 
 	Low Priority:
 		Merge Down layers (merges to bottommost selected layer)
-		
-		Resize (scale),
 		
 		System Clipboard: Copy/Paste
 		
@@ -40,3 +39,5 @@ TODO:
 		LayerTree rename, drag&drop
 
 		Custom PopupDialog to allow for saving, exporting selections, specific layers, or all layers
+
+		Stamp Tool
