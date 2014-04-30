@@ -127,10 +127,12 @@ public class DrawingArea extends javax.swing.JPanel {
                 // One could potentially add this actionImage to the finalImage 
                 // of the last simpleHistory element to get this simpleHistory
                 // object's finalImage
-                historyObj.setActionImage(imageCraft.resize(historyObj.getActionImage(), resizedWidth, resizedHeight));
+                if (historyObj.getActionImage() != null) {
+                    historyObj.setActionImage(imageCraft.resize(historyObj.getActionImage(), resizedWidth, resizedHeight));
+                }
             }
         }
-        
+
         // Update this Drawing Area's size, background, and display it properly
         this.setPreferredSize(new Dimension(resizedWidth, resizedHeight));
         this.updateBackground();
@@ -173,10 +175,10 @@ public class DrawingArea extends javax.swing.JPanel {
                 imageCraft.layerTree.getClickedHistory(selectedIndex).draw(currentDrawing);
             }
         }
-        
+
         //Draws the backgroundImage onto this DrawingArea
         g.drawImage(backgroundImage, 0, 0, null);
-        
+
         //Draws the current drawing on top of the background
         g.drawImage(currentDrawing, 0, 0, this);
 
@@ -190,22 +192,22 @@ public class DrawingArea extends javax.swing.JPanel {
     /**
      * Updates the background image to the size of this DrawingArea.
      */
-    private void updateBackground(){
+    private void updateBackground() {
         //Create a new blank image the size of this DrawingArea
         backgroundImage = new BufferedImage(
                 (int) this.getPreferredSize().getWidth(),
                 (int) this.getPreferredSize().getHeight(),
                 BufferedImage.TYPE_INT_ARGB);
-        
+
         //Background Image's graphics
         Graphics bgGraphics = backgroundImage.getGraphics();
-        
+
         //Sets the background of the drawing area to a grid of light/dark gray
         //squares to indicate that it is transparent        
         for (int x = 0; x < this.getPreferredSize().getWidth(); x += 10) {
             for (int y = 0; y < this.getPreferredSize().getHeight(); y += 10) {
-                Color shapeColor = (x + y) % 20 == 0 ? 
-                        new Color(85,85,85,175) : new Color(170,170,170,175);
+                Color shapeColor = (x + y) % 20 == 0
+                        ? new Color(85, 85, 85, 175) : new Color(170, 170, 170, 175);
                 bgGraphics.setColor(shapeColor);
                 bgGraphics.fillRect(x, y, 10, 10);
             }
@@ -213,7 +215,7 @@ public class DrawingArea extends javax.swing.JPanel {
         //Free resources for background's graphics
         bgGraphics.dispose();
     }
-    
+
     public BufferedImage getCurrentDrawing() {
         return this.currentDrawing;
     }
