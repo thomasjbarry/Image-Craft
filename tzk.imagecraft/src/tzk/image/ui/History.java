@@ -81,7 +81,7 @@ public class History {
         }
         historyName = historyType + " Object #" + historyNum;
         System.out.println("New History in " + this.layerObject.getLayerName() + ": " + historyName);
-        createFinalImage();
+        createFinalImage(layerObject.getHistoryArray().size());
     }
 
     /**
@@ -125,10 +125,16 @@ public class History {
 
     /**
      * Create snapshot of finalImage.
+     * @param index index of the history object to create a final image for
      */
-    private void createFinalImage() {
+    private void createFinalImage(int index) {
         // Get the most recent snapshot
-        BufferedImage lastImage = layerObject.getLastSnapshot();
+        BufferedImage lastImage;
+        if (index > 0) {
+            lastImage = layerObject.getSnapshot(index - 1);
+        } else {
+            lastImage = imageCraft.newBlankImage();
+        }
 
         //If this History object is not a filter it has an actionImage;
         //Draw this actionImage to the lastImage and set it as this finalImage
@@ -136,6 +142,13 @@ public class History {
             finalImage = lastImage;
             finalImage.getGraphics().drawImage(actionImage, 0, 0, null);
         }
+    }
+    
+    /**
+     * Updates the final image for this history object.
+     */
+    protected void updateFinalImage() {
+        this.createFinalImage(layerObject.getHistoryArray().indexOf(this));
     }
 
     /**
@@ -232,7 +245,7 @@ public class History {
 //                }
 //            }
 //        }
-        copyGraphics.drawImage(op.filter(layerObject.getLastSnapshot(),null), 0, 0, null);
+        copyGraphics.drawImage(op.filter(layerObject.getSnapshot(layerObject.getHistoryArray().indexOf(this)),null), 0, 0, null);
         
         //Clean up resources and set this History object's finalImage to the
         //now filtered image

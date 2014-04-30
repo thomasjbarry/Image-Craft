@@ -65,11 +65,10 @@ public class Layer {
         }
     }
 
-    public BufferedImage getLastSnapshot() {
-        int size = historyArray.size();
-        if (size > 0) {
+    public BufferedImage getSnapshot(int index) {
+        if (historyArray.size() > 0) {
             // Return a copy of the last snapshot
-            BufferedImage image = (historyArray.get(size - 1)).getFinalImage();
+            BufferedImage image = (historyArray.get(index)).getFinalImage();
             ColorModel model = image.getColorModel();
             WritableRaster raster = image.copyData(null);
             return new BufferedImage(model, raster, model.isAlphaPremultiplied(), null);

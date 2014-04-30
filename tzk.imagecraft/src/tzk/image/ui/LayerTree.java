@@ -24,6 +24,7 @@ package tzk.image.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
@@ -52,7 +53,7 @@ public class LayerTree extends JTree {
 
     /**
      * Create a new LayerTree object.
-     * 
+     *
      * @param iC the ImageCraft object this belongs to
      */
     public LayerTree(ImageCraft iC) {
@@ -234,11 +235,10 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Handles MouseClicked events for this LayerTree.
-     * You can either click on a Layer or a History item. 
-     * You can either left click or right click.
-     * On right click, customize and show menu.
-     * 
+     * Handles MouseClicked events for this LayerTree. You can either click on a
+     * Layer or a History item. You can either left click or right click. On
+     * right click, customize and show menu.
+     *
      * This fires after ValueChanged.
      *
      * @param evt
@@ -291,44 +291,43 @@ public class LayerTree extends JTree {
                 }
 
                 System.out.println("You right clicked " + clickedLayer.getLayerName());
-            } 
-            // History
+            } // History
             else {
                 //First enable all of the menu items for jPopupMenu, we will
                 //disable the ones we don't need.                
                 enableAllMenuOptions();
-                
+
                 // ClearLayer and SetCL cannot be used on History items
                 jMenuItemClearLayer.setEnabled(false);
                 jMenuItemSetCL.setEnabled(false);
-                
+
                 // Store the history array locally so that we do not need to 
                 // keep calling get methods.
                 ArrayList<History> historyList = clickedHistory.getLayer().getHistoryArray();
 
-                System.out.println("History array size: "+historyList.size());
+                System.out.println("History array size: " + historyList.size());
                 for (int i = 0; i < historyList.size(); i++) {
-                    System.out.println("History item "+i+": "+historyList.get(i).getHistoryName());
+                    System.out.println("History item " + i + ": " + historyList.get(i).getHistoryName());
                 }
-                System.out.println("This item: "+clickedHistory.getHistoryName());
-                
+                System.out.println("This item: " + clickedHistory.getHistoryName());
+
                 //History items output in reverse order
                 //If the History you clicked was the first in its layer,
                 //then it can't be moved up
                 if (clickedHistory == historyList.get(0)) {
                     jMenuItemMoveUp.setEnabled(false);
-                } 
+                }
                 //If the History you clicked was the last in its layer,
                 //then it can't be moved down.      
                 // If there is only one item, it is the bottom and the top,
                 // this must be an if, not an else if
                 if (clickedHistory == historyList.get(historyList.size() - 1)) {
                     jMenuItemMoveDown.setEnabled(false);
-                } 
+                }
 
                 System.out.println("You right clicked " + clickedHistory.getHistoryName() + " in " + clickedHistory.getLayer().getLayerName());
             }
-            
+
             //Show the jPopupMenu at the location you clicked in this LayerTree.
             jPopupMenu.show(this, evt.getX(), evt.getY());
         }
@@ -338,7 +337,7 @@ public class LayerTree extends JTree {
      * Handles TreeSelection events for this LayerTree. This fires any time a
      * selection changes in the LayerTree, even if the change occurred within
      * this method.
-     * 
+     *
      * This fires before MouseClicked.
      *
      * @param evt
@@ -351,7 +350,7 @@ public class LayerTree extends JTree {
         // This is a flag to say that we are changing items
         // Prevents valueChanged from getting out of hand and into infinite loops
         inhibitEvents = true;
-        
+
         // No selected index - nothing to do
         // Such as before background layer is added to LayerTree
         if (getMinSelectionRow() == -1) {
@@ -365,7 +364,7 @@ public class LayerTree extends JTree {
         boolean allSelected = getSelected().get(0).length == imageCraft.layerList.size();
         imageCraft.selectedAll = allSelected;
         imageCraft.jSelectAllLayers.setSelected(allSelected);
-        
+
         //Get the SelectedNode
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) this.getSelectionPath().getLastPathComponent();
 
@@ -374,17 +373,17 @@ public class LayerTree extends JTree {
         if (root.isNodeChild(selectedNode)) {
             imageCraft.currentLayer = imageCraft.layerList.get(this.root.getIndex(selectedNode));
         }
-        
+
         // Turn off layerTree "working" flag
         inhibitEvents = false;
 
         //Paint the Drawing Area to reflect the change in selection
-        imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+        imageCraft.drawingArea.repaint();
     }
 
     /**
-     * Sets the clickedLayer to the current layer.
-     * Fired by clicking "Set as Current Layer" from the menu.
+     * Sets the clickedLayer to the current layer. Fired by clicking "Set as
+     * Current Layer" from the menu.
      *
      * @param evt
      */
@@ -398,15 +397,15 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Renames the clicked Layer or History object.
-     * Does not allow layer or history object to have an empty name.
+     * Renames the clicked Layer or History object. Does not allow layer or
+     * history object to have an empty name.
      *
      * @param evt
      */
     private void jMenuItemRenameActionPerformed(java.awt.event.ActionEvent evt) {
         String renameText;
         DefaultMutableTreeNode node = null;
-        
+
         // Layer
         if (isLayer) {
             //Set the renameText to the input given from the InputDialog (by
@@ -423,8 +422,7 @@ public class LayerTree extends JTree {
                         imageCraft.layerList.indexOf(clickedLayer)));
                 node.setUserObject(renameText);
             }
-        }
-        // History item
+        } // History item
         else {
             //Set the renameText to the input given from the InputDialog (by
             //default this is the clickedLayer's current layerName.            
@@ -441,7 +439,7 @@ public class LayerTree extends JTree {
                 node.setUserObject(renameText);
             }
         }
-        
+
         // Moving this out of the previous if-then conditions makes this more
         // readable and changes only have to happen in one place, but now
         // the condition must be executed again. Trade offs...
@@ -503,6 +501,11 @@ public class LayerTree extends JTree {
             //rest of the History nodes down in this LayerTree.
             parentNode.insert(childNode, index - 1);
             model.nodeStructureChanged(parentNode);
+
+            //Update the final images of the rest of the layer
+            if (index < clickedHistory.getLayer().getHistoryArray().size() - 1) {
+                editHistorySnapshot(clickedHistory.getLayer().getHistoryArray().get(index - 1));
+            }
 
             System.out.println("You just moved " + clickedHistory.getHistoryName() + " up.");
         }
@@ -569,6 +572,11 @@ public class LayerTree extends JTree {
             //rest of the History nodes up in this LayerTree.
             parentNode.insert(childNode, index + 1);
             model.nodeStructureChanged(parentNode);
+            
+            //Update the final images of the rest of the layer
+            if (index < clickedHistory.getLayer().getHistoryArray().size() - 1) {
+                editHistorySnapshot(clickedHistory.getLayer().getHistoryArray().get(index));
+            }            
 
             System.out.println("You just moved " + clickedHistory.getHistoryName() + " down.");
         }
@@ -717,10 +725,11 @@ public class LayerTree extends JTree {
      * object
      */
     protected void removeHistory(History history, Layer layer) {
+        int index = layer.getHistoryArray().indexOf(history);
         //Set the childNode (a History Object) and parentNode (a Layer Object) 
         DefaultMutableTreeNode parentNode
                 = (DefaultMutableTreeNode) root.getChildAt(imageCraft.layerList.indexOf(layer));
-        DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(layer.getHistoryArray().indexOf(history));
+        DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) parentNode.getChildAt(index);
 
         //Insert the childNode into the tree
         model.removeNodeFromParent(childNode);
@@ -734,6 +743,11 @@ public class LayerTree extends JTree {
         //Remove the clickedHistory from its layer's historyArray
         history.getLayer().getHistoryArray().remove(history);
 
+        //Update the final images of the rest of the layer
+        if (index < layer.getHistoryArray().size() - 1) {
+            editHistorySnapshot(layer.getHistoryArray().get(index));
+        }
+
         //Reset the clickedHistory's layer's undoIndex so that none of the 
         //remaining History objects in the layer are UNDOne
         history.getLayer().setUndoIndex((short) (history.getLayer().getHistoryArray().size() - 1));
@@ -741,6 +755,13 @@ public class LayerTree extends JTree {
         //Repaint the Drawing Area
         imageCraft.drawingArea.revalidate();
         imageCraft.drawingArea.repaint();
+    }
+
+    private void editHistorySnapshot(History historyObj) {
+        ArrayList<History> historyArray = historyObj.getLayer().getHistoryArray();
+        for (int i = historyArray.indexOf(historyObj); i < (int) historyArray.size(); i++) {
+            historyArray.get(i).updateFinalImage();
+        }
     }
 
     /**
@@ -923,10 +944,10 @@ public class LayerTree extends JTree {
         //Select the TreePath
         this.setSelectionPath(path);
     }
-    
+
     /**
      * Selects the node corresponding to the passed History object.
-     * 
+     *
      * @param history the History object to select
      */
     private void setSelected(History history) {
@@ -934,8 +955,8 @@ public class LayerTree extends JTree {
     }
 
     /**
-     * Enables all of the MenuItems in jPopupMenu.
-     * There is only one JPopupMenu, so there is no need to pass a parameter.
+     * Enables all of the MenuItems in jPopupMenu. There is only one JPopupMenu,
+     * so there is no need to pass a parameter.
      */
     private void enableAllMenuOptions() {
         //enable each item in the menu's components
