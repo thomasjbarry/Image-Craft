@@ -64,15 +64,34 @@ public class Layer {
                     imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
         }
     }
+    
+    /**
+     * Get a snapshot of the entire layer.
+     * Takes into account undos
+     * 
+     * @return layer snapshot
+     */
+    public BufferedImage getSnapshot() {
+        return getSnapshot(Math.min(historyArray.size() - 1, undoIndex));
+    }
 
+    /**
+     * Return a snapshot of a history item in this layer.
+     * Gets the finalImage from a specific history object in this layer.
+     * 
+     * @param index
+     * @return the snapshot
+     */
     public BufferedImage getSnapshot(int index) {
-        if (historyArray.size() > 0) {
+        if (index > -1 && index < historyArray.size()) {
+//        if (historyArray.size() > 0) {
             // Return a copy of the last snapshot
             BufferedImage image = (historyArray.get(index)).getFinalImage();
             ColorModel model = image.getColorModel();
             WritableRaster raster = image.copyData(null);
             return new BufferedImage(model, raster, model.isAlphaPremultiplied(), null);
         } else {
+            // No history, return blank image
             return imageCraft.newBlankImage();
         }
     }

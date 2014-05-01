@@ -129,12 +129,12 @@ public class History {
      */
     private void createFinalImage(int index) {
         // Get the most recent snapshot
-        BufferedImage lastImage;
-        if (index > 0) {
-            lastImage = layerObject.getSnapshot(index - 1);
-        } else {
-            lastImage = imageCraft.newBlankImage();
-        }
+        BufferedImage lastImage = layerObject.getSnapshot(index - 1);
+//        if (index > 0) {
+//            lastImage = layerObject.getSnapshot(index - 1);
+//        } else {
+//            lastImage = imageCraft.newBlankImage();
+//        }
 
         //If this History object is not a filter it has an actionImage;
         //Draw this actionImage to the lastImage and set it as this finalImage
@@ -245,7 +245,9 @@ public class History {
 //                }
 //            }
 //        }
-        copyGraphics.drawImage(op.filter(layerObject.getSnapshot(layerObject.getHistoryArray().indexOf(this)),null), 0, 0, null);
+//        copyGraphics.drawImage(op.filter(layerObject.getSnapshot(layerObject.getHistoryArray().indexOf(this)),null), 0, 0, null);
+        copyGraphics.drawImage(op.filter(layerObject.getSnapshot(), null), 0, 0, null);
+        
         
         //Clean up resources and set this History object's finalImage to the
         //now filtered image

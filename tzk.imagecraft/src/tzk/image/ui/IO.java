@@ -49,11 +49,9 @@ public class IO {
         // What ImageCraft object this object belongs to
         imageCraft = iC;
 
-        // Reuse the same fileChooser
+        // Reuse this fileChooser each time
+        // It only allows choosing one file at a time
         fileChooser = new JFileChooser();
-
-        // Set up our file filters. when we open, save, or export, applying 
-        // these filters shows what formats we can open, save, or export in.
     }
 
     /**
@@ -75,14 +73,62 @@ public class IO {
         }
 
         // File chosen, open
+        // Must be final to be able to be read in invokeLaters
         final File file = fileChooser.getSelectedFile();
-        if (file.exists()) {
+        if (!file.exists()) {
+            // Nothing to do
+            return;
+        }
+
+        // Get extension
+        String fileName = file.toString();
+        int j = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+        fileName = fileName.substring(j + 1);
+        String ext = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+        
+        // No actions taken on this ImageCraft?
+        boolean newCraft = imageCraft.numLayer == 1 && imageCraft.layerList.get(0).getHistoryArray().isEmpty();
+
+        // ImageCraft Format
+        if (ext.equals("icf")) {
+            if (newCraft) {
+                // Open into this imageCraft
+                openImageCraft(file, imageCraft);
+            }
+            else {
+                // Open ICF file in new ImageCraft instance
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    
+                    @Override
+                    public void run() {
+                        // Create new ImageCraft object
+                        final ImageCraft iC = new ImageCraft();
+                        
+                        // Must invokeLater because of NullPointerExceptions
+                        java.awt.EventQueue.invokeLater(new Runnable() {
+                            
+                            @Override
+                            public void run() {
+                                openImageCraft(file, iC);
+                            }
+                            
+                        });
+                        
+                        // Show ImageCraft object
+                        // Should repaint
+                        iC.setVisible(true);
+                    }
+                });
+            }
+        } // GIF, JPEG, or PNG
+        else {
             //If we have never made a new Layer or made a new history element
             //in the background layer then open the file in this ImageCraft in
-            //a new layer, otherwise open it in a new ImageCraft instance.
-            if (imageCraft.numLayer == 1 && imageCraft.layerList.get(0).getHistoryArray().isEmpty()) {
+            //a new layer
+            if (newCraft) {
                 readFile(file, imageCraft, true);
-            } else {
+            } // Otherwise open it in a new ImageCraft instance
+            else {
                 java.awt.EventQueue.invokeLater(new Runnable() {
 
                     @Override
@@ -99,16 +145,21 @@ public class IO {
                 });
             }
         }
+
         System.out.println("Open " + file.toString());
     }
 
     /**
-     * Save a file in ImageCraft format.
+     * Save a file in ImageCraft format ("icf"). Add all layers together into
+     * one PNG. Save these files into one file but make the first line
+     * proprietary: the color value of the first pixel in the first line of the
+     * image translates to the number of layers in the drawing.
      *
      * @param unique false: Overwrite last save file true: Write to new save
      * file
      */
-    protected void save(boolean unique) {// For new saves or saving to a current file, no fileChooser is necessary
+    protected void save(boolean unique) {
+        // For new saves or saving to a current file, no fileChooser is necessary
         if (unique || latestSave == null) {
             // Set available file formats, ImageCraft only
             fileChooser.resetChoosableFileFilters();
@@ -128,6 +179,45 @@ public class IO {
 
             // Update ImageCraft title
             imageCraft.setTitle(latestSave.toString());
+        }
+        
+        // Get extension
+        // If extension is empty, set to "icf"
+        String fileName = latestSave.toString();
+        int j = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+        fileName = fileName.substring(j + 1);
+        int lastPeriod = fileName.lastIndexOf(".");
+        if (lastPeriod < 0 || !fileName.substring(lastPeriod + 1).toLowerCase().equals("icf")) {
+            String ext = "icf";
+            if (fileName.charAt(fileName.length() -1) != '.') {
+                ext = '.' + ext;
+            }
+            latestSave = new File(latestSave.getPath() + ext);
+        }
+
+        // Compile all layers into one beefy BufferedImage
+        BufferedImage tempImage;
+        Graphics tempGraphics;
+        int width = imageCraft.drawingArea.getWidth();
+        int height = imageCraft.drawingArea.getHeight();
+        int size = imageCraft.layerList.size();
+        BufferedImage saveTo = new BufferedImage(
+                width, 1 + height * size, BufferedImage.TYPE_INT_ARGB);
+        Graphics saveGraphics = saveTo.getGraphics();
+        saveTo.setRGB(0, 0, size);
+        for (int i = 0; i < size; i++) {
+            tempImage = imageCraft.newBlankImage();
+            tempImage.getGraphics().drawImage(imageCraft.layerList.get(i).getSnapshot(), 0, 0, null);
+            saveGraphics.drawImage(tempImage, 0, 1 + (size - i - 1) * height, null);
+        }
+
+        // Save image to operating system
+        // First save as PNG format in ".icf" file
+        // PNG is lossless
+        try {
+            ImageIO.write(saveTo, "png", latestSave);
+        } catch (IOException err) {
+            System.out.println("Could not save file!");
         }
 
         System.out.println("Save " + (unique ? "new " : "") + "to " + latestSave.toString());
@@ -221,7 +311,7 @@ public class IO {
             } else {
                 latestExport = new File(latestExport.toString() + "." + format);
             }
-            
+
             BufferedImage filteredImage;
             //If exporting to a jpg or jpeg, export a BufferedImage of TYPE_INT_RGB
             //Else export as BufferedImage of TYPE_INT_ARGB
@@ -254,7 +344,7 @@ public class IO {
         try {
             //The layer we're importing/opening the file to
             Layer layer = newIC ? new Layer(iC) : iC.currentLayer;
-            
+
             //Read the file and then draw it to a BufferedImage of TYPE_INT_ARGB
             //This guarantees that the file has an alpha (JPG's do not)
             BufferedImage readFile = ImageIO.read(file);
@@ -269,13 +359,61 @@ public class IO {
                         bufferedFile.getWidth() - iC.drawingArea.getWidth(),
                         bufferedFile.getHeight() - iC.drawingArea.getHeight());
             }
-            
+
             //Create a new history object for the imported image and add it to
             //the layer
             layer.addHistory(bufferedFile, "Imported Image");
             iC.drawingArea.repaint();
         } catch (IOException err) {
             System.out.println("Not a real image..."); // You shmuck
+        }
+    }
+    
+    /**
+     * Open ImageCraft format file.
+     * ImageCraft files are always opened in a new file.
+     * 
+     * @param file the file to open
+     * @param iC the ImageCraft object it belongs to
+     */
+    private void openImageCraft(File file, ImageCraft iC) {
+        // Open the file
+        BufferedImage readImage;
+        try {
+            readImage = ImageIO.read(file);
+        } catch (IOException err) {
+            System.out.println("Could not open file!");
+            return;
+        }
+
+        // Get information about file
+        // The first pixel in the first line holds the number of layers
+        Graphics readGraphics = readImage.getGraphics();
+        int numLayers = readImage.getRGB(0, 0);
+        int width = readImage.getWidth();
+        int height = (readImage.getHeight() - 1) / numLayers;
+
+        // Import all layers
+        BufferedImage tempImage;
+        for (int i = 0; i < numLayers; i++) {
+            // This is a new ImageCraft
+            // If layer 0, use background layer that already exists
+            // Otherwise, create a new layer.
+            Layer layer;
+            if (i == 0) {
+                // Put in background layer
+                layer = iC.layerList.get(iC.layerList.size() - 1);
+            }
+            else {
+                layer = new Layer(iC);
+            }
+            tempImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            tempImage.getGraphics().drawImage(readImage,
+                    0, 0, width, height,
+                    0, i * height + 1, width, (i + 1) * height, null);
+
+            // Create a new history object for that layer
+            layer.addHistory(tempImage, "Opened drawing");
         }
     }
 
