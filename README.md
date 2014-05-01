@@ -8,8 +8,7 @@ Bugs:
 TODO:
 
 	ZACH:
-		IO.java:
-			ImageCraft format - See IO.imageCraftFormat
+		Undo-redo problems
 
 	THOMAS: 
 		LayerTree bug
