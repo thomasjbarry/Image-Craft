@@ -760,7 +760,33 @@ public class ImageCraft extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jSizeActionPerformed
 
-     public BufferedImage newBlankImage() {
+    /**
+     * Set the paint color of this ImageCraft object.
+     * Does not update ColorSwatch.
+     * 
+     * @param primary whether this is the primary color or the secondary color
+     * @param color the new color to select
+     */
+    public void setPaintColor(boolean primary, Color color) {
+        if (primary) {
+            primaryColor = color;
+        }
+        else {
+            secondaryColor = color;
+        }
+    }
+    
+    /**
+     * Get the current paint color.
+     * 
+     * @param primary whether to return the primaryColor or secondaryColor
+     * @return the proper paint color
+     */
+    public Color getPaintColor(boolean primary) {
+        return (primary ? primaryColor : secondaryColor);
+    }
+    
+    public BufferedImage newBlankImage() {
         return new BufferedImage(
                 (int) drawingArea.getPreferredSize().getWidth(),
                 (int) drawingArea.getPreferredSize().getHeight(),
@@ -851,9 +877,8 @@ public class ImageCraft extends javax.swing.JFrame {
     }
 
     // Variables declaration
-    // Make colors accessible to other packages
-    public Color primaryColor = Color.black;
-    public Color secondaryColor = Color.white;
+    private Color primaryColor = Color.black;
+    private Color secondaryColor = Color.white;
 
     // Whether all *layers* are selected within LayerTree
     protected boolean selectedAll;

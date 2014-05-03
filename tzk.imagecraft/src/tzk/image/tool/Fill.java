@@ -56,7 +56,7 @@ public class Fill extends SimpleTool {
         // Get the color that we're working with
         // Left button clicked: use primary color
         // Right button clicked: use secondary color
-        Color toColor = (!SwingUtilities.isRightMouseButton(evt) ? imageCraft.primaryColor : imageCraft.secondaryColor);
+        Color toColor = imageCraft.getPaintColor(!SwingUtilities.isRightMouseButton(evt));
         
         // The point clicked on
         // These integers variables will be reused in our loop

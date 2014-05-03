@@ -107,7 +107,7 @@ public class Shapes extends SimpleTool {
         workSpaceGraphics = (Graphics2D) imageCraft.drawingArea.getWorkSpace().getGraphics();
 
         //Determine which color to paint with and set the imageGraphics to that color
-        Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);
+        Color toColor = imageCraft.getPaintColor(!rightButton);
         workSpaceGraphics.setColor(toColor);
         workSpaceGraphics.setStroke(new BasicStroke(penWidth));
 

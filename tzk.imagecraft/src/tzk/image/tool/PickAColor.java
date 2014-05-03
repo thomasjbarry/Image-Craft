@@ -113,11 +113,7 @@ public class PickAColor extends SimpleTool {
         }
         
         //Set the primary/secondary color to pickedColor
-        if (rightButton) {
-            imageCraft.secondaryColor = pickedColor;
-        } else {
-            imageCraft.primaryColor = pickedColor;
-        }
+        imageCraft.setPaintColor(!rightButton, pickedColor);
 
         //Repaint the jColorSwatch after changing one of the colors
         imageCraft.jColorSwatch.paintComponent(imageCraft.jColorSwatch.getGraphics());

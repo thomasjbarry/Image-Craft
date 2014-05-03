@@ -5,6 +5,7 @@ Bugs:
 	LayerTree
 		update finalImage of history objects: move up/down, delete
 			in its own method so we can call that method to rebuild the layers
+		undo-redo
 TODO:
 
 	ZACH:
@@ -21,6 +22,13 @@ TODO:
 		Other types of layouts
 	
 		Tools: Select, Eraser (BufferedImageOp to selection? Change drawing type like clearRect?)
+
+	Medium priority:
+		Find all Graphics objects and make sure that whenever they are assigned, they are disposed. We're lagging.
+			From the API: "For efficiency, programmers should call dispose when finished using a Graphics object
+				       only if it was created directly from a component or another Graphics object."
+			That is to say: do not dispose of the Graphics object unless you initialized it within the 
+				same method.
 
 	Low Priority:
 		Merge Down layers (merges to bottommost selected layer)

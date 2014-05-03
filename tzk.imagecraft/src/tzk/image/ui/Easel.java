@@ -26,6 +26,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.*;
+import javax.swing.JPanel;
 
 /**
  * The Easel is a jPanel under the drawing area that allows users to resize the
@@ -63,41 +65,31 @@ public class Easel extends javax.swing.JPanel {
     public static void main(String[] args) {
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        setMinimumSize(new Dimension(100, 100));
+        setPreferredSize(new Dimension(575, 335));
 
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                formMouseExited(evt);
+        // Add events
+        addMouseListener(new MouseAdapter() {
+            public void mouseExited(MouseEvent evt) {
+                easelMouseExited(evt);
             }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                formMousePressed(evt);
+            public void mousePressed(MouseEvent evt) {
+                easelMousePressed(evt);
             }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                formMouseReleased(evt);
+            public void mouseReleased(MouseEvent evt) {
+                easelMouseReleased(evt);
             }
         });
-        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                formMouseDragged(evt);
+        addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent evt) {
+                easelMouseDragged(evt);
             }
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                formMouseMoved(evt);
+            public void mouseMoved(MouseEvent evt) {
+                easelMouseMoved(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 585, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 345, Short.MAX_VALUE)
-        );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     /**
      * This checks if the mouse is hovering above one of the 3 resizers.
@@ -106,28 +98,39 @@ public class Easel extends javax.swing.JPanel {
      *
      * @param evt
      */
-    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-        // finds out if the user clicked the right box, then sets
+    private void easelMousePressed(MouseEvent evt) {
+        // finds out if the user clicked one of the resize boxes, then sets
         // the vertical, horizontal, or corner bools to true.
-        if (evt.getX() > width - offset
-                && evt.getX() < width + (2 * offset)
-                && evt.getY() > (height / 2) - offset
-                && evt.getY() < (height / 2) + offset) {
-            //right/horizontal
+        int x = evt.getX();
+        int y = evt.getY();
+        if (isRight(x, y)) {
             horizontal = true;
-        } else if (evt.getY() > height - offset
-                && evt.getY() < height + (2 * offset)
-                && evt.getX() > (width / 2) - offset
-                && evt.getX() < (width / 2) + offset) {
-            //bottom/vertical
+        }
+        else if (isBottom(x, y)) {
             vertical = true;
-        } else if (evt.getY() > height - offset
-                && evt.getY() < height + (2 * offset)
-                && evt.getX() > width - offset
-                && evt.getX() < width + (2 * offset)) {
-            //corner
+        }
+        else if (isCorner(x, y)) {
             corner = true;
         }
+//        if (evt.getX() > width - offset
+//                && evt.getX() < width + (2 * offset)
+//                && evt.getY() > (height / 2) - offset
+//                && evt.getY() < (height / 2) + offset) {
+//            //right/horizontal
+//            horizontal = true;
+//        } else if (evt.getY() > height - offset
+//                && evt.getY() < height + (2 * offset)
+//                && evt.getX() > (width / 2) - offset
+//                && evt.getX() < (width / 2) + offset) {
+//            //bottom/vertical
+//            vertical = true;
+//        } else if (evt.getY() > height - offset
+//                && evt.getY() < height + (2 * offset)
+//                && evt.getX() > width - offset
+//                && evt.getX() < width + (2 * offset)) {
+//            //corner
+//            corner = true;
+//        }
 
         //If a resize component is selected then draw the current drawing to the easel
         if (horizontal || vertical || corner) {
@@ -138,7 +141,7 @@ public class Easel extends javax.swing.JPanel {
             imageCraft.jDesk.revalidate();
             imageCraft.jDesk.repaint();
         }
-    }//GEN-LAST:event_formMousePressed
+    }
 
     /**
      * This is where the resize functions get called. When the mouse is
@@ -146,7 +149,7 @@ public class Easel extends javax.swing.JPanel {
      *
      * @param evt
      */
-    private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+    private void easelMouseReleased(MouseEvent evt) {
 
         // Unset all flags
         horizontal = false;
@@ -154,7 +157,7 @@ public class Easel extends javax.swing.JPanel {
         corner = false;
 
         System.out.println("Drawing area resized: " + width + ", " + height);
-    }//GEN-LAST:event_formMouseReleased
+    }
 
     /**
      * This sets the cursor to a drag cursor if it is above a resizer, it
@@ -162,36 +165,52 @@ public class Easel extends javax.swing.JPanel {
      *
      * @param evt
      */
-    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+    private void easelMouseMoved(MouseEvent evt) {
         Cursor newCursor = null;
-        if (evt.getX() > width - offset
-                && evt.getX() < width + (2 * offset)
-                && evt.getY() > (height / 2) - offset
-                && evt.getY() < (height / 2) + offset) {
-            //right/horizontal
+        int x = evt.getX();
+        int y = evt.getY();
+        if (isRight(x, y)) {
             newCursor = cursorW;
-        } else if (evt.getY() > height - offset
-                && evt.getY() < height + (2 * offset)
-                && evt.getX() > (width / 2) - offset
-                && evt.getX() < (width / 2) + offset) {
-            //bottom/vertical
+        }
+        else if (isBottom(x, y)) {
             newCursor = cursorN;
-        } else if (evt.getY() > height - offset
-                && evt.getY() < height + (2 * offset)
-                && evt.getX() > width - offset
-                && evt.getX() < width + (2 * offset)) {
-            //corner
+        }
+        else if (isCorner(x, y)) {
             newCursor = cursorNW;
-        } else if (cursor != cursorDefault) {
+        }
+        else if (cursor != cursorDefault) {
             // Only change to default if it is not already
             newCursor = cursorDefault;
         }
+//        if (evt.getX() > width - offset
+//                && evt.getX() < width + (2 * offset)
+//                && evt.getY() > (height / 2) - offset
+//                && evt.getY() < (height / 2) + offset) {
+//            //right/horizontal
+//            newCursor = cursorW;
+//        } else if (evt.getY() > height - offset
+//                && evt.getY() < height + (2 * offset)
+//                && evt.getX() > (width / 2) - offset
+//                && evt.getX() < (width / 2) + offset) {
+//            //bottom/vertical
+//            newCursor = cursorN;
+//        } else if (evt.getY() > height - offset
+//                && evt.getY() < height + (2 * offset)
+//                && evt.getX() > width - offset
+//                && evt.getX() < width + (2 * offset)) {
+//            //corner
+//            newCursor = cursorNW;
+//        } else if (cursor != cursorDefault) {
+//            // Only change to default if it is not already
+//            newCursor = cursorDefault;
+//        }
+        
         // Set newCursor only if it hasn't changed
         if (newCursor != cursor) {
             cursor = newCursor;
             this.setCursor(cursor);
         }
-    }//GEN-LAST:event_formMouseMoved
+    }
 
     /**
      * This resizes the drawing area and the easel when the resizers are
@@ -199,7 +218,7 @@ public class Easel extends javax.swing.JPanel {
      *
      * @param evt
      */
-    private void formMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseDragged
+    private void easelMouseDragged(MouseEvent evt) {
         if (horizontal) {
             this.resizeEasel(evt.getX() - width, 0);
             imageCraft.drawingArea.resizeDrawing(evt.getX() - width, 0);
@@ -210,11 +229,11 @@ public class Easel extends javax.swing.JPanel {
             this.resizeEasel(evt.getX() - width, evt.getY() - height);
             imageCraft.drawingArea.resizeDrawing(evt.getX() - width, evt.getY() - height);
         }
-    }//GEN-LAST:event_formMouseDragged
+    }
 
-    private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
+    private void easelMouseExited(MouseEvent evt) {
         setCursor();
-    }//GEN-LAST:event_formMouseExited
+    }
 
     /**
      * I overrode the paintComponent method so that I could draw in the squares
@@ -271,6 +290,48 @@ public class Easel extends javax.swing.JPanel {
             cursor = cursorDefault;
             setCursor(cursor);
         }
+    }
+    
+    /**
+     * Are the coordinates within the right-side resizer?
+     * 
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return true if the coordinate is within the right-side resizer
+     */
+    private boolean isRight(int x, int y) {
+        return x > width - offset
+                && x < width + (2 * offset)
+                && y > (height / 2) - offset
+                && y < (height / 2) + offset;
+    }
+    
+    /**
+     * Are the coordinates within the bottom-side resizer?
+     * 
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return true if the coordinate is within the bottom-side resizer
+     */
+    private boolean isBottom(int x, int y) {
+        return y > height - offset
+                && y < height + (2 * offset)
+                && x > (width / 2) - offset
+                && x < (width / 2) + offset;
+    }
+    
+    /**
+     * Are the coordinates within the corner resizer?
+     * 
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return true if the coordinate is within the corner resizer
+     */
+    private boolean isCorner(int x, int y) {
+        return y > height - offset
+                && y < height + (2 * offset)
+                && x > width - offset
+                && x < width + (2 * offset);
     }
 
     private ImageCraft imageCraft;

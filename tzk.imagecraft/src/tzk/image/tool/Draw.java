@@ -96,7 +96,7 @@ public class Draw extends SimpleTool {
         // Get the color that we're working with
         // Left button clicked: use primary color
         // Right button clicked: use secondary color
-        Color toColor = (!rightButton ? imageCraft.primaryColor : imageCraft.secondaryColor);
+        Color toColor = imageCraft.getPaintColor(!rightButton);
 
         //Try to open the penStroke file and set the penColor to the toColor
         try {
