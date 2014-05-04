@@ -23,6 +23,10 @@
 package tzk.image.tool;
 
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import javax.swing.JToggleButton;
 import tzk.image.ui.ImageCraft;
 
@@ -104,15 +108,19 @@ public class SimpleTool {
         }
     }
 
+    
+    
+
+
     public void setButton(JToggleButton button) {
         toolButton = button;
     }
-    
-    public void setPenStroke(String filePath){        
+
+    public void setPenStroke(String filePath) {
     }
-    
-    public void setPenWidth(int width){
-    }        
+
+    public void setPenWidth(int width) {
+    }
 
     // Variables declaration
     private final ImageCraft imageCraft;

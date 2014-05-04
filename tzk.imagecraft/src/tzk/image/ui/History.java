@@ -125,6 +125,7 @@ public class History {
 
     /**
      * Create snapshot of finalImage.
+     *
      * @param index index of the history object to create a final image for
      */
     private void createFinalImage(int index) {
@@ -143,7 +144,7 @@ public class History {
             finalImage.getGraphics().drawImage(actionImage, 0, 0, null);
         }
     }
-    
+
     /**
      * Updates the final image for this history object.
      */
@@ -212,7 +213,67 @@ public class History {
         applyFilter(sharpenOp, selected);
     }
 
-    private void blur(ArrayList<History> selected) {
+    /**
+     * This makes the edges in a picture more clear. I overrode this so that we
+     * could use the sharpen method for other things. Not just filters. I used
+     * it when I wrote resize.
+     *
+     * @param image
+     * @return
+     */
+    private BufferedImage sharpen(BufferedImage image) {
+        float[] sharpKernel = {
+            0.0f, -1.0f, 0.0f,
+            -1.0f, 5.0f, -1.0f,
+            0.0f, -1.0f, 0.0f
+        };
+        BufferedImageOp sharpenOp = new ConvolveOp(new Kernel(3, 3, sharpKernel),
+                ConvolveOp.EDGE_NO_OP, null);
+
+        image.getGraphics().drawImage(sharpenOp.filter(image, null), 0, 0, null);
+        return image;
+    }
+
+    private BufferedImage superSharpen(BufferedImage image) {
+        float[] kernel = new float[25];
+        kernel[0]= 1.0f / 100.0f;
+        kernel[4] = 1.0f / 100.0f;
+        kernel[20] = 1.0f / 100.0f;
+        kernel[24] = 1.0f / 100.0f;
+
+        kernel[1] = 2.0f / 100.0f;
+        kernel[3] = 2.0f / 100.0f;
+        kernel[5] = 2.0f / 100.0f;
+        kernel[15] = 2.0f / 100.0f;
+        kernel[21] = 2.0f / 100.0f;
+        kernel[23] = 2.0f / 100.0f;
+        kernel[9] = 2.0f / 100.0f;
+        kernel[19] = 2.0f / 100.0f;
+
+        kernel[2] = 4.0f / 100.0f;
+        kernel[6] = 4.0f / 100.0f;
+        kernel[10] = 4.0f / 100.0f;
+        kernel[8] = 4.0f / 100.0f;
+        kernel[14] = 4.0f / 100.0f;
+        kernel[18] = 4.0f / 100.0f;
+        kernel[22] = 4.0f / 100.0f;
+        kernel[16] = 4.0f / 100.0f;
+
+        kernel[7] = 8.0f / 100.0f;
+        kernel[11] = 8.0f / 100.0f;
+        kernel[13] = 8.0f / 100.0f;
+        kernel[17] = 8.0f / 100.0f;
+
+        kernel[12] = 16.0f/ 100.0f;
+    
+    BufferedImageOp sharpenOp = new ConvolveOp(new Kernel(5, 5, kernel),
+            ConvolveOp.EDGE_NO_OP, null);
+
+    image.getGraphics().drawImage(sharpenOp.filter(image, null), 0, 0, null);
+        return image ;
+}
+
+private void blur(ArrayList<History> selected) {
         float ninth = 1.0f / 9.0f;
         float[] blurKernel = {
             ninth, ninth, ninth,
@@ -247,12 +308,69 @@ public class History {
 //        }
 //        copyGraphics.drawImage(op.filter(layerObject.getSnapshot(layerObject.getHistoryArray().indexOf(this)),null), 0, 0, null);
         copyGraphics.drawImage(op.filter(layerObject.getSnapshot(), null), 0, 0, null);
-        
-        
+
         //Clean up resources and set this History object's finalImage to the
         //now filtered image
         copyGraphics.dispose();
         this.finalImage = copy;
+    }
+
+    
+    /**
+     * Takes a buffered image and resizes it while. It uses two sharpen tools to
+     * make sure the quality of the picture doesn't drop too much.
+     * 
+     * 
+     * @param image
+     * @param newX   new width for picture
+     * @param newY   new height for picture
+     * @param smoothBefore
+     * @param smoothAfter  Usually set to false. Otherwise it will take forev's
+     * @return 
+     */
+    public BufferedImage resizeBuffered(BufferedImage image, int newX, int newY,
+            boolean smoothBefore, boolean smoothAfter) {
+
+        if(smoothBefore){
+            image = sharpen(image);
+        }
+        BufferedImage result = new BufferedImage(newX, newY, BufferedImage.TYPE_INT_ARGB);
+
+        int printInterval = newX / 10;
+        int currentInterval = printInterval;
+        int currentX = 0;
+        int currentY = 0;
+
+        for (int destX = 0; destX < newX; destX++) {
+            if (destX > currentInterval) {
+                // print status update
+                System.out.print(".");
+                currentInterval = destX + printInterval;
+            }
+            for (int destY = 0; destY < newY; destY++) {
+                // scale X and Y
+                currentX = (int) (((double) destX / (double) newX) * (double) image.getWidth());
+                currentY = (int) (((double) destY / (double) newY) * (double) image.getHeight());
+                //enforce boundaries
+                if (currentX >= image.getWidth()) {
+                    currentX = image.getWidth() - 1;
+                }
+                if (currentY >= image.getHeight()) {
+                    currentY = image.getHeight() - 1;
+                }
+
+                image.setRGB(destX, destY, image.getRGB(currentX, currentY));
+            }
+        }
+        if(smoothAfter){
+            image = sharpen(image);
+        }
+        if(smoothAfter){
+            // The comments in Frankie's version of super sharpen say that 
+            // this function will take a long time to run. 
+            image = superSharpen(image);
+        }
+        return result;
     }
 
     public BufferedImage getActionImage() {
