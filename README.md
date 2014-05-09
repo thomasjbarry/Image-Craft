@@ -18,10 +18,15 @@ TODO:
 		Scale filter: SimpleTool method => Resizing Penstrokes && Resize Tool
 		Importing image as penstroke
 
-	High priority:
-		Other types of layouts
-	
-		Tools: Select, Eraser (BufferedImageOp to selection? Change drawing type like clearRect?)
+High priority:
+	Undo/redo
+	Pretty gooey
+	Clean code
+	Commenting
+	Disposing graphics
+
+No Time:
+	Tools: Select, Eraser (BufferedImageOp to selection? Change drawing type like clearRect?)
 
 	Medium priority:
 		Find all Graphics objects and make sure that whenever they are assigned, they are disposed. We're lagging.
