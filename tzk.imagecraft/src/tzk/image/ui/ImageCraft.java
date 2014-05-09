@@ -80,22 +80,24 @@ public class ImageCraft extends JFrame {
      * Initialize GUI
      */
     @SuppressWarnings("unchecked")
-
     private void initComponents() {
 
         //These listeners ensure the application closes when all JFrames are disposed
         //and not when the first is closed.
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent evt) {
                 formWindowClosing(evt);
             }
 
+            @Override
             public void windowOpened(WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
         addComponentListener(new ComponentAdapter() {
+            @Override
             public void componentResized(ComponentEvent evt) {
                 formComponentResized(evt);
             }
@@ -117,7 +119,6 @@ public class ImageCraft extends JFrame {
         jSplitPane = new JSplitPane();
         pane.add(jSplitPane, BorderLayout.CENTER);
 
-        
         //Build the left and right pane with Flow Layout by default
         jLeftPane = new JPanel();
         jLeftPane.setLayout(new BorderLayout());
@@ -134,7 +135,6 @@ public class ImageCraft extends JFrame {
         });
         jSplitPane.add(jRightPane, JSplitPane.RIGHT);
 
-        
         //////////////////////////
         // Build the left pane
         initLeftPane();
@@ -142,14 +142,14 @@ public class ImageCraft extends JFrame {
         ///////////////////////
         // Build up the right pane
         JPanel upperCont = new JPanel(new BorderLayout());
-        
+
         // Build up the list of tools
         JPanel toolCont = new JPanel();
         toolCont.setLayout(new GridLayout());
         toolCont.setMaximumSize(new Dimension(9000, 100));
         initToolBar(toolCont);
         upperCont.add(toolCont, BorderLayout.CENTER);
-        
+
         // Color swatch
         jColorSwatch = new ColorSwatch(this);
         jColorSwatch.setPreferredSize(new Dimension(56, 56));
@@ -178,7 +178,7 @@ public class ImageCraft extends JFrame {
         // Build the Right Pane's Scroll Pane
         jRightScrollPane.setViewportView(jDesk);
         jRightPane.add(jRightScrollPane, BorderLayout.SOUTH);
-        
+
         // Add components. 
         jRightPane.add(upperCont, BorderLayout.NORTH);
         jRightPane.add(jRightScrollPane, BorderLayout.CENTER);
@@ -370,79 +370,54 @@ public class ImageCraft extends JFrame {
                 currentLayer.addHistory("Blur");
 
             } else if (clicked.equals(jAbout)) {
-                System.out.println("Whaaaaaaaaassupppppppp");
-
+                JOptionPane.showMessageDialog(jMenuBar, 
+                        "Welcome to the best damn ImageCrafting program "
+                                + "you ever did saw.");
             }
         }
 
     }
-    
+
     /**
      * Build tool buttons and place into jToolBar.
      */
     private void initToolBar(JPanel toolCont) {
+        ToolBarHandler handler = new ToolBarHandler();
+        
         jDraw = new JToggleButton();
-
         jDraw.setText("Draw");
-        jDraw.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                jDrawActionPerformed(evt);
-            }
-        });
+        jDraw.addActionListener(handler);
+        
+        
         jFill = new JToggleButton();
-
         jFill.setText("Fill");
-        jFill.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                jFillActionPerformed(evt);
-            }
-        });
+        jFill.addActionListener(handler);
+        
         jPick = new JToggleButton();
         jPick.setText("Picker");
-        jPick.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                jPickActionPerformed(evt);
-            }
-        });
+        jPick.addActionListener(handler);
+        
         jRectangle = new JToggleButton();
         jRectangle.setText("Rectangle");
-        jRectangle.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                jRectangleActionPerformed(evt);
-            }
-        });
+        jRectangle.addActionListener(handler);
+        
         jSize = new JComboBox();
-        jSize.setModel(new DefaultComboBoxModel(new String[]{"Pen Width: 1", "Pen Width: 2", "Pen Width: 5", "Caligraphy"}));
+        jSize.setModel(new DefaultComboBoxModel(new String[]
+        {"Pen Width: 1", "Pen Width: 2", "Pen Width: 5", "Caligraphy"}));
         jSize.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent evt) {
-                jSizeItemStateChanged(evt);
+                jPenChange(evt);
             }
-        });
-        jSize.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                jSizeActionPerformed(evt);
-            }
-        });
+        });       
+        
         jOval = new JToggleButton();
         jOval.setText("Oval");
-        jOval.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jOvalActionPerformed(evt);
-            }
-        });
+        jOval.addActionListener(handler);
+        
         jCrop = new JButton();
         jCrop.setText("Crop");
-        jCrop.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jCropActionPerformed(evt);
-            }
-        });
+        jCrop.addActionListener(handler);
 
         // Build the ToolBar
         toolCont.add(jDraw);
@@ -453,13 +428,40 @@ public class ImageCraft extends JFrame {
         toolCont.add(jSize);
         toolCont.add(jCrop);
     }
-    
+
+    /**
+     * Responds to the selected items in the toolbar.
+     * 
+     */
+    private class ToolBarHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            AbstractButton clicked = (AbstractButton) e.getSource();
+
+            if (clicked.equals( (JToggleButton) jDraw)) {
+                drawTool.select();
+            } else if (clicked.equals( (JToggleButton) jFill)){
+                fillTool.select();
+            } else if (clicked.equals( (JToggleButton) jPick)){
+                pickAColor.select();
+            } else if (clicked.equals( (JToggleButton) jRectangle)){
+                rectangleShape.select();
+            } else if (clicked.equals( (JToggleButton) jOval)){
+                ovalShape.select();
+            } else if (clicked.equals( (JButton) jCrop)){
+                cropTool.select();
+            }
+        }
+
+    }
+
     private void initLeftPane() {
         ////////////////
         // Holds "Layers" title and layer tools
         JPanel cont = new JPanel();
         cont.setLayout(new BorderLayout());
-        
+
         // Holds the title "Layers"
         JPanel northCont = new JPanel();
         // Holds the layer tools
@@ -470,7 +472,7 @@ public class ImageCraft extends JFrame {
         jLayerTitle.setFont(new Font("Georgia", 1, 24));
         jLayerTitle.setText("Layers");
         northCont.add(jLayerTitle);
-        
+
         // "Select All" checkbox
         jSelectAllLayers = new JCheckBox();
         jSelectAllLayers.setText("Select All");
@@ -493,14 +495,12 @@ public class ImageCraft extends JFrame {
         });
         southCont.add(newLayer);
 
-        
         ////////////////////////
         // Border layout 
         cont.add(northCont, BorderLayout.NORTH);
         cont.add(southCont, BorderLayout.SOUTH);
         jLeftPane.add(cont, BorderLayout.NORTH);
 
-        
         /////////////////
         // Add a scroll pane for the layer tree
         // Place in CENTER so it automatically sizes
@@ -561,15 +561,6 @@ public class ImageCraft extends JFrame {
         }
     }
 
-    private void jFillActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-        fillTool.select();
-    }
-
-    private void jDrawActionPerformed(ActionEvent evt) {
-        drawTool.select();
-    }
-
     private void formWindowClosing(WindowEvent evt) {
         //If we are closing the only openFrame then exit the application
         if (openFrames == 1) {
@@ -582,11 +573,7 @@ public class ImageCraft extends JFrame {
         ImageCraft.openFrames++;
     }
 
-    private void jPickActionPerformed(ActionEvent evt) {
-        pickAColor.select();
-    }
-
-    private void jSizeItemStateChanged(ItemEvent evt) {
+    private void jPenChange(ItemEvent evt) {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             if (jSize.getSelectedIndex() == 0) {
                 currentTool.setPenStroke("src/tzk/image/img/standardPen_1.png");
@@ -606,38 +593,6 @@ public class ImageCraft extends JFrame {
 
     private void formComponentResized(ComponentEvent evt) {
         this.repaint();
-    }
-
-    private void jGrayscaleActionPerformed(ActionEvent evt) {
-        currentLayer.addHistory("Grayscale");
-    }
-
-    private void jRectangleActionPerformed(ActionEvent evt) {
-        rectangleShape.select();
-    }
-
-    private void jOvalActionPerformed(ActionEvent evt) {
-        ovalShape.select();
-    }
-
-    private void jNegativeActionPerformed(ActionEvent evt) {
-        currentLayer.addHistory("Negative");
-    }
-
-    private void jSharpenActionPerformed(ActionEvent evt) {
-        currentLayer.addHistory("Sharpen");
-    }
-
-    private void jMenuItem1ActionPerformed(ActionEvent evt) {
-        currentLayer.addHistory("Blur");
-    }
-
-    private void jCropActionPerformed(ActionEvent evt) {
-        cropTool.select();
-    }
-
-    private void jSizeActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
     }
 
     /**
