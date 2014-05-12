@@ -504,7 +504,7 @@ public class LayerTree extends JTree {
 
             //Update the final images of the rest of the layer
             if (index < clickedHistory.getLayer().getHistoryArray().size() - 1) {
-                editHistorySnapshot(clickedHistory.getLayer().getHistoryArray().get(index - 1));
+                clickedHistory.getLayer().editHistorySnapshot(clickedHistory.getLayer().getHistoryArray().get(index - 1));
             }
 
             System.out.println("You just moved " + clickedHistory.getHistoryName() + " up.");
@@ -575,7 +575,7 @@ public class LayerTree extends JTree {
             
             //Update the final images of the rest of the layer
             if (index < clickedHistory.getLayer().getHistoryArray().size() - 1) {
-                editHistorySnapshot(clickedHistory.getLayer().getHistoryArray().get(index));
+                clickedHistory.getLayer().editHistorySnapshot(clickedHistory.getLayer().getHistoryArray().get(index));
             }            
 
             System.out.println("You just moved " + clickedHistory.getHistoryName() + " down.");
@@ -744,8 +744,8 @@ public class LayerTree extends JTree {
         history.getLayer().getHistoryArray().remove(history);
 
         //Update the final images of the rest of the layer
-        if (index < layer.getHistoryArray().size() - 1) {
-            editHistorySnapshot(layer.getHistoryArray().get(index));
+        if (index < layer.getHistoryArray().size()) {
+            layer.editHistorySnapshot(layer.getHistoryArray().get(index));
         }
 
         //Reset the clickedHistory's layer's undoIndex so that none of the 
@@ -757,12 +757,6 @@ public class LayerTree extends JTree {
         imageCraft.drawingArea.repaint();
     }
 
-    private void editHistorySnapshot(History historyObj) {
-        ArrayList<History> historyArray = historyObj.getLayer().getHistoryArray();
-        for (int i = historyArray.indexOf(historyObj); i < (int) historyArray.size(); i++) {
-            historyArray.get(i).updateFinalImage();
-        }
-    }
 
     /**
      * Gets the Clicked Layer based on the click location.

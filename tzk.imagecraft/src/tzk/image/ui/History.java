@@ -104,23 +104,7 @@ public class History {
         layerObject.setFilterNum((short) (layerObject.getFilterNum() + 1));
         historyName = filterType + " Object #" + layerObject.getFilterNum();
 
-        //Filter the selected History objects and create the finalImage
-        switch (actionFilter) {
-            case "Grayscale":
-                grayScale(selected);
-                break;
-            case "Negative":
-                negative(selected);
-                break;
-            case "Sharpen":
-                sharpen(selected);
-                break;
-            case "Blur":
-                blur(selected);
-                break;
-            default:
-                break;
-        }
+        chooseFilter(selected);
     }
 
     /**
@@ -130,18 +114,19 @@ public class History {
      */
     private void createFinalImage(int index) {
         // Get the most recent snapshot
-        BufferedImage lastImage = layerObject.getSnapshot(index - 1);
-//        if (index > 0) {
-//            lastImage = layerObject.getSnapshot(index - 1);
-//        } else {
-//            lastImage = imageCraft.newBlankImage();
-//        }
+        finalImage = layerObject.getSnapshot(index - 1);
 
         //If this History object is not a filter it has an actionImage;
-        //Draw this actionImage to the lastImage and set it as this finalImage
+        //Draw this actionImage to the finalImage
+        //Else apply the filter to the finalImage
         if (actionImage != null) {
-            finalImage = lastImage;
             finalImage.getGraphics().drawImage(actionImage, 0, 0, null);
+        } else {
+            ArrayList<History> selected = new ArrayList<>();
+            for (int i = 0; i < index +1; i++) {
+                selected.add(layerObject.getHistoryArray().get(i));
+            }
+            chooseFilter(selected);
         }
     }
 
@@ -161,10 +146,34 @@ public class History {
      */
     protected void draw(BufferedImage image) {
         Graphics drawGraphics = image.getGraphics();
-        drawGraphics.drawImage(actionImage, 0, 0, null);
+        if (actionImage != null) {
+            drawGraphics.drawImage(actionImage, 0, 0, null);
+        } else {
+            drawGraphics.drawImage(finalImage, 0, 0, null);
+        }
         drawGraphics.dispose();
     }
 
+    private void chooseFilter(ArrayList<History> selected) {
+                //Filter the selected History objects and create the finalImage
+        System.out.println(actionFilter);
+        switch (actionFilter) {
+            case "Grayscale":
+                grayScale(selected);
+                break;
+            case "Negative":
+                negative(selected);
+                break;
+            case "Sharpen":
+                sharpen(selected);
+                break;
+            case "Blur":
+                blur(selected);
+                break;
+            default:
+                break;
+        }
+    }
     /**
      * Grayscale filter applied to all History objects before this object in
      * layerObject's HistoryArray.
@@ -234,46 +243,7 @@ public class History {
         return image;
     }
 
-    private BufferedImage superSharpen(BufferedImage image) {
-        float[] kernel = new float[25];
-        kernel[0]= 1.0f / 100.0f;
-        kernel[4] = 1.0f / 100.0f;
-        kernel[20] = 1.0f / 100.0f;
-        kernel[24] = 1.0f / 100.0f;
-
-        kernel[1] = 2.0f / 100.0f;
-        kernel[3] = 2.0f / 100.0f;
-        kernel[5] = 2.0f / 100.0f;
-        kernel[15] = 2.0f / 100.0f;
-        kernel[21] = 2.0f / 100.0f;
-        kernel[23] = 2.0f / 100.0f;
-        kernel[9] = 2.0f / 100.0f;
-        kernel[19] = 2.0f / 100.0f;
-
-        kernel[2] = 4.0f / 100.0f;
-        kernel[6] = 4.0f / 100.0f;
-        kernel[10] = 4.0f / 100.0f;
-        kernel[8] = 4.0f / 100.0f;
-        kernel[14] = 4.0f / 100.0f;
-        kernel[18] = 4.0f / 100.0f;
-        kernel[22] = 4.0f / 100.0f;
-        kernel[16] = 4.0f / 100.0f;
-
-        kernel[7] = 8.0f / 100.0f;
-        kernel[11] = 8.0f / 100.0f;
-        kernel[13] = 8.0f / 100.0f;
-        kernel[17] = 8.0f / 100.0f;
-
-        kernel[12] = 16.0f/ 100.0f;
-    
-    BufferedImageOp sharpenOp = new ConvolveOp(new Kernel(5, 5, kernel),
-            ConvolveOp.EDGE_NO_OP, null);
-
-    image.getGraphics().drawImage(sharpenOp.filter(image, null), 0, 0, null);
-        return image ;
-}
-
-private void blur(ArrayList<History> selected) {
+    private void blur(ArrayList<History> selected) {
         float ninth = 1.0f / 9.0f;
         float[] blurKernel = {
             ninth, ninth, ninth,
@@ -307,70 +277,18 @@ private void blur(ArrayList<History> selected) {
 //            }
 //        }
 //        copyGraphics.drawImage(op.filter(layerObject.getSnapshot(layerObject.getHistoryArray().indexOf(this)),null), 0, 0, null);
-        copyGraphics.drawImage(op.filter(layerObject.getSnapshot(), null), 0, 0, null);
+        //copyGraphics.drawImage(op.filter(layerObject.getSnapshot(), null), 0, 0, null);
+        
+        // Compile correct snapshot up to this history item
+        for (History historyObj : selected) {
+            historyObj.draw(copy);
+        }
+        copyGraphics.drawImage(op.filter(copy, null), 0, 0, null);
 
         //Clean up resources and set this History object's finalImage to the
         //now filtered image
         copyGraphics.dispose();
         this.finalImage = copy;
-    }
-
-    
-    /**
-     * Takes a buffered image and resizes it while. It uses two sharpen tools to
-     * make sure the quality of the picture doesn't drop too much.
-     * 
-     * 
-     * @param image
-     * @param newX   new width for picture
-     * @param newY   new height for picture
-     * @param smoothBefore
-     * @param smoothAfter  Usually set to false. Otherwise it will take forev's
-     * @return 
-     */
-    public BufferedImage resizeBuffered(BufferedImage image, int newX, int newY,
-            boolean smoothBefore, boolean smoothAfter) {
-
-        if(smoothBefore){
-            image = sharpen(image);
-        }
-        BufferedImage result = new BufferedImage(newX, newY, BufferedImage.TYPE_INT_ARGB);
-
-        int printInterval = newX / 10;
-        int currentInterval = printInterval;
-        int currentX = 0;
-        int currentY = 0;
-
-        for (int destX = 0; destX < newX; destX++) {
-            if (destX > currentInterval) {
-                // print status update
-                System.out.print(".");
-                currentInterval = destX + printInterval;
-            }
-            for (int destY = 0; destY < newY; destY++) {
-                // scale X and Y
-                currentX = (int) (((double) destX / (double) newX) * (double) image.getWidth());
-                currentY = (int) (((double) destY / (double) newY) * (double) image.getHeight());
-                //enforce boundaries
-                if (currentX >= image.getWidth()) {
-                    currentX = image.getWidth() - 1;
-                }
-                if (currentY >= image.getHeight()) {
-                    currentY = image.getHeight() - 1;
-                }
-
-                image.setRGB(destX, destY, image.getRGB(currentX, currentY));
-            }
-        }
-        if(smoothAfter){
-            image = sharpen(image);
-        }
-        if(smoothAfter){
-            // The comments in Frankie's version of super sharpen say that 
-            // this function will take a long time to run. 
-            image = superSharpen(image);
-        }
-        return result;
     }
 
     public BufferedImage getActionImage() {

@@ -358,12 +358,16 @@ public class IO {
                 iC.drawingArea.resizeDrawing(
                         bufferedFile.getWidth() - iC.drawingArea.getWidth(),
                         bufferedFile.getHeight() - iC.drawingArea.getHeight());
+                
+                iC.getEasel().resizeEasel(iC.drawingArea.getWidth(), 
+                        iC.drawingArea.getHeight());
             }
 
             //Create a new history object for the imported image and add it to
             //the layer
             layer.addHistory(bufferedFile, "Imported Image");
             iC.drawingArea.repaint();
+            
         } catch (IOException err) {
             System.out.println("Not a real image..."); // You shmuck
         }

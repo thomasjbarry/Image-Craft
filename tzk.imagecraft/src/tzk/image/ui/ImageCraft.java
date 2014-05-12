@@ -668,6 +668,10 @@ public class ImageCraft extends JFrame {
     public void setTitle() {
         setTitle(currentTitle);
     }
+    
+    public Easel getEasel(){
+        return jEasel;
+    }
 
     /**
      * @param args the command line arguments

@@ -116,14 +116,18 @@ public class Layer {
      */
     public void addHistory(BufferedImage image, String historyType) {
         //For all indices after the undoIndex delete the History object
-        for (int i = historyArray.size() - 1; i > undoIndex; i--) {
-            imageCraft.layerTree.removeHistory(historyArray.get(historyArray.size() - i - 1), this);
-            historyArray.remove(i);
+        int index = undoIndex;
+        for (int i = historyArray.size() - 1; i > index; i--) {
+            System.out.println("UNDO " + undoIndex + " i " + i);
+            //Removes history object from both the layer tree and History Array
+            imageCraft.layerTree.removeHistory(historyArray.get(i), this);
+            System.out.println("AFTER i" + i);
         }
         History history = new History(imageCraft, this, image, historyType);
         undoIndex++;
         imageCraft.layerTree.addHistory(history, this);
         historyArray.add(history);
+        imageCraft.drawingArea.getCurrentDrawing().getGraphics().clearRect(0, 0, imageCraft.drawingArea.getCurrentDrawing().getWidth(), imageCraft.drawingArea.getCurrentDrawing().getHeight());        
         imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
                 image, 0, 0, null);
 
@@ -136,10 +140,14 @@ public class Layer {
      * @param historyType
      */
     public void addHistory(String historyType) {
+        int index = undoIndex;
+        
         //For all indices after the undoIndex delete the History object
-        for (int i = historyArray.size() - 1; i > undoIndex; i--) {
-            imageCraft.layerTree.removeHistory((History) historyArray.get(historyArray.size() - i - 1), this);
-            historyArray.remove(i);
+        for (int i = historyArray.size() - 1; i > index; i--) {
+            System.out.println(undoIndex);
+            System.out.println(i);
+            //Removes history object from both the layer tree and History Array
+            imageCraft.layerTree.removeHistory((History) historyArray.get(i), this);
         }
         //Create new History Object for the filter
         History history = new History(imageCraft, this, historyType, this.historyArray);
@@ -166,6 +174,14 @@ public class Layer {
         historyArray.remove(i);
         undoIndex = (short) (historyArray.size() - 1);
     }
+    
+    protected void editHistorySnapshot(History historyObj) {
+        System.out.println("GOT HERE");
+        for (int i = historyArray.indexOf(historyObj); i < (int) historyArray.size(); i++) {
+            System.out.println("I " + i);
+            historyArray.get(i).updateFinalImage();
+        }
+    }    
 
     protected void undo() {
         if (undoIndex > -1) {
