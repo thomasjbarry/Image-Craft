@@ -109,14 +109,14 @@ public class DrawingArea extends JPanel {
         for (Layer layer : imageCraft.layerList) {
             for (History historyObj : layer.getHistoryArray()) {
                 // finalImage is what this layer looks like after this action is performed
-                historyObj.setFinalImage(imageCraft.resize(historyObj.getFinalImage(), resizedWidth, resizedHeight));
+                historyObj.setFinalImage(imageCraft.maxOutImage(historyObj.getFinalImage(), resizedWidth, resizedHeight));
 
                 // actionImage contains a snapshot of the action performed only
                 // One could potentially add this actionImage to the finalImage 
                 // of the last simpleHistory element to get this simpleHistory
                 // object's finalImage
                 if (historyObj.getActionImage() != null) {
-                    historyObj.setActionImage(imageCraft.resize(historyObj.getActionImage(), resizedWidth, resizedHeight));
+                    historyObj.setActionImage(imageCraft.maxOutImage(historyObj.getActionImage(), resizedWidth, resizedHeight));
                 }
             }
         }

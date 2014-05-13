@@ -362,7 +362,7 @@ public class LayerTree extends JTree {
         // be selected
         // Flag and check appropriately
         boolean allSelected = getSelected().get(0).length == imageCraft.layerList.size();
-        imageCraft.selectedAll = allSelected;
+        imageCraft.allLayersSelected = allSelected;
         imageCraft.jSelectAllLayers.setSelected(allSelected);
 
         //Get the SelectedNode

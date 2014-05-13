@@ -56,7 +56,7 @@ public class ImageCraft extends JFrame {
         System.out.println("New Current Layer: "
                 + layer.getLayerName() + " ; " + layer);
 
-        selectedAll = false;
+        allLayersSelected = false;
 
         // Update the title
         setTitle();
@@ -96,12 +96,12 @@ public class ImageCraft extends JFrame {
                 formWindowOpened(evt);
             }
         });
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
+//        addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent evt) {
+//                formComponentResized(evt);
+//            }
+//        });
 
         // Default pane for the JFrame
         // Defaults to BorderLayout
@@ -109,35 +109,35 @@ public class ImageCraft extends JFrame {
 
         /////////////////////////////////
         // Build the menu bar
-        jMenuBar = new JMenuBar();
-        initMenuBar();
-        pane.add(jMenuBar, BorderLayout.NORTH);
-        setJMenuBar(jMenuBar);
+        JMenuBar menuBar = new JMenuBar();
+        initMenuBar(menuBar);
+        pane.add(menuBar, BorderLayout.NORTH);
+        setJMenuBar(menuBar);
 
         ////////////////////////////////////
         // Build the Split Pane using Border Layout
-        jSplitPane = new JSplitPane();
-        pane.add(jSplitPane, BorderLayout.CENTER);
+        JSplitPane splitPane = new JSplitPane();
+        pane.add(splitPane, BorderLayout.CENTER);
 
         //Build the left and right pane with Flow Layout by default
-        jLeftPane = new JPanel();
-        jLeftPane.setLayout(new BorderLayout());
-        jLeftPane.setMinimumSize(new Dimension(200, 100));
-        jLeftPane.setPreferredSize(new Dimension(200, 418));
-        jSplitPane.add(jLeftPane, JSplitPane.LEFT);
-        jRightPane = new JPanel();
-        jRightPane.setLayout(new BorderLayout());
-        jRightPane.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent evt) {
-                jRightPaneComponentResized(evt);
-            }
-        });
-        jSplitPane.add(jRightPane, JSplitPane.RIGHT);
+        JPanel leftPane = new JPanel();
+        leftPane.setLayout(new BorderLayout());
+        leftPane.setMinimumSize(new Dimension(200, 100));
+        leftPane.setPreferredSize(new Dimension(200, 418));
+        splitPane.add(leftPane, JSplitPane.LEFT);
+        JPanel rightPane = new JPanel();
+        rightPane.setLayout(new BorderLayout());
+//        rightPane.addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent evt) {
+//                jRightPaneComponentResized(evt);
+//            }
+//        });
+        splitPane.add(rightPane, JSplitPane.RIGHT);
 
         //////////////////////////
         // Build the left pane
-        initLeftPane();
+        initLeftPane(leftPane);
 
         ///////////////////////
         // Build up the right pane
@@ -158,7 +158,7 @@ public class ImageCraft extends JFrame {
 
         // Drawing area, and its containers
         FlowLayout leftLayout = new FlowLayout(FlowLayout.LEFT, 0, 0);
-        jRightScrollPane = new JScrollPane();
+        JScrollPane rightScrollPane = new JScrollPane();
         jDesk = new JPanel();
         jDesk.setLayout(leftLayout);
         jDesk.setBackground(new Color(210, 210, 230));
@@ -173,15 +173,15 @@ public class ImageCraft extends JFrame {
         // Add components together
         jEasel.add(drawingArea);
         jDesk.add(jEasel);
-        jRightScrollPane.add(jDesk);
+        rightScrollPane.add(jDesk);
 
         // Build the Right Pane's Scroll Pane
-        jRightScrollPane.setViewportView(jDesk);
-        jRightPane.add(jRightScrollPane, BorderLayout.SOUTH);
+        rightScrollPane.setViewportView(jDesk);
+        rightPane.add(rightScrollPane, BorderLayout.SOUTH);
 
         // Add components. 
-        jRightPane.add(upperCont, BorderLayout.NORTH);
-        jRightPane.add(jRightScrollPane, BorderLayout.CENTER);
+        rightPane.add(upperCont, BorderLayout.NORTH);
+        rightPane.add(rightScrollPane, BorderLayout.CENTER);
 
         pack();
     }
@@ -189,7 +189,7 @@ public class ImageCraft extends JFrame {
     /**
      * Build tool bar. Called from initComponents()
      */
-    private void initMenuBar() {
+    private void initMenuBar(JMenuBar menuBar) {
         // New ActionListener
         MenuBarHandler handler = new MenuBarHandler();
 
@@ -284,10 +284,10 @@ public class ImageCraft extends JFrame {
         jHelp.add(jAbout);
 
         // Add it all together into jMenuBar
-        jMenuBar.add(jFile);
-        jMenuBar.add(jEdit);
-        jMenuBar.add(jFilter);
-        jMenuBar.add(jHelp);
+        menuBar.add(jFile);
+        menuBar.add(jEdit);
+        menuBar.add(jFilter);
+        menuBar.add(jHelp);
     }
 
     /**
@@ -370,16 +370,16 @@ public class ImageCraft extends JFrame {
                 currentLayer.addHistory("Blur");
 
             } else if (clicked.equals(jAbout)) {
-                JOptionPane.showMessageDialog(jMenuBar, 
-                        "Welcome to the best damn ImageCrafting program "
-                                + "you ever did saw.");
+//                JOptionPane.showMessageDialog(menuBar, 
+//                        "Welcome to the best damn ImageCrafting program "
+//                                + "you ever did saw.");
             }
         }
 
     }
 
     /**
-     * Build tool buttons and place into jToolBar.
+     * Build tool buttons and place into passed JPanel.
      */
     private void initToolBar(JPanel toolCont) {
         ToolBarHandler handler = new ToolBarHandler();
@@ -431,7 +431,6 @@ public class ImageCraft extends JFrame {
 
     /**
      * Responds to the selected items in the toolbar.
-     * 
      */
     private class ToolBarHandler implements ActionListener {
 
@@ -456,7 +455,11 @@ public class ImageCraft extends JFrame {
 
     }
 
-    private void initLeftPane() {
+    /**
+     * Initialize components in left side of GUI.
+     * @param leftPane JPanel to contain components
+     */
+    private void initLeftPane(JPanel leftPane) {
         ////////////////
         // Holds "Layers" title and layer tools
         JPanel cont = new JPanel();
@@ -468,10 +471,10 @@ public class ImageCraft extends JFrame {
         JPanel southCont = new JPanel();
 
         //Add a Title to the header panel
-        jLayerTitle = new JLabel();
-        jLayerTitle.setFont(new Font("Georgia", 1, 24));
-        jLayerTitle.setText("Layers");
-        northCont.add(jLayerTitle);
+        JLabel layerHeader = new JLabel();
+        layerHeader.setFont(new Font("Georgia", 1, 24));
+        layerHeader.setText("Layers");
+        northCont.add(layerHeader);
 
         // "Select All" checkbox
         jSelectAllLayers = new JCheckBox();
@@ -485,7 +488,7 @@ public class ImageCraft extends JFrame {
         southCont.add(jSelectAllLayers);
 
         // "New Layer" button
-        newLayer = new JButton();
+        JButton newLayer = new JButton();
         newLayer.setText("New");
         newLayer.addMouseListener(new MouseAdapter() {
             @Override
@@ -499,22 +502,30 @@ public class ImageCraft extends JFrame {
         // Border layout 
         cont.add(northCont, BorderLayout.NORTH);
         cont.add(southCont, BorderLayout.SOUTH);
-        jLeftPane.add(cont, BorderLayout.NORTH);
+        leftPane.add(cont, BorderLayout.NORTH);
 
         /////////////////
         // Add a scroll pane for the layer tree
         // Place in CENTER so it automatically sizes
-        jLayerScrollPane = new JScrollPane();
+        JScrollPane leftScrollPane = new JScrollPane();
         layerTree = new LayerTree(this);
-        jLayerScrollPane.setViewportView(layerTree);
-        jLeftPane.add(jLayerScrollPane, BorderLayout.CENTER);
+        leftScrollPane.setViewportView(layerTree);
+        leftPane.add(leftScrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Repaint the current drawing when the split pane has been resized.
+     * @param evt handled by Java
+     */
     private void jRightPaneComponentResized(ComponentEvent evt) {
         //Draw the BufferedImage to the JPanel
         drawingArea.repaint();
     }
 
+    /**
+     * Create and select a new layer.
+     * @param evt handled by system
+     */
     @SuppressWarnings("unchecked")
     private void newLayerMouseClicked(MouseEvent evt) {
         //Uncheck the SelectAllLayers checkbox, reset the Layer List with the
@@ -531,6 +542,11 @@ public class ImageCraft extends JFrame {
                 + " ; " + layer);
     }
 
+    /**
+     * Update LayerTree when clicked on selectAll button.
+     * Ignores if was un/checked by a process.
+     * @param evt 
+     */
     private void jSelectAllLayersItemStateChanged(ItemEvent evt) {
         // Do not do anything flag
         // LayerTree uses this when setting selectAll checkbox on the fly
@@ -552,7 +568,7 @@ public class ImageCraft extends JFrame {
             }
 //            layerList1.setSelectedIndices(indexes);
             layerTree.setSelectionRows(indices);
-            selectedAll = true;
+            allLayersSelected = true;
             jSelectAllLayers.setSelected(true);
 
         } else {
@@ -561,6 +577,10 @@ public class ImageCraft extends JFrame {
         }
     }
 
+    /**
+     * Check whether to close whole application on window close.
+     * @param evt 
+     */
     private void formWindowClosing(WindowEvent evt) {
         //If we are closing the only openFrame then exit the application
         if (openFrames == 1) {
@@ -569,10 +589,18 @@ public class ImageCraft extends JFrame {
         ImageCraft.openFrames--;
     }
 
+    /**
+     * Update total number of imageCraft objects on new object.
+     * @param evt 
+     */
     private void formWindowOpened(WindowEvent evt) {
         ImageCraft.openFrames++;
     }
 
+    /**
+     * Update current tool with newly selected pen.
+     * @param evt 
+     */
     private void jPenChange(ItemEvent evt) {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             if (jSize.getSelectedIndex() == 0) {
@@ -591,9 +619,13 @@ public class ImageCraft extends JFrame {
         }
     }
 
-    private void formComponentResized(ComponentEvent evt) {
-        this.repaint();
-    }
+//    /** 
+//     * Repaint current drawing on window resize.
+//     * @param evt 
+//     */
+//    private void formComponentResized(ComponentEvent evt) {
+//        this.repaint();
+//    }
 
     /**
      * Set the paint color of this ImageCraft object. Does not update
@@ -620,6 +652,11 @@ public class ImageCraft extends JFrame {
         return (primary ? primaryColor : secondaryColor);
     }
 
+    /**
+     * Create and return a new empty BufferedImage with same dimensions
+     * as current drawing.
+     * @return the new empty image
+     */
     public BufferedImage newBlankImage() {
         return new BufferedImage(
                 (int) drawingArea.getPreferredSize().getWidth(),
@@ -627,14 +664,29 @@ public class ImageCraft extends JFrame {
                 BufferedImage.TYPE_INT_ARGB);
     }
 
-    public BufferedImage resize(BufferedImage bufferedImage, int width, int height) {
+    /**
+     * Grow passed BufferedImage if not as big as current drawing.
+     * @param bufferedImage buffered image to resize
+     * @param width its width
+     * @param height its height
+     * @return the correctly sized BufferedImage
+     */
+    public BufferedImage maxOutImage(BufferedImage bufferedImage, int width, int height) {
         //Only change the dimensions of the BufferedImage if it has increased in
         //size. This ensures data isn't lost by resizing.
         BufferedImage resizedImage = new BufferedImage(
                 Math.max(width, bufferedImage.getWidth()),
                 Math.max(height, bufferedImage.getHeight()),
                 BufferedImage.TYPE_INT_ARGB);
-        resizedImage.getGraphics().drawImage(bufferedImage, 0, 0, null);
+        Graphics resizedGraphics = resizedImage.getGraphics();
+        
+        // Draw old BufferedImage to new image to be returned
+        resizedGraphics.drawImage(bufferedImage, 0, 0, null);
+        
+        // Free up graphics resources
+        resizedGraphics.dispose();
+        
+        // Return new image
         return resizedImage;
     }
 
@@ -669,38 +721,21 @@ public class ImageCraft extends JFrame {
         setTitle(currentTitle);
     }
     
+    /**
+     * Access easel.
+     * 
+     * @return easel
+     */
     public Easel getEasel(){
         return jEasel;
     }
 
     /**
+     * Main runnable.
+     * 
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(ImageCraft.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(ImageCraft.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(ImageCraft.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(ImageCraft.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             @Override
@@ -714,20 +749,29 @@ public class ImageCraft extends JFrame {
         });
     }
 
-    // Variables declaration
+    ////// Fields //////
+    // Class fields
+    //Number of current open ImageCraft frames
+    private static int openFrames = 0;
+    // Use the same colorPicker for every open ImageCraft object
+    public static ColorPicker colorPicker = new ColorPicker();
+    
+    // Object fields
+    // Each imageCraft object may have its own colors
     private Color primaryColor = Color.black;
     private Color secondaryColor = Color.white;
 
-    // Whether all *layers* are selected within LayerTree
-    protected boolean selectedAll;
-
-    // FileChooser is inside of this input-output object
+    // FileChooser is inside of this object
     private final IO inputOutput;
 
-    //Number of New Layers, List of all layers, currently selected layer
+    // Total number of layers
     protected int numLayer;
+    // Contains all layers in this current drawing
     public ArrayList<Layer> layerList;
+    // Which layer is selected - see LayerTree
     public Layer currentLayer;
+    // Whether all layers are selected within LayerTree, flag
+    protected boolean allLayersSelected;
 
     // Current tool selected
     public SimpleTool currentTool = null;
@@ -737,11 +781,7 @@ public class ImageCraft extends JFrame {
     // Name of the current file
     public String currentTitle = "Untitled";
 
-    //Number of current open ImageCraft frames
-    private static int openFrames = 0;
-
-    public static ColorPicker colorPicker = new ColorPicker();
-
+    // Reused components
     public DrawingArea drawingArea;
     private JMenuItem jAbout;
     private JMenuItem jClose;
@@ -759,9 +799,6 @@ public class ImageCraft extends JFrame {
     private JMenuItem jGrayscale;
     private JMenu jHelp;
     private JMenuItem jImport;
-    private JLabel jLayerTitle;
-    private JPanel jLeftPane;
-    private JMenuBar jMenuBar;
     private JMenuItem jBlur;
     private JMenuItem jNegative;
     private JMenuItem jNew;
@@ -771,17 +808,11 @@ public class ImageCraft extends JFrame {
     private JMenuItem jQuit;
     public JToggleButton jRectangle;
     private JMenuItem jRedo;
-    private JPanel jRightPane;
     private JMenuItem jSave;
     private JMenuItem jSaveAs;
-    private JScrollPane jLayerScrollPane;
-    private JScrollPane jRightScrollPane;
     protected JCheckBox jSelectAllLayers;
     private JMenuItem jSharpen;
     public JComboBox jSize;
-    private JSplitPane jSplitPane;
     private JMenuItem jUndo;
     public LayerTree layerTree;
-    private JButton newLayer;
-    // End of variables declaration
 }

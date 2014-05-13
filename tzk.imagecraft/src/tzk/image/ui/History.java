@@ -120,7 +120,9 @@ public class History {
         //Draw this actionImage to the finalImage
         //Else apply the filter to the finalImage
         if (actionImage != null) {
-            finalImage.getGraphics().drawImage(actionImage, 0, 0, null);
+            Graphics finalGraphics = finalImage.getGraphics();
+            finalGraphics.drawImage(actionImage, 0, 0, null);
+            finalGraphics.dispose();
         } else {
             ArrayList<History> selected = new ArrayList<>();
             for (int i = 0; i < index +1; i++) {
@@ -238,8 +240,9 @@ public class History {
         };
         BufferedImageOp sharpenOp = new ConvolveOp(new Kernel(3, 3, sharpKernel),
                 ConvolveOp.EDGE_NO_OP, null);
-
-        image.getGraphics().drawImage(sharpenOp.filter(image, null), 0, 0, null);
+        Graphics imageGraphics = image.getGraphics();
+        imageGraphics.drawImage(sharpenOp.filter(image, null), 0, 0, null);
+        imageGraphics.dispose();
         return image;
     }
 

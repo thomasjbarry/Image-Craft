@@ -27,10 +27,11 @@ package tzk.image.ui;
  * image. 
  * @author Thomas
  */
-import java.util.ArrayList;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
+import java.util.ArrayList;
 
 public class Layer {
 
@@ -58,10 +59,14 @@ public class Layer {
     protected void drawLayer() {
         if (historyArray != null && historyArray.size() > 0 && undoIndex > -1) {
             BufferedImage snapshot = ((History) historyArray.get(undoIndex)).getFinalImage();
-            imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
+            Graphics currentGraphics = imageCraft.drawingArea.getCurrentDrawing().getGraphics();
+            Graphics areaGraphics = imageCraft.drawingArea.getGraphics();
+            currentGraphics.drawImage(
                     snapshot, 0, 0, null);
-            imageCraft.drawingArea.getGraphics().drawImage(
+            areaGraphics.drawImage(
                     imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
+            currentGraphics.dispose();
+            areaGraphics.dispose();
         }
     }
     
@@ -127,9 +132,12 @@ public class Layer {
         undoIndex++;
         imageCraft.layerTree.addHistory(history, this);
         historyArray.add(history);
-        imageCraft.drawingArea.getCurrentDrawing().getGraphics().clearRect(0, 0, imageCraft.drawingArea.getCurrentDrawing().getWidth(), imageCraft.drawingArea.getCurrentDrawing().getHeight());        
-        imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
+        BufferedImage currentDrawing = imageCraft.drawingArea.getCurrentDrawing();
+        Graphics currentGraphics = currentDrawing.getGraphics();
+        currentGraphics.clearRect(0, 0, currentDrawing.getWidth(), currentDrawing.getHeight());        
+        currentGraphics.drawImage(
                 image, 0, 0, null);
+        currentGraphics.dispose();
 
         imageCraft.drawingArea.repaint();
     }
@@ -162,9 +170,12 @@ public class Layer {
         historyArray.add(history);
         
         //Clear the Drawing Area and draw the current snapshot to the current drawing
-        imageCraft.drawingArea.getCurrentDrawing().getGraphics().clearRect(0, 0, imageCraft.drawingArea.getCurrentDrawing().getWidth(), imageCraft.drawingArea.getCurrentDrawing().getHeight());
-        imageCraft.drawingArea.getCurrentDrawing().getGraphics().drawImage(
+        BufferedImage currentDrawing = imageCraft.drawingArea.getCurrentDrawing();
+        Graphics currentGraphics = currentDrawing.getGraphics();
+        currentGraphics.clearRect(0, 0, currentDrawing.getWidth(), currentDrawing.getHeight());
+        currentGraphics.drawImage(
                 history.getFinalImage(), 0, 0, null);
+        currentGraphics.dispose();
 
         imageCraft.drawingArea.repaint();
 

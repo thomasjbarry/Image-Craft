@@ -1,29 +1,15 @@
 Image-Craft
 ===========
 
-Bugs:
-	LayerTree
-		update finalImage of history objects: move up/down, delete
-			in its own method so we can call that method to rebuild the layers
-		undo-redo
-TODO:
-
-	ZACH:
-		Undo-redo problems
-
-	THOMAS: 
-		LayerTree bug
-
-	DREW: 
-		Scale filter: SimpleTool method => Resizing Penstrokes && Resize Tool
-		Importing image as penstroke
-
 High priority:
-	Undo/redo
 	Pretty gooey
 	Clean code
 	Commenting
 	Disposing graphics
+		Finished for tzk.image.ui only
+	LayerTree (at least)
+		Make sure all java.awt.event.* and javax.swing.event.* are imported
+		and not in the code itself.
 
 No Time:
 	Tools: Select, Eraser (BufferedImageOp to selection? Change drawing type like clearRect?)

@@ -207,9 +207,12 @@ public class IO {
         saveTo.setRGB(0, 0, size);
         for (int i = 0; i < size; i++) {
             tempImage = imageCraft.newBlankImage();
-            tempImage.getGraphics().drawImage(imageCraft.layerList.get(i).getSnapshot(), 0, 0, null);
+            tempGraphics = tempImage.getGraphics();
+            tempGraphics.drawImage(imageCraft.layerList.get(i).getSnapshot(), 0, 0, null);
             saveGraphics.drawImage(tempImage, 0, 1 + (size - i - 1) * height, null);
+            tempGraphics.dispose();
         }
+        saveGraphics.dispose();
 
         // Save image to operating system
         // First save as PNG format in ".icf" file
@@ -320,11 +323,13 @@ public class IO {
                         (int) imageCraft.drawingArea.getPreferredSize().getWidth(),
                         (int) imageCraft.drawingArea.getPreferredSize().getHeight(),
                         BufferedImage.TYPE_INT_RGB);
-                filteredImage.getGraphics().drawImage(screenShot, 0, 0, null);
             } else {
                 filteredImage = imageCraft.newBlankImage();
-                filteredImage.getGraphics().drawImage(screenShot, 0, 0, null);
             }
+            Graphics filteredGraphics = filteredImage.getGraphics();
+            filteredGraphics.drawImage(screenShot, 0, 0, null);
+            filteredGraphics.dispose();
+            
             //Attempts to write the file and open it in the Desktop
             try {
                 ImageIO.write(filteredImage, format, latestExport);
@@ -350,7 +355,9 @@ public class IO {
             BufferedImage readFile = ImageIO.read(file);
             BufferedImage bufferedFile = new BufferedImage(readFile.getWidth(),
                     readFile.getHeight(), BufferedImage.TYPE_INT_ARGB);
-            bufferedFile.getGraphics().drawImage(readFile, 0, 0, null);
+            Graphics bufferedGraphics = bufferedFile.getGraphics();
+            bufferedGraphics.drawImage(readFile, 0, 0, null);
+            bufferedGraphics.dispose();
 
             //If the bufferedFile is too big resize the Drawing Area
             if (bufferedFile.getWidth() > imageCraft.drawingArea.getWidth()
@@ -392,13 +399,13 @@ public class IO {
 
         // Get information about file
         // The first pixel in the first line holds the number of layers
-        Graphics readGraphics = readImage.getGraphics();
         int numLayers = readImage.getRGB(0, 0);
         int width = readImage.getWidth();
         int height = (readImage.getHeight() - 1) / numLayers;
 
         // Import all layers
         BufferedImage tempImage;
+        Graphics tempGraphics;
         for (int i = 0; i < numLayers; i++) {
             // This is a new ImageCraft
             // If layer 0, use background layer that already exists
@@ -412,9 +419,11 @@ public class IO {
                 layer = new Layer(iC);
             }
             tempImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            tempImage.getGraphics().drawImage(readImage,
+            tempGraphics = tempImage.getGraphics();
+            tempGraphics.drawImage(readImage,
                     0, 0, width, height,
                     0, i * height + 1, width, (i + 1) * height, null);
+            tempGraphics.dispose();
 
             // Create a new history object for that layer
             layer.addHistory(tempImage, "Opened drawing");
@@ -443,6 +452,9 @@ public class IO {
                 g.drawImage(((History) layer.getHistoryArray().get(layer.getUndoIndex())).getFinalImage(), 0, 0, null);
             }
         }
+        
+        // Clean up resources
+        g.dispose();
 
         // Return the screenshot
         return image;

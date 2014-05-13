@@ -107,8 +107,17 @@ public class Easel extends javax.swing.JPanel {
 
         //If a resize component is selected then draw the current drawing to the easel
         if (horizontal || vertical || corner) {
-            this.getGraphics().drawImage(imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
-            imageCraft.jDesk.getGraphics().drawImage(imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
+            // Store graphics into their own variables so that they can be
+            // properly disposed of later on
+            Graphics thisGraphics = this.getGraphics();
+            Graphics deskGraphics = imageCraft.jDesk.getGraphics();
+            
+            thisGraphics.drawImage(imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
+            deskGraphics.drawImage(imageCraft.drawingArea.getCurrentDrawing(), 0, 0, null);
+            
+            thisGraphics.dispose();
+            deskGraphics.dispose();
+            
             revalidate();
             repaint();
             imageCraft.jDesk.revalidate();

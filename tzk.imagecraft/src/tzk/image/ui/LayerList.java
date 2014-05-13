@@ -23,14 +23,17 @@
 package tzk.image.ui;
 
 /**
- *
+ * This class is no longer used! It has been replaced with LayerTree.java!
  * @author Thomas
  */
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.event.*;
 import java.util.Vector;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 @Deprecated
 public class LayerList extends JList {
@@ -83,42 +86,42 @@ public class LayerList extends JList {
 
         jPopupMenu.add(jMenuItemSetCL);
         jMenuItemSetCL.setText("Set as Current Layer");
-        jMenuItemSetCL.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemSetCL.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemSetCLActionPerformed(evt);
             }
         });
         jPopupMenu.add(jMenuItemRename);
         jMenuItemRename.setText("Rename");
-        jMenuItemRename.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemRename.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemRenameActionPerformed(evt);
             }
         });        
         jPopupMenu.add(jMenuItemMoveUp);
         jMenuItemMoveUp.setText("Move up");
-        jMenuItemMoveUp.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemMoveUp.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemMoveUpActionPerformed(evt);
             }
         });
         jPopupMenu.add(jMenuItemMoveDown);
         jMenuItemMoveDown.setText("Move down");
-        jMenuItemMoveDown.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemMoveDown.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemMoveDownActionPerformed(evt);
             }
         });
         
         jPopupMenu.add(jMenuItemClearLayer);
         jMenuItemClearLayer.setText("Clear");
-        jMenuItemClearLayer.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemClearLayer.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                jMenuItemClearLayerActionPerformed(evt);
             }
         });
@@ -126,29 +129,29 @@ public class LayerList extends JList {
         jPopupMenu.add(jMenuItemDeleteLayer);
         jMenuItemDeleteLayer.setText("Delete");
 
-        jMenuItemDeleteLayer.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemDeleteLayer.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemDeleteLayerActionPerformed(evt);
             }
         });
 
         setSelectedIndex(0);
-        addMouseListener(new java.awt.event.MouseAdapter() {
+        addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(MouseEvent evt) {
                 jLayerListMouseClicked(evt);
             }
         });
-        addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+            public void valueChanged(ListSelectionEvent evt) {
                 jLayerListValueChanged(evt);
             }
         });
     }
 
-    private void jLayerListMouseClicked(java.awt.event.MouseEvent evt) {
+    private void jLayerListMouseClicked(MouseEvent evt) {
         //If you right clicked the LayerList then show the PopupMenu from
         //where you clicked and set the clickedLayer to the layer you clicked on
         if (SwingUtilities.isRightMouseButton(evt)) {
@@ -176,28 +179,31 @@ public class LayerList extends JList {
         }
     }
 
-    private void jLayerListValueChanged(javax.swing.event.ListSelectionEvent evt) {
+    private void jLayerListValueChanged(ListSelectionEvent evt) {
         //If there isn't a selected index don't do anything
         if (getSelectedIndex() != -1) {
-            if (imageCraft.selectedAll) {
-                imageCraft.selectedAll = false;
+            if (imageCraft.allLayersSelected) {
+                imageCraft.allLayersSelected = false;
             } else if (imageCraft.jSelectAllLayers.isSelected()) {
                 int index = getSelectedIndex();
                 imageCraft.jSelectAllLayers.setSelected(false);
                 setSelectedIndex(index);
             } else if (getSelectedIndices().length == imageCraft.layerList.size()) {
-                imageCraft.selectedAll = true;
+                imageCraft.allLayersSelected = true;
                 imageCraft.jSelectAllLayers.setSelected(true);
             }
 
             imageCraft.currentLayer = imageCraft.layerList.get(
                     getSelectedIndex());
             this.repaint();
-            imageCraft.drawingArea.paintComponent(imageCraft.drawingArea.getGraphics());
+//            Graphics drawingGraphics = imageCraft.drawingArea.getGraphics();
+//            imageCraft.drawingArea.paintComponent(drawingGraphics);
+//            drawingGraphics.dispose();
+            imageCraft.drawingArea.repaint();
         }
     }
 
-    private void jMenuItemSetCLActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemSetCLActionPerformed(ActionEvent evt) {
         //If you select the "Set as Current Layer" menu item set the Current
         //Layer to the layer we right clicked on.
         imageCraft.currentLayer = clickedLayer;
@@ -206,7 +212,7 @@ public class LayerList extends JList {
                 imageCraft.currentLayer.getLayerName());
     }
     
-    private void jMenuItemRenameActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemRenameActionPerformed(ActionEvent evt) {
         int[] selected = this.getSelectedIndices();
         String renameText = JOptionPane.showInputDialog("Rename layer", clickedLayer.getLayerName());
         if (renameText != null) {
@@ -217,7 +223,7 @@ public class LayerList extends JList {
         }
     }    
 
-    private void jMenuItemMoveUpActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemMoveUpActionPerformed(ActionEvent evt) {
         int[] selected = this.getSelectedIndices();
         int index = imageCraft.layerList.indexOf(clickedLayer);
         Layer friend = imageCraft.layerList.get(index - 1);
@@ -236,7 +242,7 @@ public class LayerList extends JList {
         System.out.println("You just moved " + clickedLayer.getLayerName() + " up.");
     }
 
-    private void jMenuItemMoveDownActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemMoveDownActionPerformed(ActionEvent evt) {
         int[] selected = this.getSelectedIndices();
         int index = imageCraft.layerList.indexOf(clickedLayer);
 
@@ -256,7 +262,7 @@ public class LayerList extends JList {
         System.out.println("You just moved " + clickedLayer.getLayerName() + " down.");
     }
 
-    private void jMenuItemClearLayerActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemClearLayerActionPerformed(ActionEvent evt) {
         int[] selected = this.getSelectedIndices();
         clickedLayer.getHistoryArray().clear();
         clickedLayer.setUndoIndex((short) -1);
@@ -266,7 +272,7 @@ public class LayerList extends JList {
         System.out.println("You just cleared " + clickedLayer.getLayerName());
     }
     
-    private void jMenuItemDeleteLayerActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemDeleteLayerActionPerformed(ActionEvent evt) {
         imageCraft.layerList.remove(clickedLayer);
         this.updateLayerList();
         this.repaint();
