@@ -109,7 +109,7 @@ public class ImageCraft extends JFrame {
 
         /////////////////////////////////
         // Build the menu bar
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
         initMenuBar(menuBar);
         pane.add(menuBar, BorderLayout.NORTH);
         setJMenuBar(menuBar);
@@ -291,7 +291,8 @@ public class ImageCraft extends JFrame {
     }
 
     /**
-     * Listener that handles MenuBar action events.
+     * Listener that handles MenuBar action events. The extensive else if chain 
+     * is for any MenuItem that is clicked in the top left menu of ImageCraft.
      */
     private class MenuBarHandler implements ActionListener {
 
@@ -370,12 +371,14 @@ public class ImageCraft extends JFrame {
                 currentLayer.addHistory("Blur");
 
             } else if (clicked.equals(jAbout)) {
-//                JOptionPane.showMessageDialog(menuBar, 
-//                        "Welcome to the best damn ImageCrafting program "
-//                                + "you ever did saw.");
+                JOptionPane.showMessageDialog(menuBar,
+                      "Something funny that Zach will write...yolo, swag, 2014"
+                              + " ImageCraft for lyfe. GG final project 2 ez. "
+                               );
+            } else {
+                System.out.println("MenuBarHanler Error");
             }
         }
-
     }
 
     /**
@@ -383,38 +386,36 @@ public class ImageCraft extends JFrame {
      */
     private void initToolBar(JPanel toolCont) {
         ToolBarHandler handler = new ToolBarHandler();
-        
+
         jDraw = new JToggleButton();
         jDraw.setText("Draw");
         jDraw.addActionListener(handler);
-        
-        
+
         jFill = new JToggleButton();
         jFill.setText("Fill");
         jFill.addActionListener(handler);
-        
+
         jPick = new JToggleButton();
         jPick.setText("Picker");
         jPick.addActionListener(handler);
-        
+
         jRectangle = new JToggleButton();
         jRectangle.setText("Rectangle");
         jRectangle.addActionListener(handler);
-        
+
         jSize = new JComboBox();
-        jSize.setModel(new DefaultComboBoxModel(new String[]
-        {"Pen Width: 1", "Pen Width: 2", "Pen Width: 5", "Caligraphy"}));
+        jSize.setModel(new DefaultComboBoxModel(new String[]{"Pen Width: 1", "Pen Width: 2", "Pen Width: 5", "Caligraphy"}));
         jSize.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent evt) {
                 jPenChange(evt);
             }
-        });       
-        
+        });
+
         jOval = new JToggleButton();
         jOval.setText("Oval");
         jOval.addActionListener(handler);
-        
+
         jCrop = new JButton();
         jCrop.setText("Crop");
         jCrop.addActionListener(handler);
@@ -438,17 +439,17 @@ public class ImageCraft extends JFrame {
         public void actionPerformed(ActionEvent e) {
             AbstractButton clicked = (AbstractButton) e.getSource();
 
-            if (clicked.equals( (JToggleButton) jDraw)) {
+            if (clicked.equals((JToggleButton) jDraw)) {
                 drawTool.select();
-            } else if (clicked.equals( (JToggleButton) jFill)){
+            } else if (clicked.equals((JToggleButton) jFill)) {
                 fillTool.select();
-            } else if (clicked.equals( (JToggleButton) jPick)){
+            } else if (clicked.equals((JToggleButton) jPick)) {
                 pickAColor.select();
-            } else if (clicked.equals( (JToggleButton) jRectangle)){
+            } else if (clicked.equals((JToggleButton) jRectangle)) {
                 rectangleShape.select();
-            } else if (clicked.equals( (JToggleButton) jOval)){
+            } else if (clicked.equals((JToggleButton) jOval)) {
                 ovalShape.select();
-            } else if (clicked.equals( (JButton) jCrop)){
+            } else if (clicked.equals((JButton) jCrop)) {
                 cropTool.select();
             }
         }
@@ -457,6 +458,7 @@ public class ImageCraft extends JFrame {
 
     /**
      * Initialize components in left side of GUI.
+     *
      * @param leftPane JPanel to contain components
      */
     private void initLeftPane(JPanel leftPane) {
@@ -515,6 +517,7 @@ public class ImageCraft extends JFrame {
 
     /**
      * Repaint the current drawing when the split pane has been resized.
+     *
      * @param evt handled by Java
      */
     private void jRightPaneComponentResized(ComponentEvent evt) {
@@ -524,6 +527,7 @@ public class ImageCraft extends JFrame {
 
     /**
      * Create and select a new layer.
+     *
      * @param evt handled by system
      */
     @SuppressWarnings("unchecked")
@@ -543,9 +547,10 @@ public class ImageCraft extends JFrame {
     }
 
     /**
-     * Update LayerTree when clicked on selectAll button.
-     * Ignores if was un/checked by a process.
-     * @param evt 
+     * Update LayerTree when clicked on selectAll button. Ignores if was
+     * un/checked by a process.
+     *
+     * @param evt
      */
     private void jSelectAllLayersItemStateChanged(ItemEvent evt) {
         // Do not do anything flag
@@ -579,7 +584,8 @@ public class ImageCraft extends JFrame {
 
     /**
      * Check whether to close whole application on window close.
-     * @param evt 
+     *
+     * @param evt
      */
     private void formWindowClosing(WindowEvent evt) {
         //If we are closing the only openFrame then exit the application
@@ -591,7 +597,8 @@ public class ImageCraft extends JFrame {
 
     /**
      * Update total number of imageCraft objects on new object.
-     * @param evt 
+     *
+     * @param evt
      */
     private void formWindowOpened(WindowEvent evt) {
         ImageCraft.openFrames++;
@@ -599,7 +606,8 @@ public class ImageCraft extends JFrame {
 
     /**
      * Update current tool with newly selected pen.
-     * @param evt 
+     *
+     * @param evt
      */
     private void jPenChange(ItemEvent evt) {
         if (evt.getStateChange() == ItemEvent.SELECTED) {
@@ -626,7 +634,6 @@ public class ImageCraft extends JFrame {
 //    private void formComponentResized(ComponentEvent evt) {
 //        this.repaint();
 //    }
-
     /**
      * Set the paint color of this ImageCraft object. Does not update
      * ColorSwatch.
@@ -653,8 +660,9 @@ public class ImageCraft extends JFrame {
     }
 
     /**
-     * Create and return a new empty BufferedImage with same dimensions
-     * as current drawing.
+     * Create and return a new empty BufferedImage with same dimensions as
+     * current drawing.
+     *
      * @return the new empty image
      */
     public BufferedImage newBlankImage() {
@@ -666,6 +674,7 @@ public class ImageCraft extends JFrame {
 
     /**
      * Grow passed BufferedImage if not as big as current drawing.
+     *
      * @param bufferedImage buffered image to resize
      * @param width its width
      * @param height its height
@@ -679,13 +688,13 @@ public class ImageCraft extends JFrame {
                 Math.max(height, bufferedImage.getHeight()),
                 BufferedImage.TYPE_INT_ARGB);
         Graphics resizedGraphics = resizedImage.getGraphics();
-        
+
         // Draw old BufferedImage to new image to be returned
         resizedGraphics.drawImage(bufferedImage, 0, 0, null);
-        
+
         // Free up graphics resources
         resizedGraphics.dispose();
-        
+
         // Return new image
         return resizedImage;
     }
@@ -720,19 +729,19 @@ public class ImageCraft extends JFrame {
     public void setTitle() {
         setTitle(currentTitle);
     }
-    
+
     /**
      * Access easel.
-     * 
+     *
      * @return easel
      */
-    public Easel getEasel(){
+    public Easel getEasel() {
         return jEasel;
     }
 
     /**
      * Main runnable.
-     * 
+     *
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -755,7 +764,7 @@ public class ImageCraft extends JFrame {
     private static int openFrames = 0;
     // Use the same colorPicker for every open ImageCraft object
     public static ColorPicker colorPicker = new ColorPicker();
-    
+
     // Object fields
     // Each imageCraft object may have its own colors
     private Color primaryColor = Color.black;
@@ -783,6 +792,7 @@ public class ImageCraft extends JFrame {
 
     // Reused components
     public DrawingArea drawingArea;
+    private JMenuBar menuBar;
     private JMenuItem jAbout;
     private JMenuItem jClose;
     public ColorSwatch jColorSwatch;

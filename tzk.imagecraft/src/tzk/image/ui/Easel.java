@@ -37,7 +37,7 @@ import javax.swing.JPanel;
  *
  * @author Drew
  */
-public class Easel extends javax.swing.JPanel {
+public class Easel extends JPanel {
 
     /**
      * Creates new form Easel
@@ -303,6 +303,4 @@ public class Easel extends javax.swing.JPanel {
     private final Cursor cursorN = new Cursor(Cursor.N_RESIZE_CURSOR);
     private final Cursor cursorNW = new Cursor(Cursor.NW_RESIZE_CURSOR);
     private final Cursor cursorDefault = new Cursor(Cursor.DEFAULT_CURSOR);
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
 }
