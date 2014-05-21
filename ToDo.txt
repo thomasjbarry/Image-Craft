@@ -1,0 +1,24 @@
+Image-Craft
+===========
+
+No Time
+	Tools Select, Eraser (BufferedImageOp to selection Change drawing type like clearRect)
+
+	Low Priority
+		Merge Down layers (merges to bottommost selected layer)
+		
+		System Clipboard CopyPaste
+		
+		When resizing, draw currently selected layers as alpha to jDesk
+
+		Drag and Drop How to modify the sizelocation of an object after creating it (shapes, pasting pictures, etc.)
+
+		Clean up ColorPicker to be more user friendly
+
+		Anti-Aliasing
+		
+		LayerTree rename, drag&drop
+
+		Custom PopupDialog to allow for saving, exporting selections, specific layers, or all layers
+
+		Stamp Tool

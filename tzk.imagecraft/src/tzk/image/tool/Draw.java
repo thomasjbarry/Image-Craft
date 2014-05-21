@@ -229,7 +229,7 @@ public class Draw extends SimpleTool {
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 if (Color.WHITE.getRGB() - image.getRGB(x, y) < 50) {
-                    image.setRGB(x, y, blackTransparent);
+                    image.setRGB(x, y, transparent);
                 } else {
                     image.setRGB(x, y, color.getRGB());
                 }
@@ -328,8 +328,7 @@ public class Draw extends SimpleTool {
     // Variables declaration
     private final ImageCraft imageCraft;
 
-    private static int alpha = 0, red = 0, green = 0, blue = 0;
-    private static int blackTransparent = (alpha << 24) | (red << 16) | (green << 8) | blue;
+    private final static int transparent = 0x00000000;
     private Graphics drawingGraphics, imageGraphics;
     private boolean dragging, rightButton;
     private BufferedImage currentDrawing;

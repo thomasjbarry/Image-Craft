@@ -24,7 +24,10 @@ package tzk.image.ui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.image.BufferedImage;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
@@ -32,6 +35,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -135,21 +140,21 @@ public class LayerTree extends JTree {
     //Methods
     private void initComponents() {
         //Initialize RightClick Menu components
-        jPopupMenu = new javax.swing.JPopupMenu();
-        jMenuItemSetCL = new javax.swing.JMenuItem();
-        jMenuItemRename = new javax.swing.JMenuItem();
-        jMenuItemMoveUp = new javax.swing.JMenuItem();
-        jMenuItemMoveDown = new javax.swing.JMenuItem();
-        jMenuItemClearLayer = new javax.swing.JMenuItem();
-        jMenuItemDelete = new javax.swing.JMenuItem();
+        jPopupMenu = new JPopupMenu();
+        jMenuItemSetCL = new JMenuItem();
+        jMenuItemRename = new JMenuItem();
+        jMenuItemMoveUp = new JMenuItem();
+        jMenuItemMoveDown = new JMenuItem();
+        jMenuItemClearLayer = new JMenuItem();
+        jMenuItemDelete = new JMenuItem();
 
         //Add jMenuItemSetCL to jPopupMenu, set its text, and add an action listener
         //to the menu item. This will set the Current Layer.
         jPopupMenu.add(jMenuItemSetCL);
         jMenuItemSetCL.setText("Set as Current Layer");
-        jMenuItemSetCL.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemSetCL.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemSetCLActionPerformed(evt);
             }
         });
@@ -158,9 +163,9 @@ public class LayerTree extends JTree {
         //to the menu item. This will rename the Layer or History object.      
         jPopupMenu.add(jMenuItemRename);
         jMenuItemRename.setText("Rename");
-        jMenuItemRename.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemRename.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemRenameActionPerformed(evt);
             }
         });
@@ -170,9 +175,9 @@ public class LayerTree extends JTree {
         //in the tree.
         jPopupMenu.add(jMenuItemMoveUp);
         jMenuItemMoveUp.setText("Move up");
-        jMenuItemMoveUp.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemMoveUp.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemMoveUpActionPerformed(evt);
             }
         });
@@ -182,9 +187,9 @@ public class LayerTree extends JTree {
         //in the tree.        
         jPopupMenu.add(jMenuItemMoveDown);
         jMenuItemMoveDown.setText("Move down");
-        jMenuItemMoveDown.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemMoveDown.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemMoveDownActionPerformed(evt);
             }
         });
@@ -193,9 +198,9 @@ public class LayerTree extends JTree {
         //to the menu item. This will clear the Layer object of all of its SH objects.
         jPopupMenu.add(jMenuItemClearLayer);
         jMenuItemClearLayer.setText("Clear");
-        jMenuItemClearLayer.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemClearLayer.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemClearLayerActionPerformed(evt);
             }
         });
@@ -205,27 +210,27 @@ public class LayerTree extends JTree {
         //from the tree.
         jPopupMenu.add(jMenuItemDelete);
         jMenuItemDelete.setText("Delete");
-        jMenuItemDelete.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemDelete.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(ActionEvent evt) {
                 jMenuItemDeleteActionPerformed(evt);
             }
         });
 
         //Add a mouse listener (mouseClicked) to this LayerTree that calls
         //the jLayerTreeMouseClicked method
-        addMouseListener(new java.awt.event.MouseAdapter() {
+        addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(MouseEvent evt) {
                 jLayerTreeMouseClicked(evt);
             }
         });
 
         //Add a tree selection listener (valueChanged) to this LayerTree that
         //calls the jLayerTreeValueChanged method
-        addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+        addTreeSelectionListener(new TreeSelectionListener() {
             @Override
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+            public void valueChanged(TreeSelectionEvent evt) {
                 jLayerTreeValueChanged(evt);
             }
         });
@@ -240,7 +245,7 @@ public class LayerTree extends JTree {
      *
      * @param evt
      */
-    private void jLayerTreeMouseClicked(java.awt.event.MouseEvent evt) {
+    private void jLayerTreeMouseClicked(MouseEvent evt) {
         //Set the boolean isLayer to true if we clicked a Layer and false if we
         //clicked a History
         Layer thisLayer = getClickedLayer(evt.getX(), evt.getY());
@@ -339,7 +344,7 @@ public class LayerTree extends JTree {
      *
      * @param evt
      */
-    private void jLayerTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {
+    private void jLayerTreeValueChanged(TreeSelectionEvent evt) {
         // Do not fire layer events - something is already working on it
         if (inhibitEvents) {
             return;
@@ -384,7 +389,7 @@ public class LayerTree extends JTree {
      *
      * @param evt
      */
-    private void jMenuItemSetCLActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemSetCLActionPerformed(ActionEvent evt) {
         imageCraft.currentLayer = clickedLayer;
 
         //Repaint this LayerTree so that the CellRenderer can repaint this node red
@@ -399,7 +404,7 @@ public class LayerTree extends JTree {
      *
      * @param evt
      */
-    private void jMenuItemRenameActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemRenameActionPerformed(ActionEvent evt) {
         String renameText;
         DefaultMutableTreeNode node = null;
 
@@ -452,7 +457,7 @@ public class LayerTree extends JTree {
      *
      * @param evt
      */
-    private void jMenuItemMoveUpActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemMoveUpActionPerformed(ActionEvent evt) {
         // Store selected rows into selected
         int[] selected = this.getSelectionRows();
         int index;
@@ -523,7 +528,7 @@ public class LayerTree extends JTree {
      *
      * @param evt
      */
-    private void jMenuItemMoveDownActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemMoveDownActionPerformed(ActionEvent evt) {
         // Store selected rows into selected
         int[] selected = this.getSelectionRows();
         int index;
@@ -594,7 +599,7 @@ public class LayerTree extends JTree {
      *
      * @param evt
      */
-    private void jMenuItemClearLayerActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemClearLayerActionPerformed(ActionEvent evt) {
         //Gets the node selected and removes all of the HistoryNodes
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) root.getChildAt(imageCraft.layerList.indexOf(clickedLayer));
         node.removeAllChildren();
@@ -618,7 +623,7 @@ public class LayerTree extends JTree {
      *
      * @param evt
      */
-    private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItemDeleteActionPerformed(ActionEvent evt) {
         //If the clicked node is a layer node
         if (isLayer) {
             //Call removeLayer method on the clickedLayer to remove it
