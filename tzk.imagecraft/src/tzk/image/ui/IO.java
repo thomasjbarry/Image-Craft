@@ -34,8 +34,12 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
+ * IO handles all the appropriate functionality for the importing and saving of
+ * ImageCraft projects. Such as opening, importing, saving, exporting...
  *
- * @author Zach
+ * Contributers: Thomas James Barry/ thomasbarry92@gmail.com /5076942 Zachary
+ *              Gateley/ zach.cykic@gmail.com /5415772 K Drew Gonzales/
+ *              drewgonzales360@gmail.com /5470602
  */
 public class IO {
 
@@ -55,7 +59,7 @@ public class IO {
     }
 
     /**
-     * Open a file.
+     * Opens the FileChooser window and allows the user to pick a file.
      */
     protected void open() {
         // Set available file formats, all
@@ -85,7 +89,7 @@ public class IO {
         int j = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
         fileName = fileName.substring(j + 1);
         String ext = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-        
+
         // No actions taken on this ImageCraft?
         boolean newCraft = imageCraft.numLayer == 1 && imageCraft.layerList.get(0).getHistoryArray().isEmpty();
 
@@ -94,26 +98,25 @@ public class IO {
             if (newCraft) {
                 // Open into this imageCraft
                 openImageCraft(file, imageCraft);
-            }
-            else {
+            } else {
                 // Open ICF file in new ImageCraft instance
                 java.awt.EventQueue.invokeLater(new Runnable() {
-                    
+
                     @Override
                     public void run() {
                         // Create new ImageCraft object
                         final ImageCraft iC = new ImageCraft();
-                        
+
                         // Must invokeLater because of NullPointerExceptions
                         java.awt.EventQueue.invokeLater(new Runnable() {
-                            
+
                             @Override
                             public void run() {
                                 openImageCraft(file, iC);
                             }
-                            
+
                         });
-                        
+
                         // Show ImageCraft object
                         // Should repaint
                         iC.setVisible(true);
@@ -180,7 +183,7 @@ public class IO {
             // Update ImageCraft title
             imageCraft.setTitle(latestSave.toString());
         }
-        
+
         // Get extension
         // If extension is empty, set to "icf"
         String fileName = latestSave.toString();
@@ -189,7 +192,7 @@ public class IO {
         int lastPeriod = fileName.lastIndexOf(".");
         if (lastPeriod < 0 || !fileName.substring(lastPeriod + 1).toLowerCase().equals("icf")) {
             String ext = "icf";
-            if (fileName.charAt(fileName.length() -1) != '.') {
+            if (fileName.charAt(fileName.length() - 1) != '.') {
                 ext = '.' + ext;
             }
             latestSave = new File(latestSave.getPath() + ext);
@@ -329,7 +332,7 @@ public class IO {
             Graphics filteredGraphics = filteredImage.getGraphics();
             filteredGraphics.drawImage(screenShot, 0, 0, null);
             filteredGraphics.dispose();
-            
+
             //Attempts to write the file and open it in the Desktop
             try {
                 ImageIO.write(filteredImage, format, latestExport);
@@ -339,12 +342,22 @@ public class IO {
                     System.out.println("File Not Found");
                 }
             } catch (IOException err) {
+                System.out.println("Error in writing.");
             }
         }
 
         System.out.println("Export " + (unique ? "new " : "") + "to " + latestExport.toString());
     }
 
+    /**
+     * ReadFile properly reads the image file into a buffered image, then
+     * resizes the drawing area. When new files are read, if the layer is empty,
+     * it makes a new layer.
+     *
+     * @param file
+     * @param iC
+     * @param newIC
+     */
     private void readFile(File file, ImageCraft iC, boolean newIC) {
         try {
             //The layer we're importing/opening the file to
@@ -365,25 +378,26 @@ public class IO {
                 iC.drawingArea.resizeDrawing(
                         bufferedFile.getWidth() - iC.drawingArea.getWidth(),
                         bufferedFile.getHeight() - iC.drawingArea.getHeight());
-                
-                iC.getEasel().resizeEasel(iC.drawingArea.getWidth(), 
-                        iC.drawingArea.getHeight());
+
+                iC.getEasel().resizeEasel(
+                        bufferedFile.getWidth() - iC.drawingArea.getWidth() + 10,
+                        bufferedFile.getHeight() - iC.drawingArea.getHeight() + 10);
             }
 
             //Create a new history object for the imported image and add it to
             //the layer
             layer.addHistory(bufferedFile, "Imported Image");
             iC.drawingArea.repaint();
-            
+
         } catch (IOException err) {
             System.out.println("Not a real image..."); // You shmuck
         }
     }
-    
+
     /**
-     * Open ImageCraft format file.
-     * ImageCraft files are always opened in a new file.
-     * 
+     * Open ImageCraft format file. ImageCraft files are always opened in a new
+     * file.
+     *
      * @param file the file to open
      * @param iC the ImageCraft object it belongs to
      */
@@ -414,8 +428,7 @@ public class IO {
             if (i == 0) {
                 // Put in background layer
                 layer = iC.layerList.get(iC.layerList.size() - 1);
-            }
-            else {
+            } else {
                 layer = new Layer(iC);
             }
             tempImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -452,7 +465,7 @@ public class IO {
                 g.drawImage(((History) layer.getHistoryArray().get(layer.getUndoIndex())).getFinalImage(), 0, 0, null);
             }
         }
-        
+
         // Clean up resources
         g.dispose();
 

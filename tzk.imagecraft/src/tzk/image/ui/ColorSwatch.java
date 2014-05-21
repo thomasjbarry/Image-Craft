@@ -32,8 +32,11 @@ import javax.swing.*;
 /**
  * Color Swatch is a custom jPanel in the top right of ImageCraft and tells the
  * user what color is currently selected.
- *
- * @author Zach
+ * 
+ * 
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class ColorSwatch extends JPanel {
 

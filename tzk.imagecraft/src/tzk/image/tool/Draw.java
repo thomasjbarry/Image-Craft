@@ -37,8 +37,12 @@ import javax.swing.SwingUtilities;
 import tzk.image.ui.ImageCraft;
 
 /**
+ * Draw pen tool. Draws images as lines and allows for different pen strokes
+ * 
  *
- * @author zach
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class Draw extends SimpleTool {
 
@@ -184,6 +188,14 @@ public class Draw extends SimpleTool {
         imageGraphics.dispose();
     }
 
+    /**
+     * Returns a point within the drawing area so that all points drawn are
+     * visible.
+     * 
+     * @param x coordinate
+     * @param y coordinate
+     * @return new point
+     */
     private Point adjustBorderPoints(short x, short y) {
         //If we dragged the mouse outside of the JPanel
         //Set the x/y value to the border value
@@ -226,6 +238,9 @@ public class Draw extends SimpleTool {
         return image;
     }
 
+    /**
+     * Select this tool.
+     */
     @Override
     public void select() {
         super.select();
@@ -234,6 +249,11 @@ public class Draw extends SimpleTool {
         imageCraft.jSize.setSelectedIndex(penIndex);
     }
 
+    /** 
+     * Set new pen stroke width for this tool.
+     * 
+     * @param filePath location of image in system
+     */
     @Override
     public void setPenStroke(String filePath) {
         penStroke = filePath;
@@ -253,6 +273,14 @@ public class Draw extends SimpleTool {
         }
     }
 
+    /**
+     * Takes two sets of xy coordinates and properly draws all points in between
+     * to give the illusion of a line.
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2 
+     */
     public void bresenhamAlgorithm(int x1, int y1, int x2, int y2) {
         //The range of X and Y
         int deltaX = x2 - x1;

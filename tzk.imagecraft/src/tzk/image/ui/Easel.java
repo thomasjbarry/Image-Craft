@@ -35,7 +35,9 @@ import javax.swing.JPanel;
  *
  * It will hopefully be used more later, but we aren't sure what for.
  *
- * @author Drew
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class Easel extends JPanel {
 

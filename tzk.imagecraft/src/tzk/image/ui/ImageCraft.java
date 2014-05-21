@@ -20,6 +20,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
+
 package tzk.image.ui;
 
 import java.awt.*;
@@ -36,7 +37,9 @@ import tzk.image.tool.*;
  * images that users craft are saveable and can be re- opened in ImageCraft
  *
  *
- * Contributers: Thomas James Barry Zachary Gateley K Drew Gonzales
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class ImageCraft extends JFrame {
 

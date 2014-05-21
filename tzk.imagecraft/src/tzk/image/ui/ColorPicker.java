@@ -33,7 +33,9 @@ import javax.swing.*;
  * This class allows the user to pick color to paint with,
  * draw shapes with, and draw with. 
  * 
- * @author Zach
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class ColorPicker extends JFrame {
 

@@ -25,7 +25,10 @@ package tzk.image.ui;
 /**
  * The user can make as many layers as they want. Each has their own buffered
  * image. 
- * @author Thomas
+ * 
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -247,6 +250,14 @@ public class Layer {
     protected void setRectangleNum(short num) {
         this.rectangleNum = num;
     }    
+    
+    protected short getOvalNum(){
+        return this.ovalNum;
+    }
+    
+    protected void setOvalNum(short num){
+        this.ovalNum = num;
+    }
 
     protected short getFillNum() {
         return this.fillNum;
@@ -281,6 +292,7 @@ public class Layer {
     private final ArrayList<History> historyArray;
     private final ImageCraft imageCraft;
 
+    private short ovalNum = 0;
     private short drawNum = 0;
     private short rectangleNum = 0;
     private short fillNum = 0;

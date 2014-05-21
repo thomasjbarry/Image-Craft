@@ -28,8 +28,12 @@ import javax.swing.SwingUtilities;
 import tzk.image.ui.ImageCraft;
 
 /**
- *
- * @author Thomas
+ * PickAColor opens a new window with a color palet and allows the user
+ * to pick a color to fill, draw, paint shapes ect. 
+ * 
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class PickAColor extends SimpleTool {
 

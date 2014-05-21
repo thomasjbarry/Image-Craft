@@ -30,8 +30,12 @@ import tzk.image.ui.ImageCraft;
 import tzk.image.ui.Layer;
 
 /**
+ * The crop tool takes the visible drawing area, and cuts off the rest of the 
+ * unseen image. 
  *
- * @author thomas
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class Crop extends SimpleTool{
     public Crop(ImageCraft iC) {
@@ -42,6 +46,7 @@ public class Crop extends SimpleTool{
         this.button = imageCraft.jCrop;
     }
     
+   
     @Override
     public void select() {
         if (false) {

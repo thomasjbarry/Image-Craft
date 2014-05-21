@@ -25,9 +25,10 @@ package tzk.image.ui;
 /**
  * This class holds information about all actions done to the project. It also
  * holds the filters
- *
- *
- * @author Thomas
+ * 
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 import java.awt.*;
 import java.awt.color.ColorSpace;
@@ -74,6 +75,10 @@ public class History {
             case "Imported Image":
                 layerObject.setImageNum((short) (layerObject.getImageNum() + 1));
                 historyNum = layerObject.getImageNum();
+                break;
+            case "Oval":
+                layerObject.setOvalNum( (short) (layerObject.getOvalNum() + 1) );
+                historyNum = layerObject.getOvalNum();
                 break;
             default:
                 historyNum = 0;

@@ -31,8 +31,12 @@ import java.awt.image.BufferedImage;
 import javax.swing.SwingUtilities;
 
 /**
+ * Fill allows users to paint a whole area of the same color, with a
+ * single color. 
  *
- * @author Thomas
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class Fill extends SimpleTool {
 

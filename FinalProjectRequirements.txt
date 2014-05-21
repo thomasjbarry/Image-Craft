@@ -1,0 +1,65 @@
+The final project meets the requirements as listed below (fill in the blanks):
+
+1)	(6 pts) Use at least 3 of the following components, handling events that they generate (you cannot just use 3 of the same type of component - you must use 3 different components).  Each component must DO something in the final version of the project - it can’t just be decorative:
+a)	JLabel
+b)	JTextField
+c)	JButton
+d)	JCheckBox
+e)	JRadioButton (don’t forget to use a ButtonGroup)
+f)	JComboBox
+g)	JList
+h)	JTextArea
+i)	JSlider
+
+The three components we used were:
+______JButton___________ created on line  __422____ of _____ImageCraft___.java
+______JComoboBox________ created on line ___409____ of _____ImageCraft___.java
+______JCheckBox_________ created on line ___485____ of _____ImageCraft___.java
+
+2)	(3 pts) Use all three layout managers listed below: 
+a)	FlowLayout
+b)	BorderLayout
+c)	GridLayout
+
+The FlowLayout manager was applied to _________jDesk_________ on line __166_____ of ____ImageCraft____.java
+The BorderLayout manager was applied to ________cont_________ on line ___471____ of _____ImageCraft___.java
+The GridLayout manager was applied to _______toolCont________ on line _____151__ of ____ImageCraft____.java
+
+
+3)	(2 pts) Use at least one JPanel (Hint: You’ll need to do this in order to use all of the layout managers).
+
+A JPanel instantiation can be found on line ___470____ of ____ImageCraft____.java
+
+
+4)	(2 pt) Use an inner class or an anonymous inner class (Hint: You’ll want to do this in order to handle events and make your components DO something).
+
+An inner class (or an anonymous inner class) can be found on lines __300__ - __385__ of ____ImageCraft___.java.  The name of this inner class (if it was not anonymous) is _______________.
+
+
+5)	(1 pt) Use a non-default font somewhere in your GUI by utilizing the method setFont().  Note that you can draw your text as a String - you don’t need to change the text on any particular component.
+
+A non-default font is found on line ___480____ of ____ImageCraft___.java.
+
+
+6)	(2 pts) Draw graphics (shapes) including at least one of the following, using a non-default color:
+a)	lines
+b)	rectangles
+c)	ovals
+
+
+Graphics were used to draw a _____rectangle____________ (line/rectangle/oval) on line__220___ of ___Easel_.java.  The non-default color used was _________________.
+
+
+7)	(1 pt) Call repaint() somewhere in your code, to immediately refresh the graphics in some component.
+
+repaint() is called on line ___528____ of ____ImageCraft____.java.
+
+
+8)	(4 pts) Perform file I/O.  You choose whether to read and/or write a file.  You choose whether to use a text file or a binary file (you’ll need to look up examples for binary file I/O, as no reading on it will be assigned).  Note that calling the write() method on a Picture or Sound object does NOT count.
+
+File _______input____ (input/output) is done on lines _368___ - __373_ of ____IO____.java
+
+
+9)	(4 pts) Perform exception handling to handle all exceptions.  Your header for your main() method should NOT say "throws ...Exception" and your program should NOT have any run-time errors (Hint: Consult the Java API for possible exceptions that various methods can throw).  You must have at least one try-catch block (Hint: You’ll need this to do file I/O).
+
+A try-catch block is found on lines _362___ - __394__ of ____IO____.java

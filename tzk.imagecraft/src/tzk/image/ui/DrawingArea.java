@@ -15,7 +15,9 @@ import javax.swing.*;
 /**
  * The drawing area is where all the drawing occurs.
  *
- * @author Thomas
+ * Contributers:    Thomas James Barry/ thomasbarry92@gmail.com   /5076942
+ *                  Zachary Gateley/    zach.cykic@gmail.com      /5415772
+ *                  K Drew Gonzales/    drewgonzales360@gmail.com /5470602
  */
 public class DrawingArea extends JPanel {
 
